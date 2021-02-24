@@ -213,14 +213,483 @@ func print_arr(arr []int) {
 ```
 
 ## 2.带哨兵的冒泡排序
+> 每一趟排序都使有序区增加了一个气泡，在经过n-1趟排序之后，有序区中就有n-1个气泡，
+  而无序区中气泡的重量总是大于等于有序区中气泡的重量，所以整个冒泡排序过程至多需要
+  进行n-1趟排序。若在某一趟排序中未发现气泡位置的交换，则说明待排序的无序区中所有
+  气泡均满足轻者在上，重者在下的原则，因此，冒泡排序过程可在此趟排序后终止。
+```go
+package main
+
+import "fmt"
+
+/**
+每一趟排序都使有序区增加了一个气泡，在经过n-1趟排序之后，有序区中就有n-1个气泡，
+而无序区中气泡的重量总是大于等于有序区中气泡的重量，所以整个冒泡排序过程至多需要
+进行n-1趟排序。若在某一趟排序中未发现气泡位置的交换，则说明待排序的无序区中所有
+气泡均满足轻者在上，重者在下的原则，因此，冒泡排序过程可在此趟排序后终止。
+*/
+func bubble_sort_pos(arr []int) {
+	l := len(arr)
+	if l == 0 || arr == nil {
+		return
+	}
+
+	i := l - 1
+	for i > 0 {
+		pos := 0
+		for j := 0; j < i; j++ {
+			if arr[j+1] < arr[j] {
+				pos = j
+				arr[j+1] = arr[j+1] + arr[j]
+				arr[j] = arr[j+1] - arr[j]
+				arr[j+1] = arr[j+1] - arr[j]
+			}
+		}
+		i = pos
+	}
+}
+
+func main() {
+	arr := []int{7, 0, 1, 9, 4, 6, 3, 5, 2, 8}
+	print_arr(arr)
+	bubble_sort_pos(arr)
+	print_arr(arr)
+}
+
+func print_arr(arr []int) {
+	l := len(arr)
+	if arr == nil || l == 0 {
+		return
+	}
+
+	for i := 0; i < l-1; i++ {
+		fmt.Print(arr[i], "\t")
+	}
+
+	fmt.Println(arr[l-1])
+}
+```
+
 ## 3.快速排序
+```go
+package main
+
+import "fmt"
+
+func quick_sort(arr []int) {
+	l := len(arr)
+	if l == 0 || arr == nil {
+		return
+	}
+
+	quick_sort_helper(arr, 0, l-1)
+}
+
+func quick_sort_helper(arr []int, low, high int) {
+	pivot := 0
+	if low < high {
+		pivot = partition(arr, low, high)
+		quick_sort_helper(arr, low, pivot-1)
+		quick_sort_helper(arr, pivot+1, high)
+	}
+}
+
+func partition(arr []int, low, high int) int {
+	//基准数据
+	pivot := arr[low]
+
+	for low < high {
+		//当队尾的元素大于等于基准数据时,向前挪动high指针
+		for low < high && arr[high] >= pivot {
+			high--
+		}
+
+		//如果队尾元素小于pivot了,需要将其赋值给low
+		arr[low] = arr[high]
+
+		//当队首元素小于等于pivot时,向前挪动low指针
+		for low < high && arr[low] <= pivot {
+			low++
+		}
+
+		//当队首元素大于pivot时,需要将其赋值给high
+		arr[high] = arr[low]
+	}
+
+	//跳出循环时low和high相等,此时的low或high就是pivot的正确索引位置,
+	//low位置的值并不是pivot,所以需要将pivot赋值给arr[low]
+	arr[low] = pivot
+
+	// 返回pivot的正确位置
+	return low
+}
+
+func main() {
+	arr := []int{7, 0, 1, 9, 4, 6, 3, 5, 2, 8}
+	print_arr(arr)
+	quick_sort(arr)
+	print_arr(arr)
+}
+
+func print_arr(arr []int) {
+	l := len(arr)
+	if arr == nil || l == 0 {
+		return
+	}
+
+	for i := 0; i < l-1; i++ {
+		fmt.Print(arr[i], "\t")
+	}
+
+	fmt.Println(arr[l-1])
+}
+```
 
 # 三.选择排序
 ## 1.简单选择排序
+```go
+package main
+
+import "fmt"
+
+func select_sort(arr []int) {
+	l := len(arr)
+	if l == 0 || arr == nil {
+		return
+	}
+
+	min_index, tmp := 0, 0
+	for i := 0; i < l; i++ {
+		min_index = i
+		for j := i; j < l; j++ {
+			if arr[min_index] > arr[j] {
+				min_index = j
+			}
+		}
+
+		if min_index != i {
+			tmp = arr[min_index]
+			arr[min_index] = arr[i]
+			arr[i] = tmp
+		}
+	}
+}
+
+func main() {
+	arr := []int{7, 0, 1, 9, 4, 6, 3, 5, 2, 8}
+	print_arr(arr)
+	select_sort(arr)
+	print_arr(arr)
+}
+
+func print_arr(arr []int) {
+	l := len(arr)
+	if arr == nil || l == 0 {
+		return
+	}
+
+	for i := 0; i < l-1; i++ {
+		fmt.Print(arr[i], "\t")
+	}
+
+	fmt.Println(arr[l-1])
+}
+```
+
 ## 2.堆排序
+> *二叉树的第i层至多有2的（i-1）次方个结点;深度为k的二叉树至多有2的k次 − 1个结点；对任何一棵二叉树T，如果其终端结点数为n0，度为2的结点数为n2，则n0 = n2 + 1。          
+  *满二叉树:一棵深度为k，且有2的(k)次方－1个节点的二叉树 特点：每一层上的结点数都是最大结点数     
+  *若设二叉树的深度为h，除第h层外，其它各层 (1～h-1) 的结点数都达到最大个数，第h层所有的结点都连续集中在最左边，这就是完全二叉树。        
+  *平衡二叉树，又称AVL树。它或是一棵空树，或是具有下列性质的二叉树:它的左子树和右子树都是平衡二叉树，且左子树和右子树的高度之差的绝对值不超过1。        
+  堆排序是指利用堆这种数据结构所设计的一种排序算法。     
+  堆积是一个近似完全二叉树的结构，并同时满足堆积的性质：即子结点的键值或索引总是小于（或者大于）它的父节点。     
+  具体算法描述如下：
+  ①.将初始待排序关键字序列(R1,R2....Rn)构建成大顶堆，此堆为初始的无序区；       
+  ②.将堆顶元素R[1]与最后一个元素R[n]交换，此时得到新的无序区(R1,R2,......Rn-1)和新的有序区(Rn),且满足R[1,2...n-1]<=R[n]；     
+  ③.由于交换后新的堆顶R[1]可能违反堆的性质，因此需要对当前无序区(R1,R2,......Rn-1)调整为新堆，然后再次将R[1]与无序区最后一个元素交换，得到新的无序区(R1,R2....Rn-2)和新的有序区(Rn-1,Rn)。不断重复此过程直到有序区的元素个数为n-1，则整个排序过程完成。
+
+```go
+package main
+
+import "fmt"
+
+func heap_sort(arr []int) {
+	l := len(arr)
+	if l == 0 || arr == nil {
+		return
+	}
+
+	for i := l/2 - 1; i >= 0; i-- {
+		adjustMaxHeap(arr, i, l)
+	}
+
+	for i := l - 1; i > 0; i-- {
+		swap_ele(arr, 0, i)
+		l--
+		adjustMaxHeap(arr, 0, l)
+	}
+}
+
+func adjustMaxHeap(arr []int, i, size int) {
+	left, right, largest := 2*i+1, 2*i+2, i
+	if left < size && arr[left] >= arr[largest] {
+		largest = left
+	}
+	if right < size && arr[right] >= arr[largest] {
+		largest = right
+	}
+	if largest != i {
+		swap_ele(arr, largest, i)
+		adjustMaxHeap(arr, largest, size)
+	}
+}
+
+func swap_ele(arr []int, i, j int) {
+	tmp := arr[i]
+	arr[i] = arr[j]
+	arr[j] = tmp
+}
+
+func main() {
+	arr := []int{7, 0, 1, 9, 4, 6, 3, 5, 2, 8}
+	print_arr(arr)
+	heap_sort(arr)
+	print_arr(arr)
+}
+
+func print_arr(arr []int) {
+	l := len(arr)
+	if arr == nil || l == 0 {
+		return
+	}
+
+	for i := 0; i < l-1; i++ {
+		fmt.Print(arr[i], "\t")
+	}
+
+	fmt.Println(arr[l-1])
+}
+```
 
 # 四.归并排序
+```go
+package main
+
+import "fmt"
+
+func merge_sort(arr []int) {
+	l := len(arr)
+	if l == 0 || arr == nil {
+		return
+	}
+
+	merge_helper(arr, 0, l-1)
+}
+
+func merge_helper(arr []int, low, high int) {
+	mid := (low + high) >> 1
+	if low < high {
+		merge_helper(arr, low, mid)
+		merge_helper(arr, mid+1, high)
+		merge_core(arr, low, mid, high)
+	}
+}
+
+func merge_core(arr []int, left, mid, right int) {
+	tmp := make([]int, right-left+1)
+	i, j, k := left, mid+1, 0
+	for i <= mid && j <= right {
+		if arr[i] < arr[j] {
+			tmp[k] = arr[i]
+			i++
+		} else {
+			tmp[k] = arr[j]
+			j++
+		}
+		k++
+	}
+
+	for i <= mid {
+		tmp[k] = arr[i]
+		k++
+		i++
+	}
+
+	for j <= right {
+		tmp[k] = arr[j]
+		k++
+		j++
+	}
+
+	for m := 0; m < len(tmp); m++ {
+		arr[left+m] = tmp[m]
+	}
+}
+
+func main() {
+	arr := []int{7, 0, 1, 9, 4, 6, 3, 5, 2, 8}
+	print_arr(arr)
+	merge_sort(arr)
+	print_arr(arr)
+}
+
+func print_arr(arr []int) {
+	l := len(arr)
+	if arr == nil || l == 0 {
+		return
+	}
+
+	for i := 0; i < l-1; i++ {
+		fmt.Print(arr[i], "\t")
+	}
+
+	fmt.Println(arr[l-1])
+}
+```
 
 # 五.基数排序
+> 基数排序的思想：      
+  把待排序的整数按位分，分为个位，十位，百位.....从小到大依次将位数进行排序。实际上分为两个过程：分配和收集。      
+  分配就是：从个位开始，按位数从小到大把数据排好，分别放进0--9这10个桶中。       
+  收集就是：依次将0-9桶中的数据放进数组中。        
+  重复这两个过程直到最高位。     
+```go
+package main
+
+import "fmt"
+
+func radix_sort(arr []int, radix int) {
+	l := len(arr)
+	if l == 0 || arr == nil {
+		return
+	}
+
+	d, p := 1, radix
+	for i := 0; i < l; i++ {
+		for arr[i] >= p {
+			p *= radix
+		}
+	}
+
+	tmp, count, divide := make([]int, l), make([]int, radix), 1
+	//进行d次排序
+	for i := 1; i <= d; i++ {
+		//每次分配前清空计数器
+		for j := 0; j < radix; j++ {
+			count[j] = 0
+		}
+
+		for j := 0; j < l; j++ {
+			//统计每个桶中的记录数
+			idx := (arr[j] / divide) % radix
+			count[idx]++
+		}
+
+		//将各个桶中的数字个数，转化成各个桶中最后一个数字的下标索引, 即将tmp中的位置依次分配给每个桶
+		for j := 1; j < radix; j++ {
+			count[j] = count[j-1] + count[j]
+		}
+
+		//将所有桶中记录依次收集到tmp中
+		for j := l - 1; j >= 0; j-- {
+			idx := (arr[j] / divide) % radix
+			tmp[count[idx]-1] = arr[j]
+			count[idx]--
+		}
+
+		//将临时数组的内容复制到arr中
+		for j := 0; j < l; j++ {
+			arr[j] = tmp[j]
+		}
+
+		divide = divide * radix
+	}
+}
+
+func main() {
+	arr := []int{7, 0, 1, 9, 4, 6, 3, 5, 2, 8}
+	print_arr(arr)
+	radix_sort(arr, 10)
+	print_arr(arr)
+}
+
+func print_arr(arr []int) {
+	l := len(arr)
+	if arr == nil || l == 0 {
+		return
+	}
+
+	for i := 0; i < l-1; i++ {
+		fmt.Print(arr[i], "\t")
+	}
+
+	fmt.Println(arr[l-1])
+}
+```
 
 # 六.计数排序
+```go
+package main
+
+import "fmt"
+
+func count_sort(arr []int) []int {
+	l := len(arr)
+	if l == 0 || arr == nil {
+		return arr
+	}
+
+	max_int, min_int := ^(int(^uint32((0)) >> 1)), int(^uint32((0))>>1)
+	fmt.Println(max_int, min_int)
+
+	for i := 0; i < l; i++ {
+		if arr[i] > max_int {
+			max_int = arr[i]
+		}
+		if arr[i] < min_int {
+			min_int = arr[i]
+		}
+	}
+
+	help_arr := make([]int, max_int-min_int+1)
+	for i := 0; i < l; i++ {
+		pos := arr[i-min_int]
+		help_arr[pos]++
+	}
+
+	for i := 1; i < l; i++ {
+		//确定不比该位置大的数据个数,不比它大的数据个数为它的个数加上前一个的记数。
+		help_arr[i] = help_arr[i-1] + help_arr[i]
+	}
+
+	res := make([]int, l)
+	for i := 0; i < l; i++ {
+		//为什么要先减一，因为保存不比它大数据的个数中包括了它自己，所以要先减一
+		help_arr[arr[i]-min_int]--
+		pos := help_arr[arr[i]-min_int]
+		res[pos] = arr[i]
+	}
+
+	return res
+}
+
+func main() {
+	arr := []int{7, 0, 1, 9, 4, 6, 3, 5, 2, 8}
+	print_arr(arr)
+	res := count_sort(arr)
+	print_arr(res)
+}
+
+func print_arr(arr []int) {
+	l := len(arr)
+	if arr == nil || l == 0 {
+		return
+	}
+
+	for i := 0; i < l-1; i++ {
+		fmt.Print(arr[i], "\t")
+	}
+
+	fmt.Println(arr[l-1])
+}
+```
