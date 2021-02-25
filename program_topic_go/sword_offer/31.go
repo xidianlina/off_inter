@@ -46,6 +46,21 @@ func NumberOf1Between1AndN_Solution(n int) int {
 
 func NumberOf1Between1AndN_Solution2(n int) int {
 	// write code here
+	cnt := 0
+	for m := 1; m <= n; m *= 10 {
+		a, b := n/m, n%m
+		if a%10 == 1 {
+			cnt += a/10*m + b + 1
+		} else {
+			cnt += ((a + 8) / 10) * m
+		}
+	}
+
+	return cnt
+}
+
+func NumberOf1Between1AndN_Solution3(n int) int {
+	// write code here
 	if n == 0 {
 		return 0
 	}
@@ -66,12 +81,12 @@ func NumberOf1Between1AndN_Solution2(n int) int {
 	return cnt
 }
 
-func NumberOf1Between1AndN_Solution3(n int) int {
+func NumberOf1Between1AndN_Solution4(n int) int {
 	// write code here
 	cnt := 0
 	var arr []string
 	for i := 1; i <= n; i++ {
-		str := strconv.FormatInt(int64((i)), 10)
+		str := strconv.Itoa(i)
 		arr = append(arr, str)
 	}
 	str := strings.Join(arr, "")
@@ -92,5 +107,8 @@ func main() {
 	fmt.Println(res)
 	fmt.Println("--------")
 	res = NumberOf1Between1AndN_Solution3(12)
+	fmt.Println(res)
+	fmt.Println("--------")
+	res = NumberOf1Between1AndN_Solution4(12)
 	fmt.Println(res)
 }
