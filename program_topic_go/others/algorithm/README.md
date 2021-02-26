@@ -314,7 +314,9 @@ func right_rotate(arr []int, start, m, n int) {
 }
 ```
 
-参考：https://www.jianshu.com/p/9c841ad88ded
+参考：     
+https://www.jianshu.com/p/9c841ad88ded
+https://blog.csdn.net/a1439775520/article/details/97397557
 -------------------
 
 # 4.
