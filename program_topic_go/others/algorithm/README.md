@@ -173,7 +173,7 @@ func shuffle2(arr []int) {
   2.1、位置置换 perfect_shuffle1 算法      
   (1).对原始位置的变化做如下分析：     
   ![shuffle](http://github.com/xidianlina/off_inter/raw/master/program_topic_go/others/algorithm/shuffle.jpg)   
-> (2)依次考察每个位置的变化规律：     
+> (2).依次考察每个位置的变化规律：     
   从上面的例子我们能看到，前 n 个元素中，     
   第 1 个元素 a1 到了原第 2 个元素 a2 的位置，即 1 -> 2；        
   第 2 个元素 a2 到了原第 4 个元素 a4 的位置，即 2 -> 4；        
@@ -209,6 +209,113 @@ func shuffle3(arr []int) {
 }
 ```
 > 分析：它的时间复杂度虽然是O(n)，但其空间复杂度却是O(n)，仍不符合本题所期待的时间O(n)，空间O(1)。
+  2.2、完美洗牌算法 perfect_shuffle2       
+  2.2.1、走圈算法 cycle_leader       
+  根据上面变换的节奏，可以看出有两个圈      
+  一个是1 -> 2 -> 4 -> 8 -> 7 -> 5 -> 1；       
+  一个是3 -> 6 -> 3。       
+  这两个圈可以表示为(1,2,4,8,7,5)和(3,6)，且perfect_shuffle1算法也已经告诉了我们，不管n是奇数还是偶数，每个位置的元素都将变为第(2*i)%(2n+1)个元素：        
+  因此只要知道圈里最小位置编号的元素即圈的头部，顺着圈走一遍就可以达到目的，且因为圈与圈是不相交的，所以这样下来，刚好走了 O（N）步。       
+  2.2.2、神级结论：若2*n=（3^k - 1），则可确定圈的个数及各自头部的起始位置      
+  引用“A Simple In-Place Algorithm for In-Shuffle”论文的一个结论了，即对于2 * n = （3^k-1）这种长度的数组，恰好只有 k 个圈，且每个圈头部的起始位置分别是 1，3，9，...，3^(k-1)。      
+  至此，完美洗牌算法的 “主体工程” 已经完工，只存在一个 “小” 问题：如果数组长度不是（3^k - 1）呢？       
+  若2 * n != （3^k - 1），则总可以找到最大的整数m，使得m < n，并且2 * m = （3^k - 1）。             
+  对于长度为 2 * m 的数组，整理元素后剩余的 2 *（n - m）长度，递归调用完美洗牌算法即可。       
+  2.2.3、完美洗牌算法 perfect_shuffle3     
+  从上文的分析过程中也就得出了我们的完美洗牌算法，其算法流程为：       
+  输入数组　a[1..2 * n]      
+  (1).找到 2 * m = 3^k - 1 使得 3^k <= 2 * n < 3^(k +1)     
+  (2).把 a[m + 1..n + m]那部分循环移 m 位       
+  (3).对每个 i = 0,1,2..k - 1，3^i 是个圈的头部，做 cycle_leader 算法，数组长度为 m，所以对 2 * m + 1 取模。       
+  (4).对数组的后面部分a[2 * m + 1.. 2 * n] 继续使用本算法, 这相当于 n 减小了m。        
+  2.2.4、perfect_shuffle2 算法解决其变形问题      
+  原始问题要输出a1, b1, a2, b2……an, bn，而完美洗牌却输出的是b1, a1, b2, a2,……bn, an。      
+  解决办法非常简单：交换两两相邻元素即可（当然，你也可以让原数组第一个和最后一个不变，中间的 2 * (n - 1) 项用原始的标准完美洗牌算法做），
+  只是在完美洗牌问题时间复杂度 O(N) 空间复杂度 O(1) 的基础上再增加 O(N) 的时间复杂度，故总的时间复杂度 O(N) 不变，且理所当然的保持了空
+  间复杂度 O(1) 。至此,问题得到了圆满解决！      
+  源代码如下：  
+```go
+package main
+
+import "fmt"
+
+func main() {
+	arr := []int{-1, 0, 2, 4, 6, 8, 1, 3, 5, 7, 9}
+	perfect_shuffle(arr)
+	fmt.Println(arr)
+}
+
+//完美洗牌算法
+func perfect_shuffle(arr []int) {
+	l := len(arr)
+	n := (l - 1) / 2
+	start := 0
+
+	for n > 1 {
+		//第1步：找到2*m = 3^k - 1，使得3^k <= len - 1 < 3^(k + 1)
+		k, m := 0, 1
+
+		//for (; (len - 1) / m >= 3; k++, m = m * 3) ;
+		for (l-1)/m >= 3 {
+			k++
+			m = m * 3
+		}
+
+		m = m / 2
+
+		//第2步：把数组中的A[m + 1,...,n + m]那部分循环右移m位
+		right_rotate(arr, start, m, n)
+
+		//第3步：对于长度为2*m的数组，刚好有k个圈，每个圈的头部为3^i
+		i, t := 0, 1
+		for i < k {
+			cycle_leader(arr, t, m*2+1)
+			i++
+			t = t * 3
+		}
+
+		//第4步：对数组后面部分A[2m + 1,...,2n]继续递归上面3步
+		start = start + m*2
+		n = n - m
+	}
+
+	//n == 1时
+	arr[1+start], arr[2+start] = arr[2+start], arr[1+start]
+	for i := 1; i < l; i = i + 2 {
+		arr[i], arr[i+1] = arr[i+1], arr[i]
+	}
+}
+
+// 走圈算法
+func cycle_leader(arr []int, start, mod int) {
+	for i := start * 2 % mod; i != start; i = i * 2 % mod {
+		arr[i], arr[start] = arr[start], arr[i]
+	}
+}
+
+//翻转 start 开始位置 end 结束位置
+func reverse(arr []int, start, end int) {
+	for start < end {
+		arr[start], arr[end] = arr[end], arr[start]
+		start++
+		end--
+	}
+}
+
+func right_rotate(arr []int, start, m, n int) {
+	//翻转前m位
+	reverse(arr, start+m+1, start+n)
+
+	//翻转剩余元素
+	reverse(arr, start+n+1, start+n+m)
+
+	//整体翻转
+	reverse(arr, start+m+1, start+n+m)
+}
+```
+
+参考：https://www.jianshu.com/p/9c841ad88ded
+-------------------
 
 # 4.
 # 5.
