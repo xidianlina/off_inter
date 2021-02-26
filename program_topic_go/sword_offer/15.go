@@ -13,10 +13,10 @@ import "fmt"
 {3,2,1}
 */
 
-type ListNode struct {
-	Val  int
-	Next *ListNode
-}
+//type ListNode struct {
+//	Val  int
+//	Next *ListNode
+//}
 
 /**
  *
