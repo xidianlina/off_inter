@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/xcltapestry/xclpkg/algorithm"
 )
 
 /**
@@ -29,22 +28,20 @@ import (
  */
 func printListFromTailToHead(head *ListNode) []int {
 	// write code here
-	stk := algorithm.NewStack()
-	for {
-		if head == nil {
-			break
-		}
-		stk.Push(head.Val)
+	if head == nil {
+		return []int{}
+	}
+
+	var stk []*ListNode
+	for head != nil {
+		stk = append(stk, head)
 		head = head.Next
 	}
+
 	var res []int
-	for {
-		if stk.Size() == 0 {
-			break
-		}
-		e := stk.Element[stk.Size()-1]
-		res = append(res, e.(int))
-		stk.Pop()
+	for len(stk) > 0 {
+		res = append(res, stk[len(stk)-1].Val)
+		stk = stk[:len(stk)-1]
 	}
 	return res
 }
