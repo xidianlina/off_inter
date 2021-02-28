@@ -24,7 +24,7 @@ package main
  * @param pRoot TreeNode类
  * @return int整型二维数组
  */
-func Print(root *TreeNode) [][]int {
+func PrintTree(root *TreeNode) [][]int {
 	// write code here
 	if root == nil {
 		return [][]int{}
