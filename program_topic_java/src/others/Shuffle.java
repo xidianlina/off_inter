@@ -1,5 +1,6 @@
 package others;
 
+//完美洗牌算法
 public class Shuffle {
     public static void main(String[] args) {
         Shuffle sf = new Shuffle();
@@ -18,9 +19,9 @@ public class Shuffle {
             //第1步：找到2*m = 3^k - 1，使得3^k <= len - 1 < 3^(k + 1)
             int k = 0, m = 1;
             //for (; (len - 1) / m >= 3; k++, m = m * 3) ;
-            while((len-1)/m>=3){
+            while ((len - 1) / m >= 3) {
                 k++;
-                m=m*3;
+                m = m * 3;
             }
 
             m = m / 2;
