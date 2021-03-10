@@ -14,19 +14,23 @@ public class JZ18 {
      */
     public TreeNode Mirror(TreeNode root) {
         //当前节点为空，直接返回
-        if (root == null)
+        if (root == null) {
             return root;
+        }
         //当前节点没有叶子节点，直接返回
-        if (root.left == null && root.right == null)
+        if (root.left == null && root.right == null) {
             return root;
+        }
         TreeNode temp = root.left;
         root.left = root.right;
         root.right = temp;
         //递归交换叶子节点
-        if (root.left != null)
+        if (root.left != null) {
             Mirror(root.left);
-        if (root.right != null)
+        }
+        if (root.right != null) {
             Mirror(root.right);
+        }
         return root;
     }
 
