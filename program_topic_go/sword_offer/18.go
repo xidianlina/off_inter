@@ -24,24 +24,8 @@ func Mirror(root *TreeNode) *TreeNode {
 		return nil
 	}
 
-	stk := make([]*TreeNode, 0)
-	stk = append(stk, root)
-	for len(stk) != 0 {
-		root = stk[len(stk)-1]
-		stk = stk[:len(stk)-1]
-		if root.Left != nil || root.Right != nil {
-			tmp := root.Left
-			root.Left = root.Right
-			root.Right = tmp
-		}
-
-		if root.Left != nil {
-			stk = append(stk, root.Left)
-		}
-
-		if root.Right != nil {
-			stk = append(stk, root.Right)
-		}
-	}
+	root.Left, root.Right = root.Right, root.Left
+	Mirror(root.Left)
+	Mirror(root.Right)
 	return root
 }
