@@ -12,9 +12,9 @@ public class JZ20_2 {
 
     public void push(int node) {
         s.push(node);
-        if (m.empty()) {
+        if (m.isEmpty()) {
             m.push(node);
-        } else if (s.peek() > node) {
+        } else if (m.peek() > node) {
             m.push(node);
         }
     }
