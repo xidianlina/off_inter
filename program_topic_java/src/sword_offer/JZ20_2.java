@@ -6,7 +6,7 @@ import java.util.Stack;
  * 题目描述
  * 定义栈的数据结构，请在该类型中实现一个能够得到栈中所含最小元素的min函数（时间复杂度应为O（1））。
  */
-public class JZ20 {
+public class JZ20_2 {
     Stack<Integer> s = new Stack<Integer>();
     Stack<Integer> m = new Stack<Integer>();
 
@@ -14,16 +14,16 @@ public class JZ20 {
         s.push(node);
         if (m.empty()) {
             m.push(node);
-        } else if (m.peek() > node) {
+        } else if (s.peek() > node) {
             m.push(node);
-        } else {
-            m.push(m.peek());
         }
     }
 
     public void pop() {
+        if (s.peek() == m.peek()) {
+            m.pop();
+        }
         s.pop();
-        m.pop();
     }
 
     public int top() {
