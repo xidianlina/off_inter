@@ -19,10 +19,8 @@ public class JZ35 {
 
     public int InversePairs(int[] array) {
         pairNum = 0;
-        int size = array.length;
-
         if (array != null) {
-            mergeSort(array, 0, size - 1);
+            mergeSort(array, 0, array.length - 1);
         }
         return pairNum;
     }
@@ -61,7 +59,7 @@ public class JZ35 {
             tmp[k++] = array[j++];
         }
 
-        for (int m = 0; m < tmp.length; i++) {
+        for (int m = 0; m < tmp.length; m++) {
             array[m + left] = tmp[m];
         }
     }
