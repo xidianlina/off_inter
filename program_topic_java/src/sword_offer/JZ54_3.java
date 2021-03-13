@@ -1,6 +1,8 @@
 package sword_offer;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 题目描述
@@ -8,12 +10,10 @@ import java.util.HashMap;
  * 返回值描述:
  * 如果当前字符流没有存在出现一次的字符，返回#字符。
  */
-public class JZ54 {
-    HashMap<Character, Integer> map = new HashMap<Character, Integer>();
-    StringBuffer s = new StringBuffer();
+public class JZ54_3 {
+    HashMap<Character, Integer> map = new LinkedHashMap<>();
 
     public void Insert(char ch) {
-        s.append(ch);
         if (map.containsKey(ch)) {
             map.put(ch, map.get(ch) + 1);
         } else {
@@ -22,9 +22,9 @@ public class JZ54 {
     }
 
     public char FirstAppearingOnce() {
-        for (int i = 0; i < s.length(); i++) {
-            if (map.get(s.charAt(i)) == 1) {
-                return s.charAt(i);
+        for (Character c : map.keySet()) {
+            if (map.get(c) == 1) {
+                return c;
             }
         }
         return '#';
