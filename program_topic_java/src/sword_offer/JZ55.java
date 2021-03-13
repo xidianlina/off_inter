@@ -1,5 +1,7 @@
 package sword_offer;
 
+import java.util.HashMap;
+
 /**
  * 题目描述
  * 给一个链表，若其中包含环，请找出该链表的环的入口结点，否则，输出null。
@@ -12,9 +14,8 @@ public class JZ55 {
      */
     public ListNode EntryNodeOfLoop(ListNode head) {
         if (head == null || head.next == null) {
-            return head;
+            return null;
         }
-
         ListNode slow = head;
         ListNode fast = head;
         while (fast != null && fast.next != null) {
@@ -26,8 +27,25 @@ public class JZ55 {
                     slow = slow.next;
                     fast = fast.next;
                 }
-
                 return slow;
+            }
+        }
+        return null;
+    }
+
+    public ListNode EntryNodeOfLoop2(ListNode head) {
+        if (head == null || head.next == null) {
+            return null;
+        }
+
+        HashMap<ListNode, Boolean> m = new HashMap<>();
+        ListNode node = head;
+        while (node != null) {
+            if (m.containsKey(node)) {
+                return node;
+            } else {
+                m.put(node, true);
+                node = node.next;
             }
         }
 
