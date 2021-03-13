@@ -12,7 +12,7 @@ import java.util.LinkedList;
  * 返回值
  * [[8],[10,6],[5,7,9,11]]
  */
-public class JZ59 {
+public class JZ59_2 {
     public ArrayList<ArrayList<Integer>> Print(TreeNode root) {
         ArrayList<ArrayList<Integer>> res = new ArrayList<>();
         if (root == null) {
@@ -20,23 +20,24 @@ public class JZ59 {
         }
 
         ArrayList<Integer> list = new ArrayList<>();
-        LinkedList<TreeNode> que = new LinkedList<>();
-        que.offer(root);
+        ArrayList<TreeNode> arr = new ArrayList<>();
+        arr.add(root);
         int curNode = 1;
         boolean leftToRight = true;
-        while (!que.isEmpty()) {
-            root = que.poll();
+        while (!arr.isEmpty()) {
+            root = arr.get(0);
+            arr.remove(0);
             --curNode;
             if (root.left != null) {
-                que.offer(root.left);
+                arr.add(root.left);
             }
             if (root.right != null) {
-                que.offer(root.right);
+                arr.add(root.right);
             }
             list.add(root.val);
 
             if (curNode == 0) {
-                curNode = que.size();
+                curNode = arr.size();
                 if (leftToRight) {
                     res.add(list);
                 } else {
