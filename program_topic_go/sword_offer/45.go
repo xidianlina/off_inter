@@ -26,7 +26,7 @@ true
 func IsContinuous(nums []int) bool {
 	// write code here
 	l := len(nums)
-	if nums != nil || l != 5 {
+	if nums == nil || l != 5 {
 		return false
 	}
 
