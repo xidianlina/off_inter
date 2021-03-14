@@ -35,7 +35,7 @@ public class BinaryInsertSort {
             int mid = 0;
             while (left <= right) {
                 mid = (left + right) >> 1;
-                if (k < arr[mid]) {
+                if (arr[mid] > k) {
                     right = mid - 1;
                 } else {
                     left = mid + 1;
