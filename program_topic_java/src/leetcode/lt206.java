@@ -10,4 +10,34 @@ package leetcode;
 你可以迭代或递归地反转链表。你能否用两种方法解决这道题？
  */
 public class lt206 {
+    public ListNode reverseList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+
+        ListNode cur = head;
+        ListNode pre = null;
+        ListNode next = null;
+        while (cur != null) {
+            next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+
+        return pre;
+    }
+
+    public ListNode reverseList2(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode p = head;
+        head = reverseList(p.next);
+        p.next.next = p;
+        p.next = null;
+
+        return head;
+    }
 }
