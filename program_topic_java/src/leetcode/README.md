@@ -7,7 +7,6 @@ LeetCode
 题目链接    
 https://leetcode-cn.com/problems/odd-even-linked-list/      
 https://leetcode.com/problems/odd-even-linked-list/     
------------------------
 ```java
 package leetcode;
 
