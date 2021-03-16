@@ -77,6 +77,133 @@ public class FisherYatesShuffle {
 }
 ```
 # 2.完美洗牌算法
+> 题目描述      
+有个长度为2n的数组{a1, a2, a3, ..., an, b1, b2, b3, ..., bn} ，
+希望排序后 {a1, b1, a2, b2, ...., an, bn} ，请考虑有无时间复杂度 O(n)，空间复杂度 O(1) 的解法。     
+分析和解法     
+解法一：蛮力变换      
+题目要求怎么变换就怎么变换。为了便于分析，取n=4，那么题目要求把     
+a1，a2，a3，a4， b1，b2，b3，b4      
+变成        
+a1，b1，a2，b2，a3，b3，a4，b4       
+1.1、步步前移
+仔细观察变换前后两个序列的特点，我们可做如下一系列操作：      
+第①步、确定 b1 的位置，即让 b1 跟它前面的 a2，a3，a4 交换：        
+a1，b1，a2，a3，a4， b2，b3，b4            
+第②步、接着确定 b2 的位置，即让 b2 跟它前面的 a3，a4 交换：     
+a1，b1，a2，b2，a3，a4， b3，b4      
+第③步、b3 跟它前面的 a4 交换位置：     
+a1，b1，a2，b2，a3，b3，a4，b4       
+b4已在最后的位置，不需要再交换。如此，经过上述 3 个步骤后，得到我们最后想要的序列。      
+源代码如下:
+```java
+package algorithm;
+
+public class Shuffle {
+    public static void main(String[] args) {
+        Shuffle shuffle = new Shuffle();
+        int[] arr = {0, 2, 4, 6, 8, 1, 3, 5, 7, 9};
+        shuffle.printArray(arr);
+        shuffle.shuffle(arr);
+        shuffle.printArray(arr);
+    }
+
+    public void printArray(int[] arr) {
+        int size = arr.length;
+        if (size == 0 || arr == null) {
+            return;
+        }
+
+        for (int i = 0; i < size - 1; i++) {
+            System.out.print(arr[i] + "\t");
+        }
+        System.out.println(arr[size - 1]);
+    }
+
+    public void shuffle(int[] arr) {
+        int l = arr.length;
+        if (l < 3 || l % 2 == 1) {
+            return;
+        }
+
+        int size = l / 2;
+        int index = 0;
+        int count = 0;
+        for (int i = size; i < l - 1; i++) {
+            //交换个数
+            count = size - (i - size) - 1;
+            //待交换的数的下标
+            index = i;
+            for (int j = 1; j <= count; j++) {
+                int tmp = arr[index];
+                arr[index] = arr[i - j];
+                arr[i - j] = tmp;
+                index = i - j;
+            }
+        }
+    }
+}
+```
+> 分析：但此方法的时间复杂度为O(N^2)，得继续寻找其它方法，看看有无办法能达到题目所预期的O(N)的时间复杂度。     
+> 1.2、中间交换      
+当然，除了如上面所述的让 b1，b2，b3，b4 步步前移跟它们各自前面的元素进行交换外，还可以每次让序列中最中间的元素进行交换达到目的。
+还是用上面的例子，针对 a1，a2，a3，a4，b1，b2，b3，b4        
+第①步：交换最中间的两个元素 a4，b1，序列变成：     
+a1，a2，a3 ，b1，a4， b2，b3，b4      
+第②步，让最中间的两对元素各自交换：     
+a1，a2 ，b1，a3，b2，a4， b3，b4      
+第③步，交换最中间的三对元素，序列变成：       
+a1，b1，a2，b2，a3，b3，a4，b4        
+同样，此法同解法 1.1、步步前移一样，时间复杂度依然为 O（N^2）。       
+源代码如下：
+```java
+package algorithm;
+
+public class Shuffle2 {
+    public static void main(String[] args) {
+        Shuffle2 shuffle = new Shuffle2();
+        int[] arr = {0, 2, 4, 6, 8, 1, 3, 5, 7, 9};
+        shuffle.printArray(arr);
+        shuffle.shuffle(arr);
+        shuffle.printArray(arr);
+    }
+
+    public void printArray(int[] arr) {
+        int size = arr.length;
+        if (size == 0 || arr == null) {
+            return;
+        }
+
+        for (int i = 0; i < size - 1; i++) {
+            System.out.print(arr[i] + "\t");
+        }
+        System.out.println(arr[size - 1]);
+    }
+
+    public void shuffle(int[] arr) {
+        int l = arr.length;
+        if (l < 3 || l % 2 == 1) {
+            return;
+        }
+
+        int n = l / 2;
+        int left = n - 1;
+        int right = n;
+        //交换次数
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = left; j < right; j += 2) {
+                int tmp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = tmp;
+            }
+            --left;
+            ++right;
+        }
+    }
+}
+```
+
+
 # 3.两个线程分别打印1-100，a线程打印偶数，b线程打印奇数
 # 4.一个链表，奇数位升序偶数位降序，让链表变成升序的
 ```java
