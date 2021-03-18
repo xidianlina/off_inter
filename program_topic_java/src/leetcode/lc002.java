@@ -20,7 +20,7 @@ package leetcode;
 0 <= Node.val <= 9
 题目数据保证列表表示的数字不含前导零
  */
-public class lt002 {
+public class lc002 {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         ListNode head = null;
         ListNode pre = null;

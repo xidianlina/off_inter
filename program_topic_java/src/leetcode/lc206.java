@@ -9,7 +9,7 @@ package leetcode;
 进阶:
 你可以迭代或递归地反转链表。你能否用两种方法解决这道题？
  */
-public class lt206 {
+public class lc206 {
     public ListNode reverseList(ListNode head) {
         if (head == null) {
             return null;

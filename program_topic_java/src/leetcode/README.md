@@ -32,7 +32,7 @@ import java.util.HashMap;
 -109 <= target <= 109
 只会存在一个有效答案
  */
-public class lt001 {
+public class lc001 {
 
     public int[] twoSum(int[] nums, int target) {
         int[] res = new int[2];
@@ -101,7 +101,7 @@ package leetcode;
 0 <= Node.val <= 9
 题目数据保证列表表示的数字不含前导零
  */
-public class lt002 {
+public class lc002 {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         ListNode head = null;
         ListNode pre = null;
@@ -134,11 +134,85 @@ public class lt002 {
         return head;
     }
 }
-
 ```
+# 3.无重复字符的最长子串
+题目链接        
+https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/        
+https://leetcode.com/problems/longest-substring-without-repeating-characters/       
+```java
+package leetcode;
 
+import java.util.HashMap;
+import java.util.Map;
 
+/*
+3.无重复字符的最长子串
+给定一个字符串，请你找出其中不含有重复字符的最长子串的长度。
+示例1:
+输入: s = "abcabcbb"
+输出: 3
+解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+示例 2:
+输入: s = "bbbbb"
+输出: 1
+解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+示例 3:
+输入: s = "pwwkew"
+输出: 3
+解释: 因为无重复字符的最长子串是"wke"，所以其长度为 3。
+请注意，你的答案必须是 子串 的长度，"pwke"是一个子序列，不是子串。
+示例 4:
+输入: s = ""
+输出: 0
+提示：
+0 <= s.length <= 5 * 104
+s由英文字母、数字、符号和空格组成
+ */
+public class lc003 {
+    /*
+    复杂度分析:
+    时间复杂度:O(N)，其中N是字符串的长度。
+    空间复杂度:O(∣Σ∣)，其中Σ表示字符集（即字符串中可以出现的字符）,∣Σ∣ 表示字符集的大小。在本题中没有明确说明字符集，
+    因此可以默认为所有ASCII码在[0, 128)[0,128) 内的字符，即∣Σ∣=128。因此空间复杂度为O(∣Σ∣)。
+    */
+    public int lengthOfLongestSubstring(String s) {
+        int[] hash = new int[256];
+        for (int i = 0; i < 256; i++) {
+            hash[i] = -1;
+        }
 
+        int maxLen = 0;
+        int start = -1;
+        for (int i = 0; i < s.length(); i++) {
+            if (hash[s.charAt(i)] > start) {
+                start = hash[s.charAt(i)];
+            }
+            hash[s.charAt(i)] = i;
+            maxLen = Math.max(maxLen, i - start);
+        }
+
+        return maxLen;
+    }
+
+    public int lengthOfLongestSubstring2(String s) {
+        int size = s.length();
+        int maxLen = 0;
+        Map<Character, Integer> map = new HashMap<Character, Integer>();
+        int start = 0;
+        for (int end = 0; end < size; end++) {
+            char cur = s.charAt(end);
+            if (map.containsKey(cur)) {
+                start = Math.max(map.get(cur), start);
+            }
+            maxLen = Math.max(maxLen, end - start + 1);
+            map.put(cur, end + 1);
+        }
+
+        return maxLen;
+    }
+}
+```
+# 
 
 
 # 21.合并两个有序链表
@@ -165,7 +239,7 @@ package leetcode;
 -100 <= Node.val <= 100
 l1和l2均按非递减顺序排列
  */
-public class lt021 {
+public class lc021 {
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         if (l1 == null && l2 == null) {
             return null;
@@ -239,7 +313,7 @@ package leetcode;
 进阶:
 你可以迭代或递归地反转链表。你能否用两种方法解决这道题？
  */
-public class lt206 {
+public class lc206 {
     public ListNode reverseList(ListNode head) {
         if (head == null) {
             return null;
@@ -311,7 +385,7 @@ class ListNode {
     }
 }
 
-public class lt328 {
+public class lc328 {
     public ListNode oddEvenList(ListNode head) {
         if (head == null || head.next == null) {
             return head;

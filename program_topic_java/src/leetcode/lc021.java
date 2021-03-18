@@ -17,7 +17,7 @@ package leetcode;
 -100 <= Node.val <= 100
 l1和l2均按非递减顺序排列
  */
-public class lt021 {
+public class lc021 {
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         if (l1 == null && l2 == null) {
             return null;

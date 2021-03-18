@@ -24,7 +24,7 @@ import java.util.HashMap;
 -109 <= target <= 109
 只会存在一个有效答案
  */
-public class lt001 {
+public class lc001 {
 
     public int[] twoSum(int[] nums, int target) {
         int[] res = new int[2];
