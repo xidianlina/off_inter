@@ -294,8 +294,185 @@ public class lc004 {
 https://leetcode-cn.com/problems/longest-palindromic-substring/     
 https://leetcode.com/problems/longest-palindromic-substring/        
 ```java
+package leetcode;
 
+/*
+5.最长回文子串
+给你一个字符串 s，找到 s 中最长的回文子串。
+示例 1：
+输入：s = "babad"
+输出："bab"
+解释："aba" 同样是符合题意的答案。
+示例 2：
+输入：s = "cbbd"
+输出："bb"
+示例 3：
+输入：s = "a"
+输出："a"
+示例 4：
+输入：s = "ac"
+输出："a"
+提示：
+1 <= s.length <= 1000
+s仅由数字和英文字母（大写和/或小写）组成
+ */
+public class lc005 {
+    public String longestPalindrome(String s) {
+        int size = s.length();
+        if (size == 1 || s.isEmpty()) {
+            return s;
+        }
+        int len = 0;
+        int start = 0;
+        int end = 0;
+        for (int i = 0; i < size; ++i) {
+            int len1 = helper(s, i, i);
+            int len2 = helper(s, i, i + 1);
+            len = Math.max(len1, len2);
+            if (len > (end - start)) {
+                start = i - (len - 1) / 2;
+                end = i + len / 2;
+            }
+        }
+        return s.substring(start, end + 1);
+    }
+
+    private int helper(String s, int start, int end) {
+        while (start >= 0 && end < s.length() && s.charAt(start) == s.charAt(end)) {
+            --start;
+            ++end;
+        }
+        return (end - start - 1);
+    }
+}
 ```
+# 6.Z字形变换
+题目链接        
+https://leetcode-cn.com/problems/zigzag-conversion/     
+https://leetcode.com/problems/zigzag-conversion/        
+```java
+package leetcode;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/*
+6.Z字形变换
+将一个给定字符串 s 根据给定的行数 numRows ，以从上往下、从左到右进行 Z 字形排列。
+比如输入字符串为 "PAYPALISHIRING" 行数为 3 时，排列如下：
+P   A   H   N
+A P L S I I G
+Y   I   R
+之后，你的输出需要从左往右逐行读取，产生出一个新的字符串，比如："PAHNAPLSIIGYIR"。
+请你实现这个将字符串进行指定行数变换的函数：
+string convert(string s, int numRows);
+示例 1：
+输入：s = "PAYPALISHIRING", numRows = 3
+输出："PAHNAPLSIIGYIR"
+示例 2：
+输入：s = "PAYPALISHIRING", numRows = 4
+输出："PINALSIGYAHRPI"
+解释：
+P     I    N
+A   L S  I G
+Y A   H R
+P     I
+示例 3：
+输入：s = "A", numRows = 1
+输出："A"
+提示：
+1 <= s.length <= 1000
+s 由英文字母（小写和大写）、',' 和 '.' 组成
+1 <= numRows <= 1000
+ */
+public class lc006 {
+    /*
+    通过从左向右迭代字符串，我们可以轻松地确定字符位于 Z 字形图案中的哪一行。
+    可以使用min(numRows,len(s))个列表来表示Z字形图案中的非空行。
+    从左到右迭代字符串s，将每个字符添加到合适的行。可以使用当前行和当前方向这两个变量对合适的行进行跟踪。
+    只有当向上移动到最上面的行或向下移动到最下面的行时，当前方向才会发生改变。
+    复杂度分析:
+    时间复杂度:O(n)，其中n=len(s)
+    空间复杂度:O(n)
+     */
+    public String convert(String s, int numRows) {
+        if (numRows == 1) {
+            return s;
+        }
+
+        List<StringBuilder> rows = new ArrayList<>();
+        for (int i = 0; i < Math.min(numRows, s.length()); i++) {
+            rows.add(new StringBuilder());
+        }
+
+        int curRow = 0;
+        boolean goingDown = false;
+        for (char c : s.toCharArray()) {
+            rows.get(curRow).append(c);
+            if (curRow == 0 || curRow == numRows - 1) {
+                goingDown = !goingDown;
+            }
+            curRow += goingDown ? 1 : -1;
+        }
+
+        StringBuilder res = new StringBuilder();
+        for (StringBuilder row : rows) {
+            res.append(row);
+        }
+
+        return res.toString();
+    }
+}
+```
+# 7.整数反转
+题目链接        
+https://leetcode-cn.com/problems/reverse-integer/       
+https://leetcode.com/problems/reverse-integer/
+```java
+package leetcode;
+
+/*
+7.整数反转
+给你一个32位的有符号整数x ，返回将x中的数字部分反转后的结果。
+如果反转后整数超过32位的有符号整数的范围[−2的31次方,2的31次方−1] ，就返回 0。
+假设环境不允许存储64位整数（有符号或无符号）。
+示例 1：
+输入：x = 123
+输出：321
+示例 2：
+输入：x = -123
+输出：-321
+示例 3：
+输入：x = 120
+输出：21
+示例 4：
+输入：x = 0
+输出：0
+提示：
+-2的31次方 <= x <= 2的31次方 - 1
+ */
+public class lc007 {
+    public int reverse(int x) {
+        int res = 0;
+        while (x != 0) {
+            if (res > Integer.MAX_VALUE / 10 || res < Integer.MIN_VALUE / 10) {
+                return 0;
+            }
+            res = res * 10 + x % 10;
+            x /= 10;
+        }
+
+        return res;
+    }
+}
+```
+# 8.
+
+
+
+
+
+
 
 # 21.合并两个有序链表
 题目链接        

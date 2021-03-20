@@ -26,11 +26,10 @@ public class lc005 {
         if (size == 1 || s.isEmpty()) {
             return s;
         }
-
         int len = 0;
         int start = 0;
         int end = 0;
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; ++i) {
             int len1 = helper(s, i, i);
             int len2 = helper(s, i, i + 1);
             len = Math.max(len1, len2);
@@ -39,7 +38,6 @@ public class lc005 {
                 end = i + len / 2;
             }
         }
-
         return s.substring(start, end + 1);
     }
 
@@ -48,6 +46,6 @@ public class lc005 {
             --start;
             ++end;
         }
-        return (end - start + 1);
+        return (end - start - 1);
     }
 }
