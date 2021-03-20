@@ -30,7 +30,42 @@ nums2.length == n
 进阶：你能设计一个时间复杂度为 O(log (m+n)) 的算法解决此问题吗？
  */
 public class lc004 {
+    /*
+    根据中位数的定义，当m+n是奇数时，中位数是两个有序数组中的第(m+n)/2个元素，当m+n是偶数时，中位数是两个有序数组中的第(m+n)/2个元素和第(m+n)/2+1个元素的平均值。
+    因此，这道题可以转化成寻找两个有序数组中的第k小的数，其中k为(m+n)/2或(m+n)/2+1。
+     */
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int size1 = nums1.length;
+        int size2 = nums2.length;
+        int size = size1 + size2;
+        if (size % 2 == 1) {
+            return findKth(nums1, 0, size1, nums2, 0, size2, size / 2 + 1);
+        } else {
+            return (findKth(nums1, 0, size1, nums2, 0, size2, size / 2) + findKth(nums1, 0, size1, nums2, 0, size2, size / 2 + 1)) / 2;
+        }
+    }
 
+    public double findKth(int[] nums1, int start1, int size1, int[] nums2, int start2, int size2, int k) {
+        if (size1 - start1 > size2 - start2) {
+            return findKth(nums2, start2, size2, nums1, start1, size1, k);
+        }
+        //如果一个数组为空，说明该数组中的所有元素都被排除，可以直接返回另一个数组中第k小的元素。
+        if (size1 - start1 == 0) {
+            return nums2[k - 1];
+        }
+        if (k == 1) {
+            // k==1表示已经找到第k-1小的数，下一个数为两个数组start开始的最小值
+            return Math.min(nums1[start1], nums2[start2]);
+        }
+
+        int p1 = start1 + Math.min(size1 - start1, k / 2); // p1和p2记录当前需要比较的那个位
+        int p2 = start2 + k - p1 + start1;
+        if (nums1[p1 - 1] < nums2[p2 - 1]) {
+            return findKth(nums1, p1, size1, nums2, start2, size2, k - p1 + start1);
+        } else if (nums1[p1 - 1] > nums2[p2 - 1]) {
+            return findKth(nums1, start1, size1, nums2, p2, size2, k - p2 + start2);
+        } else {
+            return nums1[p1 - 1];
+        }
     }
 }

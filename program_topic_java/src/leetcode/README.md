@@ -212,8 +212,90 @@ public class lc003 {
     }
 }
 ```
-# 
+# 4.寻找两个正序数组的中位数
+题目连接        
+https://leetcode-cn.com/problems/median-of-two-sorted-arrays/       
+https://leetcode.com/problems/median-of-two-sorted-arrays/      
+```java
+package leetcode;
 
+/*
+4.寻找两个正序数组的中位数
+给定两个大小分别为m和n的正序（从小到大）数组nums1和nums2。请你找出并返回这两个正序数组的中位数 。
+示例 1：
+输入：nums1 = [1,3], nums2 = [2]
+输出：2.00000
+解释：合并数组 = [1,2,3] ，中位数 2
+示例 2：
+输入：nums1 = [1,2], nums2 = [3,4]
+输出：2.50000
+解释：合并数组 = [1,2,3,4] ，中位数 (2 + 3) / 2 = 2.5
+示例 3：
+输入：nums1 = [0,0], nums2 = [0,0]
+输出：0.00000
+示例 4：
+输入：nums1 = [], nums2 = [1]
+输出：1.00000
+示例 5：
+输入：nums1 = [2], nums2 = []
+输出：2.00000
+提示：
+nums1.length == m
+nums2.length == n
+0 <= m <= 1000
+0 <= n <= 1000
+1 <= m + n <= 2000
+-106 <= nums1[i], nums2[i] <= 106
+进阶：你能设计一个时间复杂度为 O(log (m+n)) 的算法解决此问题吗？
+ */
+public class lc004 {
+    /*
+    根据中位数的定义，当m+n是奇数时，中位数是两个有序数组中的第(m+n)/2个元素，当m+n是偶数时，中位数是两个有序数组中的第(m+n)/2个元素和第(m+n)/2+1个元素的平均值。
+    因此，这道题可以转化成寻找两个有序数组中的第k小的数，其中k为(m+n)/2或(m+n)/2+1。
+     */
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int size1 = nums1.length;
+        int size2 = nums2.length;
+        int size = size1 + size2;
+        if (size % 2 == 1) {
+            return findKth(nums1, 0, size1, nums2, 0, size2, size / 2 + 1);
+        } else {
+            return (findKth(nums1, 0, size1, nums2, 0, size2, size / 2) + findKth(nums1, 0, size1, nums2, 0, size2, size / 2 + 1)) / 2;
+        }
+    }
+
+    public double findKth(int[] nums1, int start1, int size1, int[] nums2, int start2, int size2, int k) {
+        if (size1 - start1 > size2 - start2) {
+            return findKth(nums2, start2, size2, nums1, start1, size1, k);
+        }
+        //如果一个数组为空，说明该数组中的所有元素都被排除，可以直接返回另一个数组中第k小的元素。
+        if (size1 - start1 == 0) {
+            return nums2[k - 1];
+        }
+        if (k == 1) {
+            // k==1表示已经找到第k-1小的数，下一个数为两个数组start开始的最小值
+            return Math.min(nums1[start1], nums2[start2]);
+        }
+
+        int p1 = start1 + Math.min(size1 - start1, k / 2); // p1和p2记录当前需要比较的那个位
+        int p2 = start2 + k - p1 + start1;
+        if (nums1[p1 - 1] < nums2[p2 - 1]) {
+            return findKth(nums1, p1, size1, nums2, start2, size2, k - p1 + start1);
+        } else if (nums1[p1 - 1] > nums2[p2 - 1]) {
+            return findKth(nums1, start1, size1, nums2, p2, size2, k - p2 + start2);
+        } else {
+            return nums1[p1 - 1];
+        }
+    }
+}
+```
+# 5.最长回文子串
+题目链接        
+https://leetcode-cn.com/problems/longest-palindromic-substring/     
+https://leetcode.com/problems/longest-palindromic-substring/        
+```java
+
+```
 
 # 21.合并两个有序链表
 题目链接        
