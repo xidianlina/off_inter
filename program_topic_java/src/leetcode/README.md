@@ -784,8 +784,401 @@ public class lc010 {
     }
 }
 ```
+# 11.盛最多水的容器
+题目链接            
+https://leetcode-cn.com/problems/container-with-most-water/                 
+https://leetcode.com/problems/container-with-most-water/            
+```java
+package leetcode;
+
+/*
+盛最多水的容器:
+给你n个非负整数a1，a2，...，an，每个数代表坐标中的一个点(i,ai)。在坐标内画n条垂直线，垂直线i的两个端点分别为(i,ai) 和 (i, 0)。
+找出其中的两条线，使得它们与x轴共同构成的容器可以容纳最多的水。
+说明：你不能倾斜容器。
+示例 1：
+输入：[1,8,6,2,5,4,8,3,7]
+输出：49
+解释：图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为49。
+
+示例 2：
+输入：height = [1,1]
+输出：1
+
+示例 3：
+输入：height = [4,3,2,1,4]
+输出：16
+
+示例 4：
+输入：height = [1,2,1]
+输出：2
+
+提示：
+n = height.length
+2 <= n <= 3 * 104
+0 <= height[i] <= 3 * 104
+ */
+public class lc011 {
+    public static void main(String[] args) {
+        lc011 lc = new lc011();
+        int[] arr = {1, 8, 6, 2, 5, 4, 8, 3, 7};
+        System.out.println(lc.maxArea(arr));
+    }
+
+    /*
+      时间复杂度:O(N),双指针总计最多遍历整个数组一次。
+      空间复杂度:O(1),只需要额外的常数级别的空间。
+     */
+    public int maxArea(int[] height) {
+        int size = height.length;
+        if (size < 2) {
+            return 0;
+        }
+        int maxArea = 0;
+        int start = 0;
+        int end = size - 1;
+        while (start < end) {
+            maxArea = Math.max(maxArea, Math.min(height[start], height[end]) * (end - start));
+            if (height[start] < height[end]) {
+                ++start;
+            } else {
+                --end;
+            }
+        }
+
+        return maxArea;
+    }
+}
+```
+# 12.整数转罗马数字
+题目链接            
+https://leetcode-cn.com/problems/integer-to-roman/
+https://leetcode.com/problems/integer-to-roman/
+```java
+package leetcode;
+
+/*
+罗马数字包含以下七种字符:I， V， X， L，C，D 和 M。
+字符          数值
+I             1
+V             5
+X             10
+L             50
+C             100
+D             500
+M             1000
+例如,罗马数字2写做II，即为两个并列的1。12写做XII，即为X+II。27写做XXVII, 即为XX+V+II。
+通常情况下，罗马数字中小的数字在大的数字的右边。但也存在特例，例如4不写做IIII，而是IV。
+数字1在数字5的左边，所表示的数等于大数5减小数1得到的数值4。同样地，数字9表示为IX。这个特殊的规则只适用于以下六种情况：
+I可以放在V(5)和X(10) 的左边，来表示4和9。
+X可以放在L(50)和C(100)的左边，来表示40和90。
+C可以放在D(500)和M(1000)的左边，来表示400和900。
+给定一个整数，将其转为罗马数字。输入确保在1到3999的范围内。
+
+示例1:
+输入:3
+输出: "III"
+
+示例2:
+输入:4
+输出: "IV"
+
+示例3:
+输入:9
+输出: "IX"
+
+示例4:
+输入:58
+输出: "LVIII"
+解释: L = 50, V = 5, III = 3.
+
+示例5:
+输入:1994
+输出: "MCMXCIV"
+解释: M = 1000, CM = 900, XC = 90, IV = 4.
+
+提示：
+1 <= num <= 3999
+ */
+public class lc012 {
+    public static void main(String[] args) {
+        lc012 lc = new lc012();
+        System.out.println(lc.intToRoman(58));
+    }
+
+    int[] values = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+    String[] symbols = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+
+    public String intToRoman(int num) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < values.length && num >= 0; ++i) {
+            while (values[i] <= num) {
+                num -= values[i];
+                sb.append(symbols[i]);
+            }
+        }
+
+        return sb.toString();
+    }
+}
+```
+# 13.罗马数字转整数
+题目链接                
+https://leetcode-cn.com/problems/roman-to-integer/
+https://leetcode.com/problems/roman-to-integer/
+```java
+package leetcode;
+
+/*
+罗马数字包含以下七种字符:I， V， X， L，C，D 和 M。
+字符          数值
+I             1
+V             5
+X             10
+L             50
+C             100
+D             500
+M             1000
+例如,罗马数字2写做II，即为两个并列的1。12写做XII，即为X+II。27写做XXVII, 即为XX+V+II。
+通常情况下，罗马数字中小的数字在大的数字的右边。但也存在特例，例如4不写做IIII，而是IV。
+数字1在数字5的左边，所表示的数等于大数5减小数1得到的数值4。同样地，数字9表示为IX。这个特殊的规则只适用于以下六种情况：
+I可以放在V(5)和X(10) 的左边，来表示4和9。
+X可以放在L(50)和C(100)的左边，来表示40和90。
+C可以放在D(500)和M(1000)的左边，来表示400和900。
+给定一个整数，将其转为罗马数字。输入确保在1到3999的范围内。
+
+示例1:
+输入:"III"
+输出: 3
+
+示例2:
+输入:"IV"
+输出: 4
+
+示例3:
+输入:"IX"
+输出: 9
+
+示例4:
+输入:"LVIII"
+输出: 58
+解释: L = 50, V= 5, III = 3.
+
+示例5:
+输入:"MCMXCIV"
+输出: 1994
+解释: M = 1000, CM = 900, XC = 90, IV = 4.
+
+提示：
+1 <= s.length <= 15
+s 仅含字符 ('I', 'V', 'X', 'L', 'C', 'D', 'M')
+题目数据保证 s 是一个有效的罗马数字，且表示整数在范围 [1, 3999] 内
+题目所给测试用例皆符合罗马数字书写规则，不会出现跨位等情况。
+IL 和 IM 这样的例子并不符合题目要求，49 应该写作 XLIX，999 应该写作 CMXCIX 。
+ */
+public class lc013 {
+    public static void main(String[] args) {
+
+    }
+
+    /*
+       按照题目的描述，可以总结如下规则：
+       罗马数字由 I,V,X,L,C,D,M 构成；
+       当小值在大值的左边，则减小值，如 IV=5-1=4；
+       当小值在大值的右边，则加小值，如 VI=5+1=6；
+       由上可知，右值永远为正，因此最后一位必然为正。
+       一言蔽之，把一个小值放在大值的左边，就是做减法，否则为加法。
+       在代码实现上，可以往后看多一位，对比当前位与后一位的大小关系，从而确定当前位是加还是减法。当没有下一位时，做加法即可。
+       也可保留当前位的值，当遍历到下一位的时，对比保留值与遍历位的大小关系，再确定保留值为加还是减。最后一位做加法即可。
+     */
+    public int romanToInt(String s) {
+        int sum = 0;
+        int preNum = getValue(s.charAt(0));
+        for (int i = 1; i < s.length(); ++i) {
+            int num = getValue(s.charAt(i));
+            if (preNum < num) {
+                sum -= preNum;
+            } else {
+                sum += preNum;
+            }
+            preNum = num;
+        }
+        sum += preNum;
 
 
+        return sum;
+    }
+
+    private int getValue(char ch) {
+        switch (ch) {
+            case 'I':
+                return 1;
+            case 'V':
+                return 5;
+            case 'X':
+                return 10;
+            case 'L':
+                return 50;
+            case 'C':
+                return 100;
+            case 'D':
+                return 500;
+            case 'M':
+                return 1000;
+            default:
+                return 0;
+        }
+    }
+}
+```
+# 14.最长公共前缀
+题目链接                                    
+https://leetcode-cn.com/problems/longest-common-prefix/                                 
+https://leetcode.com/problems/longest-common-prefix/             
+```java
+package leetcode;
+
+/*
+编写一个函数来查找字符串数组中的最长公共前缀。
+如果不存在公共前缀，返回空字符串""。
+
+示例 1：
+输入：strs = ["flower","flow","flight"]
+输出："fl"
+
+示例 2：
+输入：strs = ["dog","racecar","car"]
+输出：""
+解释：输入不存在公共前缀。
+
+提示：
+0 <= strs.length <= 200
+0 <= strs[i].length <= 200
+strs[i] 仅由小写英文字母组成
+ */
+public class lc014 {
+    public static void main(String[] args) {
+
+    }
+
+    public String longestCommonPrefix(String[] strs) {
+        if (strs == null || strs.length == 0) {
+            return "";
+        }
+
+        String res = new String();
+        for (int j = 0; j < strs[0].length(); ++j) {
+            char c = strs[0].charAt(j);
+            for (int i = 1; i < strs.length; ++i) {
+                if (j >= strs[i].length() || strs[i].charAt(j) != c) {
+                    return res;
+                }
+            }
+            res += Character.toString(c);
+        }
+
+        return res;
+    }
+
+    public String longestCommonPrefix2(String[] strs) {
+        if (strs == null || strs.length == 0) {
+            return "";
+        }
+
+        String prefix = strs[0];
+        for (int i = 1; i < strs.length; ++i) {
+            prefix = longestCommonPrefix(prefix, strs[i]);
+            if (prefix.length() == 0) {
+                break;
+            }
+        }
+
+        return prefix;
+    }
+
+    public String longestCommonPrefix(String str1, String str2) {
+        int length = Math.min(str1.length(), str2.length());
+        int index = 0;
+        while (index < length && str1.charAt(index) == str2.charAt(index)) {
+            index++;
+        }
+
+        return str1.substring(0, index);
+    }
+}
+```                         
+# 15. 三数之和
+题目链接                
+https://leetcode-cn.com/problems/3sum/                  
+https://leetcode.com/problems/3sum/              
+```java
+package leetcode;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/*
+给你一个包含n个整数的数组nums，判断nums中是否存在三个元素a，b，c ，使得a + b + c = 0 ？请你找出所有和为0且不重复的三元组。
+注意：答案中不可以包含重复的三元组。
+
+示例 1：
+输入：nums = [-1,0,1,2,-1,-4]
+输出：[[-1,-1,2],[-1,0,1]]
+
+示例 2：
+输入：nums = []
+输出：[]
+
+示例 3：
+输入：nums = [0]
+输出：[]
+
+提示：
+0 <= nums.length <= 3000
+-105 <= nums[i] <= 105
+ */
+public class lc015 {
+    public static void main(String[] args) {
+
+    }
+
+    public List<List<Integer>> threeSum(int[] nums) {
+        int target = 0;
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        int size = nums.length;
+        if (size < 3 || nums == null) {
+            return res;
+        }
+        Arrays.sort(nums);
+        for (int i = 0; i < size - 2; ++i) {
+            //去重
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            int l = i + 1;
+            int r = size - 1;
+            while (l < r) {
+                int sum = nums[i] + nums[l] + nums[r];
+                if (sum < target) {
+                    while (l < r && nums[++l] == nums[l - 1]) ;
+                } else if (sum > target) {
+                    while (l < r && nums[--r] == nums[r + 1]) ;
+                } else {
+                    List<Integer> tmp = new ArrayList<Integer>();
+                    tmp.add(nums[i]);
+                    tmp.add(nums[l]);
+                    tmp.add(nums[r]);
+                    res.add(tmp);
+                    while (l < r && nums[++l] == nums[l - 1]) ;
+                    while (l < r && nums[--r] == nums[r + 1]) ;
+                }
+            }
+        }
+        return res;
+    }
+}
+```
 
 
 # 21.合并两个有序链表
