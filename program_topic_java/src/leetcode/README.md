@@ -693,10 +693,10 @@ https://leetcode.com/problems/regular-expression-matching/
 > 如果通过这种方法进行转移，那么就需要枚举这个组合到底匹配了s中的几个字符，会增导致时间复杂度增加，并且代码编写起来十分麻烦。                
 > 换个角度考虑这个问题：[字母+星号]的组合在匹配的过程中，本质上只会有两种情况：              
   匹配s末尾的一个字符，将该字符扔掉，而该组合还可以继续进行匹配；                     
-  不匹配字符，将该组合扔掉，不再进行匹配。                                    
-> 如果按照这个角度进行思考，可以写出很精巧的状态转移方程：
-> ![lc010_2](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/leetcode/picture/lc010_2.png)                
-> 最终的状态转移方程如下：                                     
+  不匹配字符，将该组合扔掉，不再进行匹配。                                                  
+> 如果按照这个角度进行思考，可以写出很精巧的状态转移方程：                  
+> ![lc010_2](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/leetcode/picture/lc010_2.png)                           
+> 最终的状态转移方程如下：                                                     
 > ![lc010_3](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/leetcode/picture/lc010_3.png)                                
 > 其中matches(x, y)判断两个字符是否匹配的辅助函数。只有当y是.或者x和y本身相同时，这两个字符才会匹配。                                     
 ```java
