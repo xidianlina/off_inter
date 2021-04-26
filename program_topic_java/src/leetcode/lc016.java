@@ -1,0 +1,53 @@
+package leetcode;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+/*
+给定一个包括n个整数的数组nums和 一个目标值target。找出nums中的三个整数，使得它们的和与target最接近。返回这三个数的和。假定每组输入只存在唯一答案。
+
+示例：
+输入：nums = [-1,2,1,-4], target = 1
+输出：2
+解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。
+
+提示：
+3 <= nums.length <= 10^3
+-10^3<= nums[i]<= 10^3
+-10^4<= target<= 10^4
+ */
+public class lc016 {
+    public static void main(String[] args) {
+
+    }
+
+    public int threeSumClosest(int[] nums, int target) {
+        int size = nums.length;
+        if (size < 3 || nums == null) {
+            return 0;
+        }
+
+        int closest = nums[0] + nums[1] + nums[2];
+        int diff = Math.abs(closest - target);
+        Arrays.sort(nums);
+        for (int i = 0; i < size - 2; ++i) {
+            int j = i + 1;
+            int k = size - 1;
+            while (j < k) {
+                int sum = nums[i] + nums[j] + nums[k];
+                int newDiff = Math.abs(sum - target);
+                if (diff > newDiff) {
+                    diff = newDiff;
+                    closest = sum;
+                }
+                if (sum > target) {
+                    --k;
+                } else {
+                    ++j;
+                }
+            }
+        }
+
+        return closest;
+    }
+}
