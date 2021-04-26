@@ -679,8 +679,26 @@ https://leetcode.com/problems/regular-expression-matching/
   而对于p中[字符+星号]的组合而言，它可以在s中匹配任意自然数个字符，并不具有唯一性。因此考虑使用动态规划，对匹配的方案进行枚举。                 
   用f[i][j]表示s的前i个字符与p中的前j个字符是否能够匹配。在进行状态转移时，考虑p的第j个字符的匹配情况:             
   (1).如果p的第j个字符是一个小写字母，那么必须在s中匹配一个相同的小写字母,即             
-> ![lc010](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/leetcode/picture/lc010.png)                                               
-           
+> ![lc010](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/leetcode/picture/lc010.png)                        
+> 也就是说，如果s的第i个字符与p的第j个字符不相同，那么无法进行匹配；否则可以匹配两个字符串的最后一个字符，完整的匹配结果取决于两个字符串前面的部分。                   
+> (2).在任意情况下，只要 p[j]p[j] 是 .，那么 p[j]p[j] 一定成功匹配 ss 中的任意一个小写字母。              
+> (3).如果p的第j个字符是*，那么就表示可以对p的第j-1个字符匹配任意自然数次。在匹配0次的情况下,有                 
+       f[i][j]=f[i][j−2]                
+> 也就是"浪费""了一个[字符+星号]的组合，没有匹配任何 ss 中的字符。                             
+> 在匹配1,2,3,⋯ 次的情况下，类似地有             
+> f[i][j] = f[i - 1][j - 2], if s[i] = p[j - 1]                                              
+> f[i][j] = f[i - 2][j - 2], if s[i - 1] = s[i] = p[j - 1]                                  
+> f[i][j] = f[i - 3][j - 2], if s[i - 2] = s[i - 1] = s[i] = p[j - 1]                                 
+> ......                
+> 如果通过这种方法进行转移，那么就需要枚举这个组合到底匹配了s中的几个字符，会增导致时间复杂度增加，并且代码编写起来十分麻烦。                
+> 换个角度考虑这个问题：[字母+星号]的组合在匹配的过程中，本质上只会有两种情况：              
+  匹配s末尾的一个字符，将该字符扔掉，而该组合还可以继续进行匹配；                     
+  不匹配字符，将该组合扔掉，不再进行匹配。                                    
+> 如果按照这个角度进行思考，可以写出很精巧的状态转移方程：
+> ![lc010_2](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/leetcode/picture/lc010_2.png)                
+> 最终的状态转移方程如下：                                     
+> ![lc010_3](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/leetcode/picture/lc010_3.png)                                
+> 其中matches(x, y)判断两个字符是否匹配的辅助函数。只有当y是.或者x和y本身相同时，这两个字符才会匹配。                                     
 ```java
 package leetcode;
 
