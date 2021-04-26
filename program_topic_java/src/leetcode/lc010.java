@@ -39,7 +39,10 @@ p可能为空，且只包含从a-z的小写字母，以及字符.和*。
  */
 public class lc010 {
     public static void main(String[] args) {
-
+        lc010 lc = new lc010();
+        String s = "ab";
+        String p = ".*";
+        System.out.println(lc.isMatch(s, p));
     }
 
     public boolean isMatch(String s, String p) {
@@ -62,6 +65,7 @@ public class lc010 {
                 }
             }
         }
+
         return f[m][n];
     }
 
@@ -69,9 +73,11 @@ public class lc010 {
         if (i == 0) {
             return false;
         }
+
         if (p.charAt(j - 1) == '.') {
             return true;
         }
+
         return s.charAt(i - 1) == p.charAt(j - 1);
     }
 }
