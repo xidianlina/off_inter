@@ -33,22 +33,20 @@ public class lc017 {
         if (digits == null || digits.isEmpty()) {
             return result;
         }
-
         result.add("");
-        String[] btns = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqr", "stuv", "wxyz"};
-        for (int i = 0; i < digits.length(); ++i) {
+        String[] btns = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        for (int i = 0; i < digits.length(); i++) {
             List<String> tmp = new ArrayList<>();
             String letter = btns[digits.charAt(i) - '0'];
             //遍历上一个列表，取出每一个元素，并和新的元素的每一个字符加起来保存
-            for (int j = 0; j < result.size(); ++j) {
+            for (int j = 0; j < result.size(); j++) {
                 //遍历当前数字对应的所有字符
-                for (int k = 0; k < letter.length(); ++k) {
+                for (int k = 0; k < letter.length(); k++) {
                     tmp.add(result.get(j) + letter.charAt(k));
                 }
             }
             result = tmp;
         }
-
         return result;
     }
 }

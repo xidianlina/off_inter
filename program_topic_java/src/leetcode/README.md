@@ -1248,17 +1248,257 @@ public class lc016 {
 https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/             
 https://leetcode.com/problems/letter-combinations-of-a-phone-number/       
 ```java
+package leetcode;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/*
+给定一个仅包含数字2-9的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。
+给出数字到字母的映射如下（与电话按键相同）。注意1不对应任何字母。
+
+示例 1：
+输入：digits = "23"
+输出：["ad","ae","af","bd","be","bf","cd","ce","cf"]
+
+示例 2：
+输入：digits = ""
+输出：[]
+
+示例 3：
+输入：digits = "2"
+输出：["a","b","c"]
+
+提示：
+0 <= digits.length <= 4
+digits[i] 是范围 ['2', '9'] 的一个数字。
+ */
+public class lc017 {
+    public static void main(String[] args) {
+
+    }
+
+    public List<String> letterCombinations(String digits) {
+        List<String> result = new ArrayList<>();
+        if (digits == null || digits.isEmpty()) {
+            return result;
+        }
+        result.add("");
+        String[] btns = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        for (int i = 0; i < digits.length(); i++) {
+            List<String> tmp = new ArrayList<>();
+            String letter = btns[digits.charAt(i) - '0'];
+            //遍历上一个列表，取出每一个元素，并和新的元素的每一个字符加起来保存
+            for (int j = 0; j < result.size(); j++) {
+                //遍历当前数字对应的所有字符
+                for (int k = 0; k < letter.length(); k++) {
+                    tmp.add(result.get(j) + letter.charAt(k));
+                }
+            }
+            result = tmp;
+        }
+        return result;
+    }
+}
 ```
-# 18.
+# 18.四数之和
+题目链接            
+https://leetcode-cn.com/problems/4sum/        
+https://leetcode.com/problems/4sum/        
+```java
+package leetcode;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/*
+给定一个包含n个整数的数组nums和一个目标值target，判断nums中是否存在四个元素a，b，c和d，使得a+b+c+d的值与target相等？找出所有满足条件且不重复的四元组。
+注意：答案中不可以包含重复的四元组。
+
+示例 1：
+输入：nums = [1,0,-1,0,-2,2], target = 0
+输出：[[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+
+示例 2：
+输入：nums = [], target = 0
+输出：[]
+
+提示：
+0 <= nums.length <= 200
+-109 <= nums[i] <= 109
+-109 <= target <= 109
+ */
+public class lc018 {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums.length < 4 || nums == null) {
+            return result;
+        }
+
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length - 3; ++i) {
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+
+            for (int j = i + 1; j < nums.length - 2; ++j) {
+                if (j > i + 1 && nums[j] == nums[j - 1]) {
+                    continue;
+                }
+
+                int left = j + 1;
+                int right = nums.length - 1;
+                while (left < right) {
+                    int tmp = nums[i] + nums[j] + nums[left] + nums[right];
+                    if (tmp == target) {
+                        List<Integer> l = new ArrayList<>();
+                        l.add(nums[i]);
+                        l.add(nums[j]);
+                        l.add(nums[left]);
+                        l.add(nums[right]);
+                        result.add(l);
+                        while (left < right && nums[++left] == nums[left - 1]) ;
+                        while (left < right && nums[--right] == nums[right + 1]) ;
+                    } else if (tmp < target) {
+                        while (left < right && nums[++left] == nums[left - 1]) ;
+                    } else {
+                        while (left < right && nums[--right] == nums[right + 1]) ;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+}
+```
+# 19.删除链表的倒数第N个结点
 题目链接        
+https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/          
+https://leetcode.com/problems/remove-nth-node-from-end-of-list/        
+```java
+package leetcode;
 
-# 19.
-题目链接        
+/*
+给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
+进阶：你能尝试使用一趟扫描实现吗？
 
-# 20.
-题目链接          
+示例 1：
+输入：head = [1,2,3,4,5], n = 2
+输出：[1,2,3,5]
 
+示例 2：
+输入：head = [1], n = 1
+输出：[]
+
+示例 3：
+输入：head = [1,2], n = 1
+输出：[1]
+
+提示：
+链表中结点的数目为 sz
+1 <= sz <= 30
+0 <= Node.val <= 100
+1 <= n <= sz
+ */
+public class lc019 {
+    //时间复杂度为O(n), 空间复杂度O(1)。
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        if (head == null || head.next == null) {
+            return null;
+        }
+
+        ListNode first = head, second = head;
+        for (int i = 0; i < n; ++i) {
+            first = first.next;
+        }
+
+        if (first == null) {
+            return head.next;
+        }
+
+        while (first.next != null) {
+            first = first.next;
+            second = second.next;
+        }
+
+        second.next = second.next.next;
+
+        return head;
+    }
+}
+```
+# 20.有效的括号
+题目链接      
+https://leetcode-cn.com/problems/valid-parentheses/         
+https://leetcode.com/problems/valid-parentheses/
+```java
+package leetcode;
+
+import java.util.Stack;
+
+/*
+给定一个只包括'('，')'，'{'，'}'，'['，']'的字符串 s ，判断字符串是否有效。
+有效字符串需满足：
+左括号必须用相同类型的右括号闭合。
+左括号必须以正确的顺序闭合。
+
+示例 1：
+输入：s = "()"
+输出：true
+
+示例2：
+输入：s = "()[]{}"
+输出：true
+
+示例3：
+输入：s = "(]"
+输出：false
+
+示例4：
+输入：s = "([)]"
+输出：false
+
+示例5：
+输入：s = "{[]}"
+输出：true
+
+提示：
+1 <= s.length <= 104
+s 仅由括号 '()[]{}' 组成
+ */
+public class lc020 {
+    public boolean isValid(String s) {
+        Stack<Character> stack = new Stack<>();
+        Character now;
+        Character prev;
+        int length = s.length();
+        for (int i = 0; i < length; ++i) {
+            now = s.charAt(i);
+            if (now == '(' || now == '[' || now == '{') {
+                stack.push(now);
+            } else {
+                if (stack.isEmpty()) {
+                    return false;
+                } else {
+                    prev = stack.pop();
+                }
+
+                if (now == ')' && prev != '(') {
+                    return false;
+                } else if (now == ']' && prev != '[') {
+                    return false;
+                } else if (now == '}' && prev != '{') {
+                    return false;
+                }
+            }
+        }
+
+        return stack.isEmpty();
+    }
+}
+```
 # 21.合并两个有序链表
 题目链接        
 https://leetcode-cn.com/problems/merge-two-sorted-lists/        
