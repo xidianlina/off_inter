@@ -466,8 +466,132 @@ public class lc007 {
     }
 }
 ```
-# 8.
+# 8.字符串转换整数 (atoi)
+题目链接                
+https://leetcode-cn.com/problems/string-to-integer-atoi/                
+https://leetcode.com/problems/string-to-integer-atoi/
+```java
+package leetcode;
 
+/*
+请你来实现一个myAtoi(string s)函数，使其能将字符串转换成一个 32 位有符号整数（类似 C/C++ 中的 atoi 函数）。
+函数myAtoi(string s) 的算法如下：
+
+读入字符串并丢弃无用的前导空格
+检查下一个字符（假设还未到字符末尾）为正还是负号，读取该字符（如果有）。 确定最终结果是负数还是正数。 如果两者都不存在，则假定结果为正。
+读入下一个字符，直到到达下一个非数字字符或到达输入的结尾。字符串的其余部分将被忽略。
+将前面步骤读入的这些数字转换为整数（即，"123" -> 123， "0032" -> 32）。如果没有读入数字，则整数为 0 。必要时更改符号（从步骤 2 开始）。
+如果整数数超过32位有符号整数范围 [−2^31, 2^31− 1] ，需要截断这个整数，使其保持在这个范围内。具体来说，小于 −2^31 的整数应该被固定为 −2^31 ，大于 2^31− 1 的整数应该被固定为 2^31− 1 。
+返回整数作为最终结果。
+
+注意：
+本题中的空白字符只包括空格字符 ' ' 。
+除前导空格或数字后的其余字符串外，请勿忽略 任何其他字符。
+
+示例1：
+输入：s = "42"
+输出：42
+解释：加粗的字符串为已经读入的字符，插入符号是当前读取的字符。
+第 1 步："42"（当前没有读入字符，因为没有前导空格）
+         ^
+第 2 步："42"（当前没有读入字符，因为这里不存在 '-' 或者 '+'）
+         ^
+第 3 步："42"（读入 "42"）
+           ^
+解析得到整数 42 。
+由于 "42" 在范围 [-231, 231 - 1] 内，最终结果为 42 。
+
+示例2：
+输入：s = "   -42"
+输出：-42
+解释：
+第 1 步："   -42"（读入前导空格，但忽视掉）
+            ^
+第 2 步："   -42"（读入 '-' 字符，所以结果应该是负数）
+             ^
+第 3 步："   -42"（读入 "42"）
+               ^
+解析得到整数 -42 。
+由于 "-42" 在范围 [-231, 231 - 1] 内，最终结果为 -42 。
+
+示例3：
+输入：s = "4193 with words"
+输出：4193
+解释：
+第 1 步："4193 with words"（当前没有读入字符，因为没有前导空格）
+         ^
+第 2 步："4193 with words"（当前没有读入字符，因为这里不存在 '-' 或者 '+'）
+         ^
+第 3 步："4193 with words"（读入 "4193"；由于下一个字符不是一个数字，所以读入停止）
+             ^
+解析得到整数 4193 。
+由于 "4193" 在范围 [-231, 231 - 1] 内，最终结果为 4193 。
+
+示例4：
+输入：s = "words and 987"
+输出：0
+解释：
+第 1 步："words and 987"（当前没有读入字符，因为没有前导空格）
+         ^
+第 2 步："words and 987"（当前没有读入字符，因为这里不存在 '-' 或者 '+'）
+         ^
+第 3 步："words and 987"（由于当前字符 'w' 不是一个数字，所以读入停止）
+         ^
+解析得到整数 0 ，因为没有读入任何数字。
+由于 0 在范围 [-231, 231 - 1] 内，最终结果为 0 。
+
+示例5：
+输入：s = "-91283472332"
+输出：-2147483648
+解释：
+第 1 步："-91283472332"（当前没有读入字符，因为没有前导空格）
+         ^
+第 2 步："-91283472332"（读入 '-' 字符，所以结果应该是负数）
+          ^
+第 3 步："-91283472332"（读入 "91283472332"）
+                     ^
+解析得到整数 -91283472332 。
+由于 -91283472332 小于范围 [-231, 231 - 1] 的下界，最终结果被截断为 -2^31 = -2147483648 。
+
+提示：
+0 <= s.length <= 200
+s 由英文字母（大写和小写）、数字（0-9）、' '、'+'、'-' 和 '.' 组成
+ */
+public class lc008 {
+    public static void main(String[] args) {
+
+    }
+
+    public int myAtoi(String str) {
+        int index = 0;
+        Long total = new Long(0);
+        int sign = 1;
+        while (index < str.length() && str.charAt(index) == ' ') {
+            index++;
+        }
+
+        if (index == str.length()) {
+            return (int) (total * sign);
+        }
+
+        if (str.charAt(index) == '-' || str.charAt(index) == '+') {
+            sign = str.charAt(index) == '-' ? -1 : 1;
+            index++;
+        }
+
+        while (index < str.length() && str.charAt(index) >= '0' && str.charAt(index) <= '9') {
+            total = total * 10 + str.charAt(index) - '0';
+            ++index;
+
+            if (total > Integer.MAX_VALUE) {
+                return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            }
+        }
+
+        return (int) (total * sign);
+    }
+}
+```
 
 
 
@@ -605,6 +729,85 @@ public class lc206 {
     }
 }
 ```
+# 9.回文数
+题目链接            
+https://leetcode-cn.com/problems/palindrome-number/
+https://leetcode.com/problems/palindrome-number/
+```java
+package leetcode;
+
+/*
+给你一个整数 x ，如果 x 是一个回文整数，返回 true ；否则，返回 false 。
+回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。例如，121 是回文，而 123 不是。
+
+示例 1：
+输入：x = 121
+输出：true
+
+示例2：
+输入：x = -121
+输出：false
+解释：从左向右读, 为 -121 。 从右向左读, 为 121- 。因此它不是一个回文数。
+
+示例 3：
+输入：x = 10
+输出：false
+解释：从右向左读, 为 01 。因此它不是一个回文数。
+
+示例 4：
+输入：x = -101
+输出：false
+
+提示：
+-2^31<= x <= 2^31- 1
+ */
+public class lc009 {
+    public static void main(String[] args) {
+        lc009 lc = new lc009();
+        System.out.println(lc.isPalindrome(121));
+        System.out.println(lc.isPalindrome(123));
+        System.out.println("---------------");
+        System.out.println(lc.isPalindrome2(121));
+        System.out.println(lc.isPalindrome2(123));
+    }
+
+    public boolean isPalindrome(int x) {
+        if (x < 0) {
+            return false;
+        }
+
+        String s = String.valueOf(x);
+        int start = 0;
+        int end = s.length() - 1;
+
+        while (start <= end) {
+            if (s.charAt(start) != s.charAt(end)) {
+                return false;
+            }
+            ++start;
+            --end;
+        }
+
+        return true;
+    }
+
+    public boolean isPalindrome2(int x) {
+        if (x < 0) {
+            return false;
+        }
+
+        int reverse = 0;
+        int origin = x;
+        while (x > 0) {
+            reverse = reverse * 10 + x % 10;
+            x /= 10;
+        }
+
+        return reverse == origin;
+    }
+}
+```
+# 10.
 
 # 328.奇偶链表
 题目链接    
