@@ -1580,7 +1580,295 @@ public class lc021 {
     }
 }
 ```
+# 22.括号生成
+题目链接                
+https://leetcode-cn.com/problems/generate-parentheses/
+https://leetcode.com/problems/generate-parentheses/
+```java
+package leetcode;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/*
+数字n代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
+
+示例 1：
+输入：n = 3
+输出：["((()))","(()())","(())()","()(())","()()()"]
+
+示例 2：
+输入：n = 1
+输出：["()"]
+
+提示：
+1 <= n <= 8
+ */
+public class lc022 {
+    /*
+     深度优先遍历:
+     当前左右括号都有大于0个可以使用的时候，才产生分支；
+     产生左分支的时候，只看当前是否还有左括号可以使用；
+     产生右分支的时候，还受到左分支的限制，右边剩余可以使用的括号数量一定得在严格大于左边剩余的数量的时候，才可以产生分支；
+     在左边和右边剩余的括号数都等于0的时候结算。
+     */
+    public List<String> generateParenthesis(int n) {
+        List<String> result = new ArrayList<>();
+
+        //特判
+        if (n == 0) {
+            return result;
+        }
+
+        // 执行深度优先遍历，搜索可能的结果
+        generateParenthesisDFS(n, n, "", result);
+
+        return result;
+    }
+
+    private void generateParenthesisDFS(int left, int right, String out, List<String> result) {
+        if (left == 0 && right == 0) {
+            result.add(out);
+            return;
+        }
+
+        // 剪枝（左括号可以使用的个数严格大于右括号可以使用的个数才剪枝）
+        if (left > right) {
+            return;
+        }
+
+        if (left > 0) {
+            generateParenthesisDFS(left - 1, right, out + "(", result);
+        }
+
+        if (right > 0) {
+            generateParenthesisDFS(left, right - 1, out + ")", result);
+        }
+    }
+}
+```
+# 23.合并K个升序链表
+题目链接                
+https://leetcode-cn.com/problems/merge-k-sorted-lists/
+https://leetcode.com/problems/merge-k-sorted-lists/
+```java
+package leetcode;
+
+/*
+给你一个链表数组，每个链表都已经按升序排列。
+请你将所有链表合并到一个升序链表中，返回合并后的链表。
+
+示例 1：
+输入：lists = [[1,4,5],[1,3,4],[2,6]]
+输出：[1,1,2,3,4,4,5,6]
+解释：链表数组如下：
+[
+  1->4->5,
+  1->3->4,
+  2->6
+]
+将它们合并到一个有序链表中得到。
+1->1->2->3->4->4->5->6
+
+示例 2：
+输入：lists = []
+输出：[]
+
+示例 3：
+输入：lists = [[]]
+输出：[]
+
+提示：
+k == lists.length
+0 <= k <= 10^4
+0 <= lists[i].length <= 500
+-10^4 <= lists[i][j] <= 10^4
+lists[i] 按 升序 排列
+lists[i].length 的总和不超过 10^4
+ */
+public class lc023 {
+    //时间复杂度：O(n∗log(k))，n是所有链表中元素的总和，k是链表个数。
+    public ListNode mergeKLists(ListNode[] lists) {
+        int n = lists.length;
+        if (n == 0) {
+            return null;
+        }
+
+        while (n > 1) {
+            int k = (n + 1) / 2;
+            for (int i = 0; i < n / 2; ++i) {
+                lists[i] = mergeTwoLists(lists[i], lists[i + k]);
+            }
+            n = k;
+        }
+
+        return lists[0];
+    }
+
+    private ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null && l2 == null) {
+            return null;
+        }
+
+        if (l1 == null) {
+            return l2;
+        }
+
+        if (l2 == null) {
+            return l1;
+        }
+
+        ListNode head = new ListNode(-1);
+        ListNode cur = head;
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                cur.next = l1;
+                l1 = l1.next;
+            } else {
+                cur.next = l2;
+                l2 = l2.next;
+            }
+            cur = cur.next;
+        }
+
+        cur.next = l1 == null ? l2 : l1;
+
+        return head.next;
+    }
+}
+```
+# 24.两两交换链表中的节点
+题目链接                
+https://leetcode-cn.com/problems/swap-nodes-in-pairs/                   
+https://leetcode-cn.com/problems/swap-nodes-in-pairs/           
+```java
+package leetcode;
+
+/*
+给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。
+你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+
+示例 1：
+输入：head = [1,2,3,4]
+输出：[2,1,4,3]
+
+示例 2：
+输入：head = []
+输出：[]
+
+示例 3：
+输入：head = [1]
+输出：[1]
+
+提示：
+链表中节点的数目在范围 [0, 100] 内
+0 <= Node.val <= 100
+ */
+public class lc024 {
+    /*
+      时间复杂度：O(n)O(n)，其中 nn 是链表的节点数量。需要对每个节点进行更新指针的操作。
+      空间复杂度：O(n)O(n)，其中 nn 是链表的节点数量。空间复杂度主要取决于递归调用的栈空间
+     */
+    public ListNode swapPairs(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode tmp = head.next;
+        head.next = swapPairs(tmp.next);
+        tmp.next = head;
+
+        return tmp;
+    }
+}
+```
+# 25.K 个一组翻转链表
+题目链接                
+https://leetcode-cn.com/problems/reverse-nodes-in-k-group/              
+https://leetcode.com/problems/reverse-nodes-in-k-group/             
+```java
+package leetcode;
+
+/*
+给你一个链表，每k个节点一组进行翻转，请你返回翻转后的链表。
+k是一个正整数，它的值小于或等于链表的长度。
+如果节点总数不是k的整数倍，那么请将最后剩余的节点保持原有顺序。
+
+进阶：
+你可以设计一个只使用常数额外空间的算法来解决此问题吗？
+你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。
+
+示例 1：
+输入：head = [1,2,3,4,5], k = 2
+输出：[2,1,4,3,5]
+
+示例 2：
+输入：head = [1,2,3,4,5], k = 3
+输出：[3,2,1,4,5]
+
+示例 3：
+输入：head = [1,2,3,4,5], k = 1
+输出：[1,2,3,4,5]
+
+示例 4：
+输入：head = [1], k = 1
+输出：[1]
+
+提示：
+列表中节点的数量在范围 sz 内
+1 <= sz <= 5000
+0 <= Node.val <= 1000
+1 <= k <= sz
+ */
+public class lc025 {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if (head == null || k == 1) {
+            return head;
+        }
+
+        ListNode dummy = new ListNode(-1);
+        ListNode pre = dummy;
+        ListNode cur = head;
+        dummy.next = head;
+
+        int i = 0;
+        while (cur != null) {
+            ++i;
+            if (i % k == 0) {
+                pre = reverseOneGroup(pre, cur.next);
+                cur = pre.next;
+            } else {
+                cur = cur.next;
+            }
+        }
+
+        return dummy.next;
+    }
+
+    private ListNode reverseOneGroup(ListNode pre, ListNode next) {
+        ListNode last = pre.next;
+        ListNode cur = last.next;
+        while (cur != next) {
+            last.next = cur.next;
+            cur.next = pre.next;
+            pre.next = cur;
+            cur = last.next;
+        }
+
+        return last;
+    }
+}
+```
+# 26.
+题目链接 
+# 27.
+题目链接 
+# 28.
+题目链接 
+# 29.
+题目链接 
+# 30.
+题目链接 
 # 206.反转链表
 题目链接        
 https://leetcode-cn.com/problems/reverse-linked-list/       
