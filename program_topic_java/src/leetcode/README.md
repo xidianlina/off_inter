@@ -2794,7 +2794,84 @@ public class lc040 {
         }
     }
 }
-```                  
+```     
+# 41.缺失的第一个正数
+题目链接      
+https://leetcode-cn.com/problems/first-missing-positive/          
+https://leetcode.com/problems/first-missing-positive/ 
+```java
+package leetcode;
+
+/*
+给你一个未排序的整数数组 nums ，请你找出其中没有出现的最小的正整数。
+
+进阶：你可以实现时间复杂度为 O(n) 并且只使用常数级别额外空间的解决方案吗？
+
+示例 1：
+输入：nums = [1,2,0]
+输出：3
+
+示例 2：
+输入：nums = [3,4,-1,1]
+输出：2
+
+示例 3：
+输入：nums = [7,8,9,11,12]
+输出：1
+ */
+public class lc041 {
+    /*
+        如果数组中包含x∈[1,N]，那么恢复后，数组的第x−1个元素为x。
+        时间复杂度:O(N),其中N是数组的长度。
+        空间复杂度:O(1)。
+     */
+    public int firstMissingPositive(int[] nums) {
+        int size = nums.length;
+        for (int i = 0; i < size; ++i) {
+            while (nums[i] > 0 && nums[i] <= size && nums[i] != nums[nums[i] - 1]) {
+                int temp = nums[nums[i] - 1];
+                nums[nums[i] - 1] = nums[i];
+                nums[i] = temp;
+            }
+        }
+
+        for (int i = 0; i < size; ++i) {
+            if (nums[i] != i + 1) {
+                return i + 1;
+            }
+        }
+
+        return size + 1;
+    }
+}
+```
+# 42.
+题目链接      
+
+# 43.
+题目链接
+# 44.
+题目链接
+# 45.
+题目链接
+# 46.
+题目链接
+# 47.
+题目链接
+# 48.
+题目链接
+# 49.
+题目链接
+
+
+
+
+
+
+
+
+
+
 # 206.反转链表
 题目链接        
 https://leetcode-cn.com/problems/reverse-linked-list/       
