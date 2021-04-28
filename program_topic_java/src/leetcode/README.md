@@ -2248,7 +2248,553 @@ public class lc030 {
         return result;
     }
 }
-```    
+```   
+# 31.下一个排列
+题目链接            
+https://leetcode-cn.com/problems/next-permutation/
+https://leetcode.com/problems/next-permutation/
+```java
+package leetcode;
+
+/*
+实现获取 下一个排列 的函数，算法需要将给定数字序列重新排列成字典序中下一个更大的排列。
+如果不存在下一个更大的排列，则将数字重新排列成最小的排列（即升序排列）。
+必须 原地 修改，只允许使用额外常数空间。
+
+示例 1：
+输入：nums = [1,2,3]
+输出：[1,3,2]
+
+示例 2：
+输入：nums = [3,2,1]
+输出：[1,2,3]
+
+示例 3：
+输入：nums = [1,1,5]
+输出：[1,5,1]
+
+示例 4：
+输入：nums = [1]
+输出：[1]
+
+提示：
+1 <= nums.length <= 100
+0 <= nums[i] <= 100
+ */
+public class lc031 {
+    /*
+        思路及解法:
+        下一个排列总是比当前排列要大，除非该排列已经是最大的排列。希望找到一种方法，能够找到一个大于当前序列的新序列，且变大的幅度尽可能小。
+        将一个左边的「较小数」与一个右边的「较大数」交换，以能够让当前排列变大，从而得到下一个排列。
+        同时要让这个「较小数」尽量靠右，而「较大数」尽可能小。当交换完成后，「较大数」右边的数需要按照升序重新排列。
+        这样可以在保证新排列大于原来排列的情况下，使变大的幅度尽可能小。
+        
+        时间复杂度：O(N)，其中N为给定序列的长度。至多只需要扫描两次序列，以及进行一次反转操作。
+        空间复杂度：O(1),只需要常数的空间存放若干变量。
+     */
+    public void nextPermutation(int[] nums) {
+        int i = nums.length - 2;
+        //找到右边较大的数
+        while (i >= 0 && nums[i] >= nums[i + 1]) {
+            --i;
+        }
+
+        //找到左边较小的数
+        if (i >= 0) {
+            int j = nums.length - 1;
+            while (j >= 0 && nums[i] >= nums[j]) {
+                --j;
+            }
+
+            //交换
+            swap(nums, i, j);
+        }
+
+        //反转,使较大数右边的数需要按照升序重新排列
+        reverse(nums, i + 1);
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+    private void reverse(int[] nums, int start) {
+        int left = start;
+        int right = nums.length - 1;
+        while (left < right) {
+            swap(nums, left, right);
+            ++left;
+            --right;
+        }
+    }
+}
+``` 
+# 32.最长有效括号
+题目链接            
+https://leetcode-cn.com/problems/longest-valid-parentheses/             
+https://leetcode.com/problems/longest-valid-parentheses/     
+```java
+package leetcode;
+
+import java.util.Stack;
+
+/*
+给你一个只包含 '('和 ')'的字符串，找出最长有效（格式正确且连续）括号子串的长度。
+
+示例 1：
+输入：s = "(()"
+输出：2
+解释：最长有效括号子串是 "()"
+
+示例 2：
+输入：s = ")()())"
+输出：4
+解释：最长有效括号子串是 "()()"
+
+示例 3：
+输入：s = ""
+输出：0
+
+提示：
+0 <= s.length <= 3 * 104
+s[i] 为 '(' 或 ')'
+ */
+public class lc032 {
+    /*
+        时间复杂度:O(n)，nn是给定字符串的长度。只需要遍历字符串一次即可。
+        空间复杂度:O(n)。栈的大小在最坏情况下会达到n，因此空间复杂度为O(n) 。
+     */
+    public int longestValidParentheses(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+
+        Stack<Integer> stack = new Stack<Integer>();
+        int start = 0;
+        int result = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            if (s.charAt(i) == '(') {
+                stack.push(i);
+            } else {
+                if (stack.isEmpty()) {
+                    start = i + 1;
+                } else {
+                    stack.pop();
+                    result = stack.isEmpty() ? Math.max(result, i - start + 1) : Math.max(result, i - stack.peek());
+                }
+            }
+        }
+
+        return result;
+    }
+}
+```              
+# 33.搜索旋转排序数组
+题目链接            
+https://leetcode-cn.com/problems/search-in-rotated-sorted-array/            
+https://leetcode.com/problems/search-in-rotated-sorted-array/            
+```java
+package leetcode;
+
+/*
+整数数组 nums 按升序排列，数组中的值 互不相同 。
+在传递给函数之前，nums 在预先未知的某个下标 k（0 <= k < nums.length）上进行了 旋转，
+使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。
+例如，[0,1,2,4,5,6,7] 在下标 3 处经旋转后可能变为[4,5,6,7,0,1,2] 。
+给你旋转后的数组 nums 和一个整数 target ，如果 nums 中存在这个目标值 target ，则返回它的下标，否则返回-1。
+
+示例 1：
+输入：nums = [4,5,6,7,0,1,2], target = 0
+输出：4
+
+示例 2：
+输入：nums = [4,5,6,7,0,1,2], target = 3
+输出：-1
+
+示例 3：
+输入：nums = [1], target = 0
+输出：-1
+
+提示：
+1 <= nums.length <= 5000
+-10^4 <= nums[i] <= 10^4
+nums 中的每个值都 独一无二
+题目数据保证 nums 在预先未知的某个下标上进行了旋转
+-10^4 <= target <= 10^4
+ */
+public class lc033 {
+    /*
+        时间复杂度:O(logn)，其中n为num 数组的大小。整个算法时间复杂度即为二分查找的时间复杂度O(logn)。
+        空间复杂度:O(1)。只需要常数级别的空间存放变量。
+     */
+    public int search(int[] nums, int target) {
+        int size = nums.length;
+        if (size == 0 || nums == null) {
+            return -1;
+        }
+
+        int left = 0;
+        int right = size - 1;
+        while (left <= right) {
+            int mid = (left + right) >> 1;
+            if (nums[mid] == target) {
+                return mid;
+            } else if (nums[mid] < nums[right]) {
+                if (nums[mid] < target && nums[right] >= target) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            } else {
+                if (nums[left] <= target && target < nums[mid]) {
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            }
+        }
+
+        return -1;
+    }
+}
+```              
+# 34.在排序数组中查找元素的第一个和最后一个位置
+题目链接                
+https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/                   
+https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/           
+```java
+package leetcode;
+
+/*
+给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置。
+如果数组中不存在目标值 target，返回[-1, -1]。
+
+进阶：
+你可以设计并实现时间复杂度为O(log n)的算法解决此问题吗？
+
+示例 1：
+输入：nums = [5,7,7,8,8,10], target = 8
+输出：[3,4]
+
+示例2：
+输入：nums = [5,7,7,8,8,10], target = 6
+输出：[-1,-1]
+
+示例 3：
+输入：nums = [], target = 0
+输出：[-1,-1]
+
+提示：
+0 <= nums.length <= 105
+-10^9<= nums[i]<= 10^9
+nums是一个非递减数组
+-10^9<= target<= 10^9
+ */
+public class lc034 {
+    /*
+        时间复杂度:O(logn) ，其中n为数组的长度。二分查找的时间复杂度为O(logn)。
+        空间复杂度:O(1) 。只需要常数空间存放若干变量。
+     */
+    public int[] searchRange(int[] nums, int target) {
+        int size = nums.length;
+        int[] result = {-1, -1};
+        if (size == 0 || nums == null) {
+            return result;
+        }
+
+        int left = 0;
+        int right = size - 1;
+        while (left <= right) {
+            int mid = (left + right) >> 1;
+            if (nums[mid] > target) {
+                right = mid - 1;
+            } else if (nums[mid] < target) {
+                left = mid + 1;
+            } else {
+                int index = mid;
+                while (index >= 0 && nums[index] == target) {
+                    --index;
+                }
+                result[0] = index + 1;
+                index = mid;
+                while (index < size && nums[index] == target) {
+                    ++index;
+                }
+                result[1] = index - 1;
+                break;
+            }
+        }
+
+        return result;
+    }
+}
+```              
+# 35.搜索插入位置
+题目链接                
+https://leetcode-cn.com/problems/search-insert-position/                
+https://leetcode.com/problems/search-insert-position/            
+```java
+package leetcode;
+
+/*
+给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+你可以假设数组中无重复元素。
+
+示例 1:
+输入: [1,3,5,6], 5
+输出: 2
+
+示例2:
+输入: [1,3,5,6], 2
+输出: 1
+
+示例 3:
+输入: [1,3,5,6], 7
+输出: 4
+
+示例 4:
+输入: [1,3,5,6], 0
+输出: 0
+ */
+public class lc035 {
+    /*
+        问题可转化为「在一个有序数组中找第一个大于等于target的下标」
+        直接套用二分法即可，即不断用二分法逼近查找第一个大于等于target的下标
+        时间复杂度:O(logn)，其中n为数组的长度。二分查找所需的时间复杂度为O(logn)。
+        空间复杂度:O(1)。只需要常数空间存放若干变量。
+     */
+    public int searchInsert(int[] nums, int target) {
+        int size = nums.length;
+        int left = 0;
+        int right = size - 1;
+        int result = size;
+        while (left <= right) {
+            int mid = (right - left >> 1) + left;
+            if (target <= nums[mid]) {
+                result = mid;
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        return result;
+    }
+}
+```                           
+# 38.外观数列(数数并说)
+题目链接                                    
+https://leetcode-cn.com/problems/count-and-say/                 
+https://leetcode.com/problems/count-and-say/            
+```java
+package leetcode;
+
+/*
+给定一个正整数n,输出外观数列的第n项。
+「外观数列」是一个整数序列，从数字1开始，序列中的每一项都是对前一项的描述。
+你可以将其视作是由递归公式定义的数字字符串序列：
+countAndSay(1) = "1"
+countAndSay(n) 是对 countAndSay(n-1) 的描述，然后转换成另一个数字字符串。
+前五项如下：
+1.     1
+2.     11
+3.     21
+4.     1211
+5.     111221
+第一项是数字 1
+描述前一项，这个数是 1 即 “ 一 个 1 ”，记作 "11"
+描述前一项，这个数是 11 即 “ 二 个 1 ” ，记作 "21"
+描述前一项，这个数是 21 即 “ 一 个 2 + 一 个 1 ” ，记作 "1211"
+描述前一项，这个数是 1211 即 “ 一 个 1 + 一 个 2 + 二 个 1 ” ，记作 "111221"
+要描述一个数字字符串，首先要将字符串分割为最小数量的组，每个组都由连续的最多相同字符组成。
+然后对于每个组，先描述字符的数量，然后描述字符，形成一个描述组。要将描述转换为数字字符串，先将每组中的字符数量用数字替换，再将所有描述组连接起来。
+
+示例 1：
+输入：n = 1
+输出："1"
+解释：这是一个基本样例。
+
+示例 2：
+输入：n = 4
+输出："1211"
+
+解释：
+countAndSay(1) = "1"
+countAndSay(2) = 读 "1" = 一 个 1 = "11"
+countAndSay(3) = 读 "11" = 二 个 1 = "21"
+countAndSay(4) = 读 "21" = 一 个 2 + 一 个 1 = "12" + "11" = "1211"
+
+提示：
+1 <= n <= 30
+ */
+public class lc038 {
+    public String countAndSay(int n) {
+        if (n <= 0) {
+            return null;
+        }
+
+        String s = "1";
+        for (int i = 1; i < n; ++i) {
+            StringBuilder tmp = new StringBuilder();
+            int cnt = 1;
+            for (int j = 1; j < s.length(); ++j) {
+                if (s.charAt(j) == s.charAt(j - 1)) {
+                    ++cnt;
+                } else {
+                    tmp.append(cnt);
+                    tmp.append(s.charAt(j - 1));
+                    cnt = 1;
+                }
+            }
+            tmp.append(cnt);
+            tmp.append(s.charAt(s.length() - 1));
+            s = tmp.toString();
+        }
+
+        return s;
+    }
+}
+```           
+# 39.组合总和
+题目链接            
+https://leetcode-cn.com/problems/combination-sum/               
+https://leetcode.com/problems/combination-sum/          
+```java
+package leetcode;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/*
+给定一个无重复元素的数组candidates和一个目标数target，找出candidates中所有可以使数字和为target的组合。
+candidates中的数字可以无限制重复被选取。
+
+说明：
+所有数字（包括target）都是正整数。
+解集不能包含重复的组合。
+
+示例1：
+输入：candidates = [2,3,6,7], target = 7,
+所求解集为：
+[
+  [7],
+  [2,2,3]
+]
+
+示例2：
+输入：candidates = [2,3,5], target = 8,
+所求解集为：
+[
+ [2,2,2,2],
+ [2,3,3],
+ [3,5]
+]
+
+提示：
+1 <= candidates.length <= 30
+1 <= candidates[i] <= 200
+candidate 中的每个元素都是独一无二的。
+1 <= target <= 500
+ */
+public class lc039 {
+    /*
+      时间复杂度:O(S)，其中S为所有可行解的长度之和。时间复杂度取决于搜索树所有叶子节点的深度之和，即所有可行解的长度之和。
+      空间复杂度:O(target)。除答案数组外，空间复杂度取决于递归的栈深度，在最差情况下需要递归O(target) 层。
+     */
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> out = new ArrayList<>();
+        helper(candidates, target, 0, out, result);
+
+        return result;
+    }
+
+    private void helper(int[] candidates, int target, int start, List<Integer> out, List<List<Integer>> result) {
+        if (target < 0) {
+            return;
+        }
+
+        if (target == 0) {
+            result.add(new ArrayList<>(out));
+        }
+
+        for (int i = start; i < candidates.length; ++i) {
+            out.add(candidates[i]);
+            helper(candidates, target - candidates[i], i, out, result);
+            out.remove(out.size() - 1);
+        }
+    }
+}
+```                        
+# 40.组合总和 II
+题目链接            
+https://leetcode-cn.com/problems/combination-sum-ii/                              
+https://leetcode.com/problems/combination-sum-ii/               
+```java
+package leetcode;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/*
+给定一个数组candidates和一个目标数target，找出candidates中所有可以使数字和为target的组合。
+candidates中的每个数字在每个组合中只能使用一次。
+
+说明：
+所有数字（包括目标数）都是正整数。
+解集不能包含重复的组合。
+
+示例1:
+输入: candidates =[10,1,2,7,6,1,5], target =8,
+所求解集为:
+[
+  [1, 7],
+  [1, 2, 5],
+  [2, 6],
+  [1, 1, 6]
+]
+
+示例2:
+输入: candidates =[2,5,2,1,2], target =5,
+所求解集为:
+[
+ [1,2,2],
+ [5]
+]
+ */
+public class lc040 {
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> out = new ArrayList<>();
+        Arrays.sort(candidates);
+        helper(candidates, target, 0, out, result);
+
+        return result;
+    }
+
+    private void helper(int[] candidates, int target, int start, List<Integer> out, List<List<Integer>> result) {
+        if (target < 0) {
+            return;
+        }
+
+        if (target == 0) {
+            result.add(new ArrayList<>(out));
+        }
+
+        for (int i = start; i < candidates.length; ++i) {
+            if (i > start && candidates[i] == candidates[i - 1]) {
+                continue;
+            }
+            out.add(candidates[i]);
+            helper(candidates, target - candidates[i], i + 1, out, result);
+            out.remove(out.size() - 1);
+        }
+    }
+}
+```                  
 # 206.反转链表
 题目链接        
 https://leetcode-cn.com/problems/reverse-linked-list/       

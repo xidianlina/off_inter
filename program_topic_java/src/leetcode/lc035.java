@@ -1,0 +1,47 @@
+package leetcode;
+
+/*
+给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+你可以假设数组中无重复元素。
+
+示例 1:
+输入: [1,3,5,6], 5
+输出: 2
+
+示例2:
+输入: [1,3,5,6], 2
+输出: 1
+
+示例 3:
+输入: [1,3,5,6], 7
+输出: 4
+
+示例 4:
+输入: [1,3,5,6], 0
+输出: 0
+ */
+public class lc035 {
+    /*
+        问题可转化为「在一个有序数组中找第一个大于等于target的下标」
+        直接套用二分法即可，即不断用二分法逼近查找第一个大于等于target的下标
+        时间复杂度:O(logn)，其中n为数组的长度。二分查找所需的时间复杂度为O(logn)。
+        空间复杂度:O(1)。只需要常数空间存放若干变量。
+     */
+    public int searchInsert(int[] nums, int target) {
+        int size = nums.length;
+        int left = 0;
+        int right = size - 1;
+        int result = size;
+        while (left <= right) {
+            int mid = (right - left >> 1) + left;
+            if (target <= nums[mid]) {
+                result = mid;
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        return result;
+    }
+}
