@@ -2035,7 +2035,10 @@ public class lc028 {
     /*
       kmp算法:
       利用已经部分匹配这个有效信息，保持i指针不回溯，通过修改j指针，让模式串尽量地移动到有效的位置。
-      参考:https://www.cnblogs.com/yjiyjige/p/3263858.html
+      KMP算法的时间复杂度还是很稳定的。
+      平均时间复杂度为 Θ(m+n)。
+      最好时间复杂度为 O(m+(n−m))=O(n)。它发生在主串和模式串字符都不相同的情况下，例如，主串为abcdefghijk，模式串为+-*@。
+      最差时间复杂度为 O(m+n)。它发生在主串和模式串都为相同的字符的情况下，例如，主串为aaaaaaaaaaaaaaaaaaaaa，模式串为aaaa。
      */
     public int strStrKmp(String haystack, String needle) {
         int i = 0;
@@ -2073,10 +2076,179 @@ public class lc028 {
     }
 }
 ```
-# 29.
-题目链接 
-# 30.
-题目链接 
+> KMP算法：            
+> KMP算法要解决的问题就是在字符串（也叫主串）中的模式（pattern）定位问题。就是平时常说的关键字搜索。模式串就是关键字（接下来称它为P），
+> 如果它在一个主串（接下来称为T）中出现，就返回它的具体位置，否则返回-1（常用手段）。           
+> KMP算法思想：“利用已经部分匹配这个有效信息，保持主串T的i指针不回溯，通过修改模式串P的j指针，让模式串尽量地移动到有效的位置。”           
+> 整个KMP的重点就在于当模式串P某一个字符与主串T不匹配时，应该知道模式串P的j指针要移动到哪？              
+> 当匹配失败时，模式串P的j要移动的下一个位置k。存在着这样的性质：最前面的k个字符和j之前的最后k个字符是一样的。即P[0 ~ k-1] == P[j-k ~ j-1]                            
+> ![kmp](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/leetcode/picture/kmp.png)            
+> 当 T[i] != P[j] 时                              
+> 有 T[i-j ~ i-1] == P[0 ~ j-1]                                           
+> 因为 P[0 ~ k-1] == P[j-k ~ j-1]                               
+> 所以 T[i-k ~ i-1] == P[0 ~ k-1]                                         
+> 接下来就是重点了，怎么求这个（这些）k呢？因为在P的每一个位置都可能发生不匹配，也就是说要计算每一个位置j对应的k，所以用一个数组next来保存，next[j] = k，表示当T[i] != P[j]时，j指针的下一个位置。                  
+> 对于长度为m的字符串p，其前缀函数π(j)(0≤j<m) 表示p的子串p[0:i]的最长的相等的真前缀与真后缀的长度。特别地，如果不存在符合条件的前后缀，那么π(j)=0。其中真前缀与真后缀的定义为不等于自身的的前缀与后缀。              
+> 下面讲解求解next[j]的推导思路：           
+> next[j]的值（也就是k）表示，当P[j] != T[i]时，j指针的下一步移动位置。         
+> 当j为0时，j已经在最左边了，不可能再移动了，这时候应该是i指针后移。所以在代码中才会有next[0]=-1;这个初始化。                      
+> 当j为1时，j指针一定是后移到0位置的。因为它前面也就只有这一个位置了，所以在代码中才会有next[1]=0。               
+> ![kmp2](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/leetcode/picture/kmp2.png)          
+> 仔细对比这两个图发现一个规律：                   
+> 当P[k] == P[j]时，有next[j+1] == next[j] + 1                  
+> 证明：                   
+> 因为在P[j]之前已经有P[0 ~ k-1] == p[j-k ~ j-1]。（next[j] == k）             
+> 这时候现有P[k] == P[j]，可以得到P[0 ~ k-1] + P[k] == p[j-k ~ j-1] + P[j]。                   
+> 即：P[0 ~ k] == P[j-k ~ j]，即next[j+1] == k + 1 == next[j] + 1。                              
+> ![kmp3](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/leetcode/picture/kmp3.png)                  
+> 当P[k] != P[j]时,k=next[k]                                      
+> ![kmp4](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/leetcode/picture/kmp4.png)              
+> 像上边的例子，已经不可能找到[ A，B，A，B ]这个最长的后缀串了，但还是可能找到[ A，B ]、[ B ]这样的前缀串的。所以这个过程像不像在定位[ A，B，A，C ]这个串，当C和主串不一样了（也就是k位置不一样了），那当然是把指针移动到next[k]啦。                                             
+>                                     
+> 参考 https://www.cnblogs.com/yjiyjige/p/3263858.html
+# 29.两数相除
+题目链接                
+https://leetcode-cn.com/problems/divide-two-integers/               
+https://leetcode.com/problems/divide-two-integers/              
+```java
+package leetcode;
+
+/*
+给定两个整数，被除数dividend和除数divisor。将两数相除，要求不使用乘法、除法和mod运算符。
+返回被除数dividend除以除数divisor得到的商。
+整数除法的结果应当截去（truncate）其小数部分，例如：truncate(8.345) = 8 以及 truncate(-2.7335) = -2
+
+示例1:
+输入: dividend = 10, divisor = 3
+输出: 3
+解释: 10/3 = truncate(3.33333..) = truncate(3) = 3
+
+示例2:
+输入: dividend = 7, divisor = -3
+输出: -2
+解释: 7/-3 = truncate(-2.33333..) = -2
+
+提示：
+被除数和除数均为32位有符号整数。
+除数不为0。
+假设我们的环境只能存储 32 位有符号整数，其数值范围是 [−2^31, 2^31− 1]。本题中，如果除法结果溢出，则返回 2^31− 1。
+ */
+public class lc029 {
+    /*
+      位操作Bit Operation，思路是:如果被除数大于或等于除数，则进行如下循环，定义变量t等于除数，定义计数p，
+      当t的两倍小于等于被除数时，进行如下循环，t扩大一倍，p扩大一倍，然后更新res和m。
+      通过不断的二进制向左位移，判断除数(divisor)位移几次后，最接近被除数(dividend)。获取到最接近的值，用被除数减去最接近的值。
+      并重复上述过程，同时记录每次位移至最接近的值所需要的2的幂次方。将所有位移致最接近的值所需要的2幂次方叠加起来，就是最终的结果了。
+     */
+    public int divide(int dividend, int divisor) {
+        int res = 0;
+        if (divisor == 0) {
+            return Integer.MAX_VALUE;
+        }
+        if (dividend == Integer.MIN_VALUE && divisor == -1) {
+            return Integer.MAX_VALUE;
+        }
+        long m = Math.abs((long) dividend);
+        long n = Math.abs((long) divisor);
+        while (m >= n) {
+            long t = n, p = 1;
+            while (m >= (t << 1)) {
+                t <<= 1;
+                p <<= 1;
+            }
+            res += p;
+            m -= t;
+        }
+        if ((dividend > 0 && divisor > 0) || (dividend < 0 && divisor < 0)) {
+            return res;
+        } else {
+            return -res;
+        }
+    }
+}
+```              
+# 30.串联所有单词的子串
+题目链接            
+https://leetcode-cn.com/problems/substring-with-concatenation-of-all-words/                 
+https://leetcode.com/problems/substring-with-concatenation-of-all-words/         
+```java
+package leetcode;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/*
+给定一个字符串s和一些长度相同的单词words。找出s中恰好可以由words中所有单词串联形成的子串的起始位置。
+注意子串要与words中的单词完全匹配，中间不能有其他字符，但不需要考虑words中单词串联的顺序。
+
+示例 1：
+输入：
+  s = "barfoothefoobarman",
+  words = ["foo","bar"]
+输出：[0,9]
+解释：
+从索引 0 和 9 开始的子串分别是 "barfoo" 和 "foobar" 。
+输出的顺序不重要, [9,0] 也是有效答案。
+
+示例 2：
+输入：
+  s = "wordgoodgoodgoodbestword",
+  words = ["word","good","best","word"]
+输出：[]
+ */
+public class lc030 {
+    public List<Integer> findSubstring(String s, String[] words) {
+        List<Integer> result = new ArrayList<>();
+        if (s.isEmpty() || s == null || words.length == 0 || words == null) {
+            return result;
+        }
+
+        //存储words的所有单词
+        Map<String, Integer> allWords = new HashMap<String, Integer>();
+        for (String str : words) {
+            if (allWords.containsKey(str)) {
+                allWords.put(str, allWords.get(str) + 1);
+            } else {
+                allWords.put(str, 1);
+            }
+        }
+
+        int wordNum = words.length;
+        int wordLen = words[0].length();
+        //遍历所有子串
+        for (int i = 0; i <= s.length() - wordNum * wordLen; ++i) {
+            //存当前扫描的字符串含有的单词
+            Map<String, Integer> hasWords = new HashMap<String, Integer>();
+            int num = 0;
+            //判断该子串是否符合
+            while (num < wordNum) {
+                String word = s.substring(i + num * wordLen, i + num * wordLen + wordLen);
+                if (!allWords.containsKey(word)) {
+                    break;
+                }
+
+                int value = hasWords.getOrDefault(word, 0);
+                hasWords.put(word, value + 1);
+
+                //判断当前单词的value和allWords中该单词的value
+                if (hasWords.get(word) > allWords.get(word)) {
+                    break;
+                }
+
+                ++num;
+            }
+
+            if (num == wordNum) {
+                result.add(i);
+            }
+        }
+
+        return result;
+    }
+}
+```    
 # 206.反转链表
 题目链接        
 https://leetcode-cn.com/problems/reverse-linked-list/       

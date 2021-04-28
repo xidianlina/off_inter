@@ -51,7 +51,10 @@ public class lc028 {
     /*
       kmp算法:
       利用已经部分匹配这个有效信息，保持i指针不回溯，通过修改j指针，让模式串尽量地移动到有效的位置。
-      参考:https://www.cnblogs.com/yjiyjige/p/3263858.html
+      KMP算法的时间复杂度还是很稳定的。
+      平均时间复杂度为 Θ(m+n)。
+      最好时间复杂度为 O(m+(n−m))=O(n)。它发生在主串和模式串字符都不相同的情况下，例如，主串为abcdefghijk，模式串为+-*@。
+      最差时间复杂度为 O(m+n)。它发生在主串和模式串都为相同的字符的情况下，例如，主串为aaaaaaaaaaaaaaaaaaaaa，模式串为aaaa。
      */
     public int strStrKmp(String haystack, String needle) {
         int i = 0;
