@@ -3425,15 +3425,144 @@ public class lc049 {
     }
 }
 ```
+# 50.Pow(x, n)
+题目链接    
+https://leetcode-cn.com/problems/powx-n/        
+https://leetcode.com/problems/powx-n/
+```java
+package leetcode;
 
+/*
+实现pow(x, n)，即计算 x 的 n 次幂函数（即，xn）。
 
+示例 1：
+输入：x = 2.00000, n = 10
+输出：1024.00000
 
+示例 2：
+输入：x = 2.10000, n = 3
+输出：9.26100
 
+示例 3：
+输入：x = 2.00000, n = -2
+输出：0.25000
+解释：2-2 = 1/22 = 1/4 = 0.25
 
+提示：
 
+-100.0 <x< 100.0
+-2^31<= n <=2^31-1
+-10^4 <= xn <= 10^4
+ */
+public class lc050 {
+    /*
+        时间复杂度：O(logn)，即为递归的层数。
+        空间复杂度：空间复杂度：O(1)。
+     */
+    public double myPow(double x, int n) {
+        double res = 1.0;
+        for (int i = n; i != 0; i /= 2) {
+            if (i % 2 != 0) {
+                res *= x;
+            }
+            x *= x;
+        }
 
+        return n < 0 ? 1 / res : res;
+    }
+}
+```
+# 53.最大子序和
+题目链接      
+https://leetcode-cn.com/problems/maximum-subarray/      
+https://leetcode.com/problems/maximum-subarray/      
+```java
+package leetcode;
 
+/*
+给定一个整数数组nums，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
 
+示例 1：
+输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
+输出：6
+解释：连续子数组[4,-1,2,1] 的和最大，为6 。
+
+示例 2：
+输入：nums = [1]
+输出：1
+
+示例 3：
+输入：nums = [0]
+输出：0
+
+示例 4：
+输入：nums = [-1]
+输出：-1
+
+示例 5：
+输入：nums = [-100000]
+输出：-100000
+ */
+public class lc053 {
+    //方法一：暴力解
+    public int maxSubArray(int[] nums) {
+        int size = nums.length;
+        if (size == 0 || nums == null) {
+            return Integer.MIN_VALUE;
+        }
+
+        int maxSum = Integer.MIN_VALUE;
+        for (int i = 0; i < size; ++i) {
+            int curSum = 0;
+            for (int j = i; j < size; ++j) {
+                curSum += nums[j];
+                if (curSum > maxSum) {
+                    maxSum = curSum;
+                }
+            }
+        }
+
+        return maxSum;
+    }
+
+    public int maxSubArray2(int[] nums) {
+        int size = nums.length;
+        if (size == 0 || nums == null) {
+            return Integer.MIN_VALUE;
+        }
+
+        int maxSum = nums[0];
+        int curSum = nums[0];
+        for (int i = 1; i < size; ++i) {
+            if (curSum < 0) {
+                curSum = nums[i];
+            } else {
+                curSum += nums[i];
+            }
+
+            if (curSum > maxSum) {
+                maxSum = curSum;
+            }
+        }
+
+        return maxSum;
+    }
+}
+```
+# 54.
+题目链接
+# 55.
+题目链接
+# 56.
+题目链接
+# 57.
+题目链接
+# 58.
+题目链接
+# 59.
+题目链接
+# 60.
+题目链接
 
 # 206.反转链表
 题目链接        
