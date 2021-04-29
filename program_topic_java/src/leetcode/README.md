@@ -3097,16 +3097,334 @@ public class lc044 {
     }
 }
 ```
-# 45.
-题目链接
-# 46.
-题目链接
-# 47.
-题目链接
-# 48.
-题目链接
-# 49.
-题目链接
+# 45.跳跃游戏 II
+题目链接                
+https://leetcode-cn.com/problems/jump-game-ii/              
+https://leetcode.com/problems/jump-game-ii/          
+```java
+package leetcode;
+
+/*
+给定一个非负整数数组，你最初位于数组的第一个位置。
+数组中的每个元素代表你在该位置可以跳跃的最大长度。
+你的目标是使用最少的跳跃次数到达数组的最后一个位置。
+假设你总是可以到达数组的最后一个位置。
+
+示例 1:
+输入: [2,3,1,1,4]
+输出: 2
+解释: 跳到最后一个位置的最小跳跃数是 2。
+     从下标为 0 跳到下标为 1 的位置，跳1步，然后跳3步到达数组的最后一个位置。
+
+示例 2:
+输入: [2,3,0,1,4]
+输出: 2
+
+提示:
+1 <= nums.length <= 1000
+0 <= nums[i] <= 105
+ */
+public class lc045 {
+    /*
+        方法一：反向查找出发位置
+        目标是到达数组的最后一个位置，因此可以考虑最后一步跳跃前所在的位置，该位置通过跳跃能够到达最后一个位置。
+        如果有多个位置通过跳跃都能够到达最后一个位置，那么应该如何进行选择呢？直观上来看，可以「贪心」地选择距离最后一个位置最远的那个位置，
+        也就是对应下标最小的那个位置。因此，我们可以从左到右遍历数组，选择第一个满足要求的位置。
+        找到最后一步跳跃前所在的位置之后，继续贪心地寻找倒数第二步跳跃前所在的位置，以此类推，直到找到数组的开始位置。
+
+        时间复杂度：O(n^2)，其中n是数组长度。有两层嵌套循环，在最坏的情况下，例如数组中的所有元素都是1，position需要遍历数组中的每个位置，对于position的每个值都有一次循环。
+        空间复杂度：O(1)。
+     */
+    public int jump(int[] nums) {
+        int position = nums.length - 1;
+        int steps = 0;
+        while (position > 0) {
+            for (int i = 0; i < position; ++i) {
+                if (i + nums[i] >= position) {
+                    position = i;
+                    steps++;
+                    break;
+                }
+            }
+        }
+
+        return steps;
+    }
+
+    /*
+        方法二：正向查找可到达的最大位置
+        维护当前能够到达的最大下标位置，记为边界。从左到右遍历数组，到达边界时，更新边界并将跳跃次数增加1。
+        在遍历数组时，不访问最后一个元素，这是因为在访问最后一个元素之前，边界一定大于等于最后一个位置，否则就无法跳到最后一个位置了。
+        如果访问最后一个元素，在边界正好为最后一个位置的情况下，会增加一次「不必要的跳跃次数」，因此不必访问最后一个元素。
+        时间复杂度：O(n)，其中n是数组长度。
+        空间复杂度：O(1)。
+     */
+    public int jump2(int[] nums) {
+        int n = nums.length;
+        int step = 0;
+        int curReach = 0;
+        int maxReach = 0;
+        for (int i = 0; i < n - 1; ++i) {
+            maxReach = Math.max(maxReach, i + nums[i]);
+            if (curReach == i) {
+                ++step;
+                curReach = maxReach;
+            }
+        }
+
+        return step;
+    }
+}
+```
+# 46.全排列
+题目链接            
+https://leetcode-cn.com/problems/permutations/              
+https://leetcode.com/problems/permutations/             
+```java
+package leetcode;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/*
+给定一个 没有重复 数字的序列，返回其所有可能的全排列。
+
+示例:
+输入: [1,2,3]
+输出:
+[
+  [1,2,3],
+  [1,3,2],
+  [2,1,3],
+  [2,3,1],
+  [3,1,2],
+  [3,2,1]
+]
+ */
+public class lc046 {
+    public List<List<Integer>> permute(int[] nums) {
+        // 最终返回的结果集
+        List<List<Integer>> result = new ArrayList<>();
+        int size = nums.length;
+        if (size == 0 || nums == null) {
+            return result;
+        }
+        helper(nums, 0, result);
+
+        return result;
+    }
+
+    private void helper(int[] nums, int start, List<List<Integer>> result) {
+        // 将当前数组加到结果集中
+        if (start == nums.length) {
+            List<Integer> list = new ArrayList<>();
+            for (int i = 0; i < nums.length; ++i) {
+                list.add(nums[i]);
+            }
+            result.add(list);
+            return;
+        }
+
+        // 将当前位置的数跟后面的数交换，并搜索解
+        for (int i = start; i < nums.length; ++i) {
+            swap(nums, i, start);
+            helper(nums, start + 1, result);
+            swap(nums, i, start);
+        }
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+```              
+# 47.全排列 II
+题目链接                
+https://leetcode-cn.com/problems/permutations-ii/               
+https://leetcode.com/problems/permutations-ii/           
+```java
+package leetcode;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/*
+给定一个可包含重复数字的序 nums ，按任意顺序 返回所有不重复的全排列。
+
+示例 1：
+输入：nums = [1,1,2]
+输出：
+[[1,1,2],
+ [1,2,1],
+ [2,1,1]]
+
+示例 2：
+输入：nums = [1,2,3]
+输出：[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+
+提示：
+1 <= nums.length <= 8
+-10 <= nums[i] <= 10
+ */
+public class lc047 {
+    /*
+        时间复杂度：O(n×n!)，其中n为序列的长度。
+        空间复杂度：O(n)，其中n为序列的长度。
+     */
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        int size = nums.length;
+        if (size == 0 || nums == null) {
+            return result;
+        }
+
+        boolean[] used = new boolean[size];
+        List<Integer> out = new ArrayList<>();
+        Arrays.sort(nums);
+        dfs(nums, used, out, result);
+
+        return result;
+    }
+
+    public void dfs(int[] nums, boolean[] used, List<Integer> out, List<List<Integer>> result) {
+        if (out.size() == nums.length) {
+            result.add(new ArrayList<>(out));
+            return;
+        }
+
+        for (int i = 0; i < nums.length; ++i) {
+            // 当前位置的数已经在List中了
+            if (used[i]) {
+                continue;
+            }
+
+            // 当前元素与其前一个元素值相同 且 前元素未被加到list中，跳过该元素
+            if (i > 0 && nums[i] == nums[i - 1] && used[i - 1]) {
+                continue;
+            }
+
+            // 深度优先搜索遍历
+            used[i] = true;
+            out.add(nums[i]);
+            dfs(nums, used, out, result);
+            out.remove(out.size() - 1);
+            used[i] = false;
+        }
+    }
+}
+```
+# 48.旋转图像
+题目链接                
+https://leetcode-cn.com/problems/rotate-image/          
+https://leetcode.com/problems/rotate-image/          
+```java
+package leetcode;
+
+/*
+给定一个n×n的二维矩阵matrix 表示一个图像。请你将图像顺时针旋转90度。
+你必须在 原地 旋转图像，这意味着你需要直接修改输入的二维矩阵。请不要 使用另一个矩阵来旋转图像。
+
+示例 1：
+输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+输出：[[7,4,1],[8,5,2],[9,6,3]]
+
+示例 2：
+输入：matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]
+输出：[[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]
+
+示例 3：
+输入：matrix = [[1]]
+输出：[[1]]
+
+示例 4：
+输入：matrix = [[1,2],[3,4]]
+输出：[[3,1],[4,2]]
+ */
+public class lc048 {
+    /*
+        时间复杂度：O(N^2)，其中N是matrix的边长。对于每一次翻转操作都需要枚举矩阵中一半的元素。
+        空间复杂度：O(1)。为原地翻转得到的原地旋转。
+     */
+    public void rotate(int[][] matrix) {
+        int n = matrix.length;
+
+        //沿左上至右下对角线翻转
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < i; ++j) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp;
+            }
+        }
+
+        //水平翻转每一行
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n / 2; ++j) {
+                int tmp = matrix[i][j];
+                matrix[i][j] = matrix[i][n - 1 - j];
+                matrix[i][n - 1 - j] = tmp;
+            }
+        }
+    }
+}
+```
+# 49.字母异位词分组
+题目链接            
+https://leetcode-cn.com/problems/group-anagrams/            
+https://leetcode.com/problems/group-anagrams/           
+```java
+package leetcode;
+
+import java.util.*;
+
+/*
+给定一个字符串数组，将字母异位词组合在一起。字母异位词指字母相同，但排列不同的字符串。
+
+示例:
+输入: ["eat", "tea", "tan", "ate", "nat", "bat"]
+输出:
+[
+  ["ate","eat","tea"],
+  ["nat","tan"],
+  ["bat"]
+]
+
+说明：
+所有输入均为小写字母。
+ */
+public class lc049 {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> result = new ArrayList<>();
+        int size = strs.length;
+        if (size < 1) {
+            return result;
+        }
+
+        Map<String, List<String>> map = new HashMap<String, List<String>>();
+        for (String str : strs) {
+            char[] arrayOfString = str.toCharArray();
+            Arrays.sort(arrayOfString);
+            String tmp = new String(arrayOfString);
+            if (map.containsKey(tmp)) {
+                map.get(tmp).add(str);
+            } else {
+                List<String> item = new ArrayList<>();
+                item.add(str);
+                map.put(tmp, item);
+            }
+        }
+
+        for (List<String> value : map.values()) {
+            result.add(value);
+        }
+
+        return result;
+    }
+}
+```
 
 
 
