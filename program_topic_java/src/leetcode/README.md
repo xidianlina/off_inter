@@ -2845,13 +2845,258 @@ public class lc041 {
     }
 }
 ```
-# 42.
-题目链接      
+# 42. 接雨水
+题目链接                      
+https://leetcode-cn.com/problems/trapping-rain-water/           
+https://leetcode.com/problems/trapping-rain-water/           
+```java
+package leetcode;
 
-# 43.
-题目链接
-# 44.
-题目链接
+/*
+给定n个非负整数表示每个宽度为1的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+
+示例 1：
+输入：height = [0,1,0,2,1,0,1,3,2,1,2,1]
+输出：6
+解释：上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水）。
+
+示例 2：
+输入：height = [4,2,0,3,2,5]
+输出：9
+ */
+public class lc042 {
+    /*
+        方法一:先遍历一遍找到塔顶，然后分别从两边开始，往塔顶所在位置遍历，水位只会增高不会减小，
+        且一直和最近遇到的最大高度持平，这样知道了实时水位，就可以边遍历边计算面积。
+        时间复杂度:O(n)，其中n是数组height的长度。
+        空间复杂度:O(1)。只需要使用常数的额外空间。
+     */
+    public int trap(int[] height) {
+        int n = height.length;
+        if (n <= 2) {
+            return 0;
+        }
+
+        int top = -1;
+        int topIndex = 0;
+        for (int i = 0; i < n; ++i) {
+            if (height[i] > top) {
+                top = height[i];
+                topIndex = i;
+            }
+        }
+
+        int area = 0;
+        int root = height[0];
+        for (int i = 0; i < topIndex; ++i) {
+            if (root < height[i]) {
+                root = height[i];
+            } else {
+                area += (root - height[i]);
+            }
+        }
+
+        root = height[n - 1];
+        for (int i = n - 1; i > topIndex; --i) {
+            if (root < height[i]) {
+                root = height[i];
+            } else {
+                area += (root - height[i]);
+            }
+        }
+
+        return area;
+    }
+
+    /*
+        方法二:left和right两个指针分别指向数组的首尾位置，从两边向中间扫描，在当前两指针确定的范围内，
+        先比较两头找出较小值，如果较小值是left指向的值，则从左向右扫描，如果较小值是right指向的值，则从右向左扫描，
+        若遇到的值比当较小值小，则将差值存入结果，如遇到的值大，则重新确定新的窗口范围，以此类推直至left和right指针重合。
+        时间复杂度:O(n)，其中n是数组height的长度。两个指针的移动总次数不超过n。
+        空间复杂度:O(1)。只需要使用常数的额外空间。
+     */
+    public int trap2(int[] height) {
+        int n = height.length;
+        if (n < 2) {
+            return 0;
+        }
+        int area = 0;
+        int left = 0;
+        int right = n - 1;
+        while (left < right) {
+            int min = height[left] < height[right] ? height[left] : height[right];
+            if (height[left] == min) {
+                ++left;
+                while (left < right && height[left] < min) {
+                    area += min - height[left];
+                    ++left;
+                }
+            } else {
+                --right;
+                while (left < right && height[right] < min) {
+                    area += min - height[right];
+                    --right;
+                }
+            }
+        }
+        return area;
+    }
+}
+```
+# 43.字符串相乘
+题目链接                
+https://leetcode-cn.com/problems/multiply-strings/              
+https://leetcode.com/problems/multiply-strings/          
+```java
+package leetcode;
+
+/*
+给定两个以字符串形式表示的非负整数num1和num2，返回num1和num2的乘积，它们的乘积也表示为字符串形式。
+
+示例 1:
+输入: num1 = "2", num2 = "3"
+输出: "6"
+
+示例 2:
+输入: num1 = "123", num2 = "456"
+输出: "56088"
+
+说明：
+num1和num2的长度小于110。
+num1 和num2 只包含数字0-9。
+num1 和num2均不以零开头，除非是数字 0 本身。
+不能使用任何标准库的大数类型（比如 BigInteger）或直接将输入转换为整数来处理。
+ */
+public class lc043 {
+    /*
+        如果num1和num2之一是0，则直接将0作为结果返回即可。如果num1和num2都不是0，则可以通过模拟「竖式乘法」的方法计算乘积。
+        从右往左遍历乘数，将乘数的每一位与被乘数相乘得到对应的结果，再将每次得到的结果累加。这道题中，被乘数是num1，乘数是num2。
+        需要注意的是num2除了最低位以外，其余的每一位的运算结果都需要补0。
+        由于num1和num2的乘积的最大长度为m+n，因此创建长度为m+n的数组result用于存储乘积。对于任意0≤i<m 和0≤j<n，
+        num1[i]×num2[j]的结果位于result[i+j+1]，如果result[i+j+1]≥10，则将进位部分加到result[i+j]。
+        最后，将数组result转成字符串，如果最高位是0则舍弃最高位。
+        
+        时间复杂度:O(mn)，其中m和n分别是num1和num2的长度。需要计算num1的每一位和num2的每一位的乘积。
+        空间复杂度:O(m+n)，其中m和n分别是num1和num2的长度。需要创建一个长度为m+n的数组存储乘积。
+     */
+    public String multiply(String num1, String num2) {
+        if (num1.equals("0") || num2.equals("0")) {
+            return "0";
+        }
+
+        int m = num1.length();
+        int n = num2.length();
+        int[] result = new int[m + n];
+        for (int i = m - 1; i >= 0; --i) {
+            int x = num1.charAt(i) - '0';
+            for (int j = n - 1; j >= 0; --j) {
+                int y = num2.charAt(j) - '0';
+                result[i + j + 1] += x * y;
+            }
+        }
+
+        for (int i = m + n - 1; i > 0; --i) {
+            result[i - 1] += result[i] / 10;
+            result[i] %= 10;
+        }
+
+        int index = result[0] == 0 ? 1 : 0;
+        StringBuilder ans = new StringBuilder();
+        while (index < m + n) {
+            ans.append(result[index]);
+            ++index;
+        }
+
+        return ans.toString();
+    }
+}
+```
+# 44.通配符匹配
+题目链接                
+https://leetcode-cn.com/problems/wildcard-matching/             
+https://leetcode.com/problems/wildcard-matching/                
+> 思路与算法:                
+  在给定的模式p中，只会有三种类型的字符出现：                
+  小写字母 a-za−z，可以匹配对应的一个小写字母；                    
+  问号?，可以匹配任意一个小写字母；
+  星号*，可以匹配任意字符串，可以为空，也就是匹配零或任意多个小写字母。
+> ![lc044](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/leetcode/picture/lc044.png)                     
+> ![lc044_2](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/leetcode/picture/lc044_2.png)                     
+```java
+package leetcode;
+
+/*
+给定一个字符串(s) 和一个字符模式(p) ，实现一个支持'?'和'*'的通配符匹配。
+'?' 可以匹配任何单个字符。
+'*' 可以匹配任意字符串（包括空字符串）。
+两个字符串完全匹配才算匹配成功。
+
+说明:
+s可能为空，且只包含从a-z的小写字母。
+p可能为空，且只包含从a-z的小写字母，以及字符?和*。
+
+示例1:
+输入:
+s = "aa"
+p = "a"
+输出: false
+解释: "a" 无法匹配 "aa" 整个字符串。
+
+示例2:
+输入:
+s = "aa"
+p = "*"
+输出: true
+解释:'*' 可以匹配任意字符串。
+
+示例3:
+输入:
+s = "cb"
+p = "?a"
+输出: false
+解释:'?' 可以匹配 'c', 但第二个 'a' 无法匹配 'b'。
+
+示例4:
+输入:
+s = "adceb"
+p = "*a*b"
+输出: true
+解释:第一个 '*' 可以匹配空字符串, 第二个 '*' 可以匹配字符串 "dce".
+
+示例5:
+输入:
+s = "acdcb"
+p = "a*c?b"
+输出: false
+ */
+public class lc044 {
+    public boolean isMatch(String s, String p) {
+        int m = s.length();
+        int n = p.length();
+        boolean[][] dp = new boolean[m + 1][n + 1];
+        dp[0][0] = true;
+        for (int i = 1; i <= n; ++i) {
+            if (p.charAt(i - 1) == '*') {
+                dp[0][i] = true;
+            } else {
+                break;
+            }
+        }
+
+        for (int i = 1; i <= m; ++i) {
+            for (int j = 1; j <= n; ++j) {
+                if (p.charAt(j - 1) == '*') {
+                    dp[i][j] = dp[i][j - 1] || dp[i - 1][j];
+                } else if (p.charAt(j - 1) == '?' || p.charAt(j - 1) == s.charAt(i - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                }
+            }
+        }
+
+        return dp[m][n];
+    }
+}
+```
 # 45.
 题目链接
 # 46.
