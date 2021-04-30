@@ -3549,16 +3549,336 @@ public class lc053 {
     }
 }
 ```
-# 54.
-题目链接
-# 55.
-题目链接
-# 56.
-题目链接
-# 57.
-题目链接
-# 58.
-题目链接
+# 54.螺旋矩阵
+题目链接            
+https://leetcode-cn.com/problems/spiral-matrix/         
+https://leetcode.com/problems/spiral-matrix/
+```java
+package leetcode;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/*
+给你一个m行n列的矩阵matrix ，请按照顺时针螺旋顺序 ，返回矩阵中的所有元素。
+
+示例 1：
+输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+输出：[1,2,3,6,9,8,7,4,5]
+
+示例 2：
+输入：matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+输出：[1,2,3,4,8,12,11,10,9,5,6,7]
+
+提示：
+m == matrix.length
+n == matrix[i].length
+1 <= m, n <= 10
+-100 <= matrix[i][j] <= 100
+ */
+public class lc054 {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        int row = matrix.length;
+        int col = matrix[0].length;
+
+        List<Integer> result = new ArrayList<>();
+        if (matrix == null || row == 0 || col == 0) {
+            return result;
+        }
+
+        int top = 0;
+        int bottom = row - 1;
+        int left = 0;
+        int right = col - 1;
+        //螺旋曲线，运动轨迹总是一致的
+        while (top <= bottom && left <= right) {
+            //向右列递增遍历
+            for (int j = left; j <= right; ++j) {
+                result.add(matrix[top][j]);
+            }
+
+            //遍历后，去掉此行
+            ++top;
+
+            //向下行递增遍历
+            for (int i = top; i <= bottom; ++i) {
+                result.add(matrix[i][right]);
+            }
+
+            //遍历后，去掉此行
+            --right;
+
+            if (top <= bottom) {//重要判断，防止重复
+                //向左列递减遍历
+                for (int j = right; j >= left; --j) {
+                    result.add(matrix[bottom][j]);
+                }
+            }
+
+            //遍历后，去掉此行
+            --bottom;
+
+            if (left <= right) {//重要判断，防止重复
+                //向上行递减遍历
+                for (int i = bottom; i >= top; --i) {
+                    result.add(matrix[i][left]);
+                }
+            }
+
+            //遍历后，去掉此列
+            ++left;
+        }
+
+        return result;
+    }
+}
+```
+# 55.跳跃游戏
+题目链接                
+https://leetcode-cn.com/problems/jump-game/         
+https://leetcode.com/problems/jump-game/            
+```java
+package leetcode;
+
+/*
+给定一个非负整数数组nums ，你最初位于数组的第一个下标 。
+数组中的每个元素代表你在该位置可以跳跃的最大长度。
+判断你是否能够到达最后一个下标。
+
+示例 1：
+输入：nums = [2,3,1,1,4]
+输出：true
+解释：可以先跳 1 步，从下标 0 到达下标 1, 然后再从下标 1 跳 3 步到达最后一个下标。
+
+示例 2：
+输入：nums = [3,2,1,0,4]
+输出：false
+解释：无论怎样，总会到达下标为 3 的位置。但该下标的最大跳跃长度是 0 ， 所以永远不可能到达最后一个下标。
+
+提示：
+1 <= nums.length <= 3 * 104
+0 <= nums[i] <= 105
+ */
+public class lc055 {
+    /*
+        时间复杂度：O(n)，其中n为数组的大小。只需要访问nums数组一遍，共n个位置。
+        空间复杂度：O(1)，不需要额外的空间开销。
+     */
+    public boolean canJump(int[] nums) {
+        int size = nums.length;
+
+        //维护当前能跳到的最大位置
+        int maxJump = 0;
+        for (int i = 0; i < size; ++i) {
+            // i>maxJump表示无法到达i的位置,失败
+            // maxJump >= (n - 1),此时的距离已经足够到达终点，成功
+            if (i > maxJump || maxJump >= (size - 1)) {
+                break;
+            }
+
+            // nums[i]+i当前跳最远距离
+            // maxJump为i之前跳最远距离
+            maxJump = maxJump > (i + nums[i]) ? maxJump : (i + nums[i]);
+        }
+
+        return maxJump >= (size - 1);
+    }
+
+    public boolean canJump2(int[] nums) {
+        int n = nums.length;
+
+        // dp[i]表示当前跳跃的最大距离
+        int[] dp = new int[n];
+        dp[0] = nums[0];
+
+        // i表示当前距离，也是下标
+        for (int i = 1; i < n; ++i) {
+            // i点可达
+            if (i <= dp[i - 1]) {
+                dp[i] = dp[i - 1] > (nums[i] + i) ? dp[i - 1] : (nums[i] + i);
+            } else {
+                dp[i] = dp[i - 1];
+            }
+        }
+
+        return dp[n - 1] >= (n - 1);
+    }
+}
+```
+# 56.合并区间
+题目链接                
+https://leetcode-cn.com/problems/merge-intervals/               
+https://leetcode.com/problems/merge-intervals/          
+```java
+package leetcode;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+
+/*
+以数组intervals表示若干个区间的集合，其中单个区间为intervals[i] = [starti, endi] 。
+请你合并所有重叠的区间，并返回一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间。
+
+示例 1：
+输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
+输出：[[1,6],[8,10],[15,18]]
+解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
+
+示例 2：
+输入：intervals = [[1,4],[4,5]]
+输出：[[1,5]]
+解释：区间 [1,4] 和 [4,5] 可被视为重叠区间。
+ */
+public class lc056 {
+    /*  按照区间的左端点升序排序，那么在排完序的列表中，可以合并的区间一定是连续的。
+        算法:数组merged存储最终的答案,将列表中的区间按照左端点升序排序。然后将第一个区间加入merged数组中，并按顺序依次考虑之后的每个区间：
+            如果当前区间的左端点在数组merged中最后一个区间的右端点之后，那么它们不会重合，可以直接将这个区间加入数组merged的末尾；
+            否则，它们重合，需要用当前区间的右端点更新数组merged中最后一个区间的右端点，将其置为二者的较大值。
+        时间复杂度：O(nlogn)，其中n为区间的数量。除去排序的开销，我们只需要一次线性扫描，所以主要的时间开销是排序的O(nlogn)。
+        空间复杂度：O(logn)，其中n为区间的数量。这里计算的是存储答案之外，使用的额外空间。O(logn)即为排序所需要的空间复杂度。
+     */
+    public int[][] merge(int[][] intervals) {
+        if (intervals.length == 0) {
+            return new int[0][2];
+        }
+
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] interval1, int[] interval2) {
+                return interval1[0] - interval2[0];
+            }
+        });
+
+        List<int[]> merged = new ArrayList<int[]>();
+        for (int i = 0; i < intervals.length; ++i) {
+            int left = intervals[i][0];
+            int right = intervals[i][1];
+            // 当前区间的左端点在数组merged中最后一个区间的右端点之后，那么它们不会重合，可以直接将这个区间加入数组merged的末尾
+            if (merged.size() == 0 || merged.get(merged.size() - 1)[1] < left) {
+                merged.add(new int[]{left, right});
+            } else {
+                // 重合，需要用当前区间的右端点更新数组merged中最后一个区间的右端点，将其置为二者的较大值。
+                merged.get(merged.size() - 1)[1] = Math.max(merged.get(merged.size() - 1)[1], right);
+            }
+        }
+
+        return merged.toArray(new int[merged.size()][]);
+    }
+}
+```
+# 57.插入区间
+题目链接            
+https://leetcode-cn.com/problems/insert-interval/               
+https://leetcode.com/problems/insert-interval/          
+> ![lc057](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/leetcode/picture/lc057.png)                       
+> ![lc057_2](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/leetcode/picture/lc057_2.png)                       
+```java
+package leetcode;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/*
+给你一个无重叠的 ，按照区间起始端点排序的区间列表。
+在列表中插入一个新的区间，你需要确保列表中的区间仍然有序且不重叠（如果有必要的话，可以合并区间）。
+
+示例 1：
+输入：intervals = [[1,3],[6,9]], newInterval = [2,5]
+输出：[[1,5],[6,9]]
+
+示例 2：
+输入：intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]
+输出：[[1,2],[3,10],[12,16]]
+解释：这是因为新的区间 [4,8] 与 [3,5],[6,7],[8,10]重叠。
+
+示例 3：
+输入：intervals = [], newInterval = [5,7]
+输出：[[5,7]]
+
+示例 4：
+输入：intervals = [[1,5]], newInterval = [2,3]
+输出：[[1,5]]
+
+示例 5：
+输入：intervals = [[1,5]], newInterval = [2,7]
+输出：[[1,7]]
+ */
+public class lc057 {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        int left = newInterval[0];
+        int right = newInterval[1];
+        boolean placed = false;
+        List<int[]> ansList = new ArrayList<int[]>();
+        for (int[] interval : intervals) {
+            // 无交集,在插入区间的左侧
+            if (interval[1] < left) {
+                ansList.add(interval);
+
+                // 无交集,在插入区间的右侧
+            } else if (interval[0] > right) {
+                if (!placed) {
+                    ansList.add(new int[]{left, right});
+                    placed = true;
+                }
+                ansList.add(interval);
+            } else {
+                // 与插入区间有交集，计算它们的并集
+                left = Math.min(left, interval[0]);
+                right = Math.max(right, interval[1]);
+            }
+        }
+
+        if (!placed) {
+            ansList.add(new int[]{left, right});
+        }
+
+        return ansList.toArray(new int[ansList.size()][]);
+    }
+}
+```
+# 58.最后一个单词的长度
+题目链接            
+https://leetcode-cn.com/problems/length-of-last-word/           
+https://leetcode.com/problems/length-of-last-word/       
+```java
+package leetcode;
+
+/*
+给你一个字符串s，由若干单词组成，单词之间用空格隔开。返回字符串中最后一个单词的长度。如果不存在最后一个单词，请返回0。
+单词 是指仅由字母组成、不包含任何空格字符的最大子字符串。
+
+示例 1：
+输入：s = "Hello World"
+输出：5
+
+示例 2：
+输入：s = " "
+输出：0
+ */
+public class lc058 {
+    public int lengthOfLastWord(String s) {
+        int size = s.length();
+        if (size == 0 || s.isEmpty()) {
+            return 0;
+        }
+
+        int count = 0;
+        int end = size - 1;
+        while (end >= 0 && s.charAt(end) == ' ') {
+            --end;
+        }
+
+        while (end >= 0 && s.charAt(end) != ' ') {
+            --end;
+            ++count;
+        }
+
+        return count;
+    }
+}
+```
 # 59.
 题目链接
 # 60.
