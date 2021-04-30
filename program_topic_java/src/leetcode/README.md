@@ -3879,9 +3879,320 @@ public class lc058 {
     }
 }
 ```
-# 59.
+# 59.螺旋矩阵 II
 题目链接
-# 60.
+https://leetcode-cn.com/problems/spiral-matrix-ii/          
+https://leetcode.com/problems/spiral-matrix-ii/          
+```java
+package leetcode;
+
+/*
+给你一个正整数n，生成一个包含1到n^2所有元素，且元素按顺时针顺序螺旋排列的n x n正方形矩阵matrix 。
+
+示例 1：
+输入：n = 3
+输出：[[1,2,3],[8,9,4],[7,6,5]]
+
+示例 2：
+输入：n = 1
+输出：[[1]]
+
+提示：
+1 <= n <= 20
+ */
+public class lc059 {
+    public int[][] generateMatrix(int n) {
+        int[][] result = new int[n][n];
+        if (n == 0) {
+            return result;
+        }
+
+        int top = 0;
+        int bottom = n - 1;
+        int left = 0;
+        int right = n - 1;
+        int num = 1;
+        while (top <= bottom && left <= right) {
+            if (num <= n * n) {
+                for (int j = left; j <= right; ++j) {
+                    result[top][j] = num;
+                    ++num;
+                }
+            }
+
+            ++top;
+
+            if (num <= n * n) {
+                for (int i = top; i <= bottom; ++i) {
+                    result[i][right] = num;
+                    ++num;
+                }
+            }
+
+            --right;
+
+            if (num <= n * n) {
+                for (int j = right; j >= left; --j) {
+                    result[bottom][j] = num;
+                    ++num;
+                }
+            }
+
+            --bottom;
+
+            if (num <= n * n) {
+                for (int i = bottom; i >= top; --i) {
+                    result[i][left] = num;
+                    ++num;
+                }
+            }
+
+            ++left;
+        }
+
+        return result;
+    }
+}
+```
+# 60.排列序列
+题目链接            
+https://leetcode-cn.com/problems/permutation-sequence/          
+https://leetcode.com/problems/permutation-sequence/          
+```java
+package leetcode;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/*
+给出集合[1,2,3,...,n]，其所有元素共有n!种排列。
+按大小顺序列出所有排列情况，并一一标记，当n = 3 时, 所有排列如下：
+"123"
+"132"
+"213"
+"231"
+"312"
+"321"
+
+给定n和k，返回第k个排列。
+
+示例 1：
+输入：n = 3, k = 3
+输出："213"
+
+示例 2：
+输入：n = 4, k = 9
+输出："2314"
+
+示例 3：
+输入：n = 3, k = 1
+输出："123"
+
+提示：
+1 <= n <= 9
+1 <= k <= n!
+ */
+public class lc060 {
+    /*
+        在数列1，2，3，... , n构建的全排列中，返回第k个排列。
+        对于n个数可以有n!种排列；那么n-1个数就有(n-1)!种排列。
+        那么对于n位数来说，如果除去最高位不看，后面的n-1位就有 (n-1)!种排列。
+        所以，还是对于n位数来说，每一个不同的最高位数，后面可以拼接(n-1)!种排列。
+        所以可以看成是按照每组(n-1)!个这样分组。
+        利用k/(n-1)!可以取得最高位在数列中的index。这样第k个排列的最高位就能从数列中的index位取得，此时还要把这个数从数列中删除。
+        然后，新的k就可以由k%(n-1)!获得。循环n次即可。同时，为了可以跟数组坐标对其，令k先--。
+        时间复杂度：O(n^2)。
+        空间复杂度：O(n)。
+     */
+    public String getPermutation(int n, int k) {
+        //为了可以跟数组坐标对其，令k先--
+        --k;
+
+        List<Integer> numList = new ArrayList<>();
+        for (int i = 1; i <= n; ++i) {
+            numList.add(i);
+        }
+
+        //计算n!
+        int fac = 1;
+        for (int i = 2; i < n; ++i) {
+            fac *= i;
+        }
+
+        StringBuilder res = new StringBuilder();
+        int times = n - 1;
+        while (times >= 0) {
+            int indexInList = k / fac;
+            res.append(numList.get(indexInList));
+            numList.remove(indexInList);
+
+            //新的k就可以由k%(n-1)!获得
+            k = k % fac;
+
+            if (times != 0) {
+                fac = fac / times;
+            }
+
+            --times;
+        }
+
+        return res.toString();
+    }
+}
+```
+# 61.旋转链表
+题目链接            
+https://leetcode-cn.com/problems/rotate-list/               
+https://leetcode.com/problems/rotate-list/               
+```java
+package leetcode;
+
+/*
+给你一个链表的头节点 head ，旋转链表，将链表每个节点向右移动 k 个位置。
+
+示例 1：
+输入：head = [1,2,3,4,5], k = 2
+输出：[4,5,1,2,3]
+
+示例 2：
+输入：head = [0,1,2], k = 4
+输出：[2,0,1]
+
+提示：
+链表中节点的数目在范围 [0, 500] 内
+-100 <= Node.val <= 100
+0 <= k <= 2 * 10^9
+ */
+public class lc061 {
+    /*
+        时间复杂度：O(n)，最坏情况下，需要遍历该链表两次。
+        空间复杂度：O(1)，只需要常数的空间存储若干变量。
+     */
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null || k <= 0) {
+            return head;
+        }
+
+        int len = 0;
+        ListNode cur = head;
+        while (cur != null) {
+            ++len;
+            cur = cur.next;
+        }
+
+        k %= len;
+
+        ListNode slow = head;
+        ListNode fast = head;
+        for (int i = 0; i < k; ++i) {
+            if (fast.next != null) {
+                fast = fast.next;
+            } else {
+                return head;
+            }
+        }
+
+        while (fast.next != null) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+
+        fast.next = head;
+        fast = slow.next;
+        slow.next = null;
+
+        return fast;
+    }
+}
+```
+# 62.不同路径
+题目链接            
+https://leetcode-cn.com/problems/unique-paths/          
+https://leetcode.com/problems/unique-paths/          
+```java
+package leetcode;
+
+/*
+一个机器人位于一个 m x n网格的左上角 （起始点在下图中标记为 “Start” ）。
+机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。
+问总共有多少条不同的路径？
+
+示例 1：
+输入：m = 3, n = 7
+输出：28
+
+示例 2：
+输入：m = 3, n = 2
+输出：3
+解释：
+从左上角开始，总共有 3 条路径可以到达右下角。
+1. 向右 -> 向下 -> 向下
+2. 向下 -> 向下 -> 向右
+3. 向下 -> 向右 -> 向下
+
+示例 3：
+输入：m = 7, n = 3
+输出：28
+
+示例 4：
+输入：m = 3, n = 3
+输出：6
+
+提示：
+1 <= m, n <= 100
+题目数据保证答案小于等于 2 * 109
+ */
+public class lc062 {
+    /*
+        时间复杂度：O(mn)
+        空间复杂度：O(mn)
+     */
+    public int uniquePaths(int m, int n) {
+        if (m == 0 || n == 0) {
+            return 0;
+        }
+
+        if (m == 1 || n == 1) {
+            return 1;
+        }
+
+        int[][] dp = new int[m][n];
+
+        //只有一行时，到终点每个格子只有一种走法
+        for (int j = 0; j < n; ++j) {
+            dp[0][j] = 1;
+        }
+
+        // 只有一列时，到终点每个格子只有一种走法
+        for (int i = 0; i < m; ++i) {
+            dp[i][0] = 1;
+        }
+
+        for (int i = 1; i < m; ++i) {
+            for (int j = 1; j < n; ++j) {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+
+        return dp[m - 1][n - 1];
+    }
+}
+```
+# 63.
+题目链接
+# 64.
+题目链接
+# 65.
+题目链接
+# 66.
+题目链接
+# 67.
+题目链接
+# 68.
+题目链接
+# 69.
+题目链接
+# 70.
 题目链接
 
 # 206.反转链表
