@@ -48,6 +48,7 @@ public class lc003 {
             hash[s.charAt(i)] = i;
             maxLen = Math.max(maxLen, i - start);
         }
+
         return maxLen;
     }
 
