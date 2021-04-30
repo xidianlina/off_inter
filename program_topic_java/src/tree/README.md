@@ -583,12 +583,229 @@ public class TwoTreeSame {
 }
 ```
 ## 7.求二叉树的镜像
+
+```java
+package tree;
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+import java.util.Stack;
+
+public class Mirror {
+    public static void main(String[] args) {
+        GetMirror mirror = new GetMirror();
+        TreeNode root = mirror.createTree();
+        mirror.levelTraverseTree(root);
+        System.out.println("------------------");
+        mirror.mirror(root);
+        mirror.levelTraverseTree(root);
+        System.out.println("------------------");
+        mirror.mirror2(root);
+        mirror.levelTraverseTree(root);
+        System.out.println("------------------");
+        TreeNode node = mirror.mirror3(root);
+        mirror.levelTraverseTree(node);
+    }
+
+    //递归求二叉树的镜像
+    public void mirror(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+
+        TreeNode tmp = root.left;
+        root.left = root.right;
+        root.right = tmp;
+        mirror(root.left);
+        mirror(root.right);
+    }
+
+    //非递归求二叉树的镜像
+    public void mirror2(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            root = stack.pop();
+            TreeNode tmp = root.left;
+            root.left = root.right;
+            root.right = tmp;
+            if (root.right != null) {
+                stack.push(root.right);
+            }
+            if (root.left != null) {
+                stack.push(root.left);
+            }
+        }
+    }
+
+    //递归求二叉树的镜像
+    public TreeNode mirror3(TreeNode root) {
+        if (root == null) {
+            return root;
+        }
+
+        TreeNode left = mirror3(root.left);
+        TreeNode right = mirror3(root.right);
+        root.left = right;
+        root.right = left;
+
+        return root;
+    }
+
+    public TreeNode createTree() {
+        TreeNode tree;
+        Scanner sc = new Scanner(System.in);
+        int data = sc.nextInt();
+        if (data == 0) {
+            tree = null;
+        } else {
+            tree = new TreeNode();
+            tree.data = data;
+            tree.left = createTree();
+            tree.right = createTree();
+        }
+
+        return tree;
+    }
+
+    public void levelTraverseTree(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int curCount = 1;
+        while (!queue.isEmpty()) {
+            root = queue.poll();
+            --curCount;
+            System.out.print(root.data + " ");
+            if (root.left != null) {
+                queue.offer(root.left);
+            }
+            if (root.right != null) {
+                queue.offer(root.right);
+            }
+            if (curCount == 0) {
+                curCount = queue.size();
+                System.out.println();
+            }
+        }
+    }
+}
+```
+## 8.判断一颗二叉树是否是镜像二叉树
+```java
+package tree;
+
+import java.util.Scanner;
+
+public class IsMirror {
+    public static void main(String[] args) {
+        IsMirror isMirror = new IsMirror();
+        TreeNode root = isMirror.createTree();
+        System.out.println(isMirror.isMirror(root));
+    }
+
+    public boolean isMirror(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        return helper(root.left, root.right);
+    }
+
+    boolean helper(TreeNode left, TreeNode right) {
+        if (left == null && right == null) {
+            return true;
+        }
+
+        if (left == null || right == null) {
+            return false;
+        }
+
+        if (left.data != right.data) {
+            return false;
+        }
+
+        return helper(left.left, right.right) && helper(left.right, right.left);
+    }
+
+    public TreeNode createTree() {
+        TreeNode tree;
+        Scanner sc = new Scanner(System.in);
+        int data = sc.nextInt();
+        if (data == 0) {
+            tree = null;
+        } else {
+            tree = new TreeNode();
+            tree.data = data;
+            tree.left = createTree();
+            tree.right = createTree();
+        }
+
+        return tree;
+    }
+}
+```
+## 9.求两个结点的最低公共祖先结点
+```java
+package tree;
+
+import java.util.Scanner;
+
+public class GetLowestCommonAncestor {
+    public static void main(String[] args) {
+        GetLowestCommonAncestor lowestCommonAncestor = new GetLowestCommonAncestor();
+        TreeNode root = lowestCommonAncestor.createTree();
+        TreeNode node1 = root.left.left;
+        TreeNode node2 = root.left.right;
+        TreeNode common = lowestCommonAncestor.lowestCommonAncestor(root, node1, node2);
+        System.out.println(common.data);
+    }
+
+    TreeNode lowestCommonAncestor(TreeNode root, TreeNode node1, TreeNode node2) {
+        if (root == null || node1 == null || node2 == null) {
+            return null;
+        }
+
+        if (root == node1 || root == node2) {
+            return root;
+        }
+
+        TreeNode left = lowestCommonAncestor(root.left, node1, node2);
+        TreeNode right = lowestCommonAncestor(root.right, node1, node2);
+        if (left != null && right != null) {
+            return root;
+        }
+        return left != null ? left : right;
+    }
+
+    public TreeNode createTree() {
+        TreeNode tree;
+        Scanner sc = new Scanner(System.in);
+        int data = sc.nextInt();
+        if (data == 0) {
+            tree = null;
+        } else {
+            tree = new TreeNode();
+            tree.data = data;
+            tree.left = createTree();
+            tree.right = createTree();
+        }
+
+        return tree;
+    }
+}
+```
+## 10.求任意两结点距离
 ```java
 
 ```
-## 8.判断一颗二叉树是否是镜像二叉树
-## 9.求两个结点的最低公共祖先结点
-## 10.求任意两结点距离
 ## 11.
 ## 12.
 ## 13.
