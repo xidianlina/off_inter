@@ -4439,12 +4439,392 @@ public class lc067 {
     }
 }
 ```
-# 68.
+# 69.x 的平方根
+题目链接            
+https://leetcode-cn.com/problems/sqrtx/             
+https://leetcode.com/problems/sqrtx/         
+```java
+package leetcode;
+
+/*
+实现int sqrt(int x)函数。
+计算并返回x的平方根，其中 x 是非负整数。
+由于返回类型是整数，结果只保留整数的部分，小数部分将被舍去。
+
+示例 1:
+输入: 4
+输出: 2
+
+示例 2:
+输入: 8
+输出: 2
+
+说明: 8 的平方根是 2.82842...,
+     由于返回类型是整数，小数部分将被舍去。
+ */
+public class lc069 {
+    /*
+        方法一：暴力解
+        时间复杂度：O(logx)，即为二分查找需要的次数。
+        空间复杂度：O(1)。
+     */
+    public int mySqrt(int x) {
+        if (x < 0) {
+            return x;
+        }
+
+        int begin = 1;
+        int end = x;
+        int mid = 0;
+        while (begin <= end) {
+            mid = (begin + end) >> 1;
+            if (mid == x / mid) {
+                return mid;
+            } else if (mid < x / mid) {
+                begin = mid + 1;
+            } else {
+                end = mid - 1;
+            }
+        }
+
+        // 结束条件end一定<begin，所以返回end
+        return end;
+    }
+
+    /*
+         牛顿迭代法
+         时间复杂度：O(logx)，此方法是二次收敛的，相较于二分查找更快。
+         空间复杂度：O(1)。
+     */
+    public int mySqrt2(int x) {
+        if (x < 0) {
+            return x;
+        }
+
+        long v = x;
+        while (v * v > x) {
+            v = (v + x / v) / 2;
+        }
+
+        return (int) v;
+    }
+}
+```
+# 70.爬楼梯
+题目链接        
+https://leetcode-cn.com/problems/climbing-stairs/           
+https://leetcode.com/problems/climbing-stairs/           
+```java
+package leetcode;
+
+/*
+假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+注意：给定 n 是一个正整数。
+
+示例 1：
+输入： 2
+输出： 2
+解释： 有两种方法可以爬到楼顶。
+1.  1 阶 + 1 阶
+2.  2 阶
+
+示例 2：
+输入： 3
+输出： 3
+解释： 有三种方法可以爬到楼顶。
+1.  1 阶 + 1 阶 + 1 阶
+2.  1 阶 + 2 阶
+3.  2 阶 + 1 阶
+ */
+public class lc070 {
+    public int climbStairs(int n) {
+        if (n == 0 || n == 1 || n == 2) {
+            return n;
+        }
+
+        return climbStairs(n - 1) + climbStairs(n - 2);
+    }
+
+    public int climbStairs2(int n) {
+        if (n < 2) {
+            return n;
+        }
+
+        int temp = 0;
+        int pre = 1;
+        int result = 1;
+        for (int i = 2; i <= n; ++i) {
+            temp = result;
+            result = result + pre;
+            pre = temp;
+        }
+
+        return result;
+    }
+
+    public int climbStairs3(int n) {
+        if (n == 0 || n == 1 || n == 3) {
+            return n;
+        }
+
+        int[] dp = new int[n];
+        dp[0] = 1;
+        dp[1] = 2;
+        for (int i = 2; i < n; ++i) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+
+        return dp[n - 1];
+    }
+}
+```
+# 71.简化路径
+题目链接            
+https://leetcode-cn.com/problems/simplify-path/         
+https://leetcode.com/problems/simplify-path/         
+```java
+package leetcode;
+
+import java.util.*;
+
+/*
+给你一个字符串path ，表示指向某一文件或目录Unix风格绝对路径 （以 '/' 开头），请你将其转化为更加简洁的规范路径。
+在 Unix 风格的文件系统中，一个点（.）表示当前目录本身；此外，两个点（..）表示将目录切换到上一级（指向父目录）；
+两者都可以是复杂相对路径的组成部分。任意多个连续的斜杠（即，'//'）都被视为单个斜杠 '/' 。 对于此问题，任何其他
+格式的点（例如，'...'）均被视为文件/目录名称。
+
+请注意，返回的 规范路径 必须遵循下述格式：
+始终以斜杠 '/' 开头。
+两个目录名之间必须只有一个斜杠 '/' 。
+最后一个目录名（如果存在）不能 以 '/' 结尾。
+此外，路径仅包含从根目录到目标文件或目录的路径上的目录（即，不含 '.' 或 '..'）。
+返回简化后得到的 规范路径 。
+
+示例 1：
+输入：path = "/home/"
+输出："/home"
+解释：注意，最后一个目录名后面没有斜杠。
+
+示例 2：
+输入：path = "/../"
+输出："/"
+解释：从根目录向上一级是不可行的，因为根目录是你可以到达的最高级。
+
+示例 3：
+输入：path = "/home//foo/"
+输出："/home/foo"
+解释：在规范路径中，多个连续斜杠需要用一个斜杠替换。
+
+示例 4：
+输入：path = "/a/./b/../../c/"
+输出："/c"
+
+提示：
+1 <= path.length <= 3000
+path 由英文字母，数字，'.'，'/' 或 '_' 组成。
+path 是一个有效的 Unix 风格绝对路径。
+ */
+public class lc071 {
+    public String simplifyPath(String path) {
+        //用栈来模拟
+        LinkedList<String> stack = new LinkedList<>();
+
+        //用/分割，多个/也视为/
+        String[] strArr = path.split("/");
+        for (String s : strArr) {
+            //如果等于空或者等于.，那就没有影响
+            if (s.equals("") || s.equals(".")) {
+                continue;
+            }
+
+            //如果等于..，那就要返回上一级目录，因此栈中弹出当前目录
+            if (s.equals("..")) {
+                if (!stack.isEmpty()) {
+                    stack.pop();
+                }
+                continue;
+            }
+
+            //栈中压入当前目录
+            stack.push(s);
+        }
+
+        StringBuffer sb = new StringBuffer();
+        Collections.reverse(stack);
+        while (!stack.isEmpty()) {
+            sb.append("/").append(stack.pop());
+        }
+        if (sb.length() == 0) {
+            sb.append("/");
+        }
+
+        return sb.toString();
+    }
+
+    public String simplifyPath2(String path) {
+        Stack<String> stack = new Stack<String>();
+
+        String[] strs = path.split("/");
+        for (String str : strs) {
+            if (!stack.isEmpty() && str.equals("..")) {
+                stack.pop();
+            } else if (!str.equals("") && !str.equals(".") && !str.equals("..")) {
+                stack.push(str);
+            }
+        }
+
+        List<String> result = new ArrayList<>(stack);
+        return "/" + String.join("/", result);
+    }
+}
+```
+# 72.编辑距离
+题目链接            
+https://leetcode-cn.com/problems/edit-distance/         
+https://leetcode.com/problems/edit-distance/         
+```java
+package leetcode;
+
+/*
+给你两个单词word1 和word2，请你计算出将word1转换成word2 所使用的最少操作数。
+你可以对一个单词进行如下三种操作：
+插入一个字符
+删除一个字符
+替换一个字符
+
+示例1：
+输入：word1 = "horse", word2 = "ros"
+输出：3
+解释：
+horse -> rorse (将 'h' 替换为 'r')
+rorse -> rose (删除 'r')
+rose -> ros (删除 'e')
+
+示例2：
+输入：word1 = "intention", word2 = "execution"
+输出：5
+解释：
+intention -> inention (删除 't')
+inention -> enention (将 'i' 替换为 'e')
+enention -> exention (将 'n' 替换为 'x')
+exention -> exection (将 'n' 替换为 'c')
+exection -> execution (插入 'u')
+
+提示：
+0 <= word1.length, word2.length <= 500
+word1 和 word2 由小写英文字母组成
+ */
+public class lc072 {
+    /*
+        时间复杂度:O(mn)，其中m为word1的长度，n为word2的长度。
+        空间复杂度:O(mn)，需要大小为O(mn)的数组来记录状态值。
+     */
+    public int minDistance(String word1, String word2) {
+        int m = word1.length();
+        int n = word2.length();
+
+        //dp[i][j]表示从word1的前i个字符转换到word2的前j个字符所需要的步骤
+        int[][] dp = new int[m + 1][n + 1];
+
+        //先给这个二维数组dp的第一行第一列赋值，因为第一行和第一列对应的总有一个字符串是空串，于是转换步骤完全是另一个字符串的长度。
+        for (int i = 0; i <= m; ++i) {
+            dp[i][0] = i;
+        }
+
+        for (int j = 0; j <= n; ++j) {
+            dp[0][j] = j;
+        }
+
+        //当word1[i] == word2[j]时，dp[i][j] = dp[i - 1][j - 1]，其他情况时，dp[i][j]是其左，左上，上的三个值中的最小值加1
+        for (int i = 1; i <= m; ++i) {
+            for (int j = 1; j <= n; ++j) {
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = Math.min(Math.min(dp[i - 1][j - 1], dp[i][j - 1]), dp[i - 1][j]) + 1;
+                }
+            }
+        }
+
+        return dp[m][n];
+    }
+}
+```
+# 73.
+题目链接            
+https://leetcode-cn.com/problems/set-matrix-zeroes/         
+https://leetcode.com/problems/set-matrix-zeroes/             
+```java
+package leetcode;
+
+/*
+给定一个 m x n 的矩阵，如果一个元素为 0 ，则将其所在行和列的所有元素都设为 0 。请使用原地算法。
+
+进阶：
+一个直观的解决方案是使用 O(mn)的额外空间，但这并不是一个好的解决方案。
+一个简单的改进方案是使用 O(m+n) 的额外空间，但这仍然不是最好的解决方案。
+你能想出一个仅使用常量空间的解决方案吗？
+ */
+public class lc073 {
+    /*
+        先扫描第一行第一列，如果有0，则将各自的flag设置为true
+        然后扫描除去第一行第一列的整个数组，如果有0，则将对应的第一行和第一列的数字赋0
+        再次遍历除去第一行第一列的整个数组，如果对应的第一行和第一列的数字有一个为0，则将当前值赋0
+        最后根据第一行第一列的flag来更新第一行第一列
+     */
+    public void setZeroes(int[][] matrix) {
+        int m=matrix.length;
+        int n=matrix[0].length;
+        boolean rowZero=false;
+        boolean colZero=false;
+        for(int j=0;j<n;++j){
+            if(matrix[0][j]==0){
+                rowZero=true;
+            }
+        }
+        for(int i=0;i<m;++i){
+            if(matrix[i][0]==0){
+                colZero=true;
+            }
+        }
+        for(int i=1;i<m;++i){
+            for(int j=1;j<n;++j){
+                if(matrix[i][j]==0){
+                    matrix[i][0]=0;
+                    matrix[0][j]=0;
+                }
+            }
+        }
+        for(int i=1;i<m;++i){
+            for(int j=1;j<n;++j){
+                if(matrix[i][0]==0||matrix[0][j]==0){
+                    matrix[i][j]=0;
+                }
+            }
+        }
+        if(rowZero){
+            for(int j=0;j<n;++j){
+                matrix[0][j]=0;
+            }
+        }
+        if(colZero){
+            for(int i=0;i<m;++i){
+                matrix[i][0]=0;
+            }
+        }
+    }
+}
+```
+# 74.
 题目链接
-# 69.
+# 75.
 题目链接
-# 70.
+# 76.
 题目链接
+
+
+
 
 # 206.反转链表
 题目链接        
