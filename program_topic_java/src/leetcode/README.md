@@ -4178,16 +4178,267 @@ public class lc062 {
     }
 }
 ```
-# 63.
-题目链接
-# 64.
-题目链接
-# 65.
-题目链接
-# 66.
-题目链接
-# 67.
-题目链接
+# 63.63. 不同路径 II
+题目链接            
+https://leetcode-cn.com/problems/unique-paths-ii/           
+https://leetcode.com/problems/unique-paths-ii/       
+```java
+package leetcode;
+
+/*
+一个机器人位于一个m x n网格的左上角 （起始点在下图中标记为“Start” ）。
+机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。
+现在考虑网格中有障碍物。那么从左上角到右下角将会有多少条不同的路径？
+网格中的障碍物和空位置分别用 1 和 0 来表示。
+
+示例 1：
+输入：obstacleGrid = [[0,0,0],[0,1,0],[0,0,0]]
+输出：2
+解释：
+3x3 网格的正中间有一个障碍物。
+从左上角到右下角一共有 2 条不同的路径：
+1. 向右 -> 向右 -> 向下 -> 向下
+2. 向下 -> 向下 -> 向右 -> 向右
+
+示例 2：
+输入：obstacleGrid = [[0,1],[0,0]]
+输出：1
+
+提示：
+m ==obstacleGrid.length
+n ==obstacleGrid[i].length
+1 <= m, n <= 100
+obstacleGrid[i][j] 为 0 或 1
+ */
+public class lc063 {
+    /*
+        时间复杂度：O(nm)，其中n为网格的行数，m为网格的列数。只需要遍历所有网格一次即可。
+        空间复杂度：O(nm)。
+     */
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        int m = obstacleGrid.length;
+        int n = obstacleGrid[0].length;
+
+        if (m == 0 || n == 0) {
+            return 0;
+        }
+
+        if (obstacleGrid[0][0] == 1 || obstacleGrid[m - 1][n - 1] == 1) {
+            return 0;
+        }
+
+        int[][] dp = new int[m][n];
+
+        dp[0][0] = 1;
+
+        //处理第一行
+        for (int j = 1; j < n; ++j) {
+            if (obstacleGrid[0][j] == 1) {
+                dp[0][j] = 0;
+            } else {
+                dp[0][j] = dp[0][j - 1];
+            }
+        }
+
+        //处理第一列
+        for (int i = 1; i < m; ++i) {
+            if (obstacleGrid[i][0] == 1) {
+                dp[i][0] = 0;
+            } else {
+                dp[i][0] = dp[i - 1][0];
+            }
+        }
+
+        for (int i = 1; i < m; ++i) {
+            for (int j = 1; j < n; ++j) {
+                if (obstacleGrid[i][j] == 1) {
+                    dp[i][j] = 0;
+                } else {
+                    dp[i][j] = dp[i][j - 1] + dp[i - 1][j];
+                }
+            }
+        }
+
+        return dp[m - 1][n - 1];
+    }
+
+    /*
+        时间复杂度：O(nm)，其中n为网格的行数，m为网格的列数。只需要遍历所有网格一次即可。
+        空间复杂度：O(m)。利用滚动数组优化，可以只用O(m)大小的空间来记录当前行的f值。
+     */
+    public int uniquePathsWithObstacles2(int[][] obstacleGrid) {
+        int m = obstacleGrid.length;
+        int n = obstacleGrid[0].length;
+
+        int[] f = new int[n];
+        f[0] = obstacleGrid[0][0] == 0 ? 1 : 0;
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (obstacleGrid[i][j] == 1) {
+                    f[j] = 0;
+                    continue;
+                }
+
+                if (j - 1 >= 0 && obstacleGrid[i][j - 1] == 0) {
+                    f[j] += f[j - 1];
+                }
+            }
+        }
+
+        return f[n - 1];
+    }
+}
+```
+# 64.最小路径和
+题目链接            
+https://leetcode-cn.com/problems/minimum-path-sum/          
+https://leetcode.com/problems/minimum-path-sum/         
+```java
+package leetcode;
+
+/*
+给定一个包含非负整数的mxn网格grid,请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+说明：每次只能向下或者向右移动一步。
+
+示例 1：
+输入：grid = [[1,3,1],[1,5,1],[4,2,1]]
+输出：7
+解释：因为路径 1→3→1→1→1 的总和最小。
+
+示例 2：
+输入：grid = [[1,2,3],[4,5,6]]
+输出：12
+
+提示：
+m == grid.length
+n == grid[i].length
+1 <= m, n <= 200
+0 <= grid[i][j] <= 100
+ */
+public class lc064 {
+    public int minPathSum(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+
+        int[][] dp = new int[m][n];
+        dp[0][0] = grid[0][0];
+
+        for (int j = 1; j < n; ++j) {
+            dp[0][j] = dp[0][j - 1] + grid[0][j];
+        }
+
+        for (int i = 1; i < m; ++i) {
+            dp[i][0] = dp[i - 1][0] + grid[i][0];
+        }
+
+        for (int i = 1; i < m; ++i) {
+            for (int j = 1; j < n; ++j) {
+                dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+            }
+        }
+
+        return dp[m - 1][n - 1];
+    }
+}
+```
+# 66.加一
+题目链接            
+https://leetcode-cn.com/problems/plus-one/          
+https://leetcode.com/problems/plus-one/          
+```java
+package leetcode;
+
+/*
+给定一个由 整数 组成的 非空 数组所表示的非负整数，在该数的基础上加一。
+最高位数字存放在数组的首位， 数组中每个元素只存储单个数字。
+你可以假设除了整数 0 之外，这个整数不会以零开头。
+
+示例 1：
+输入：digits = [1,2,3]
+输出：[1,2,4]
+解释：输入数组表示数字 123。
+
+示例 2：
+输入：digits = [4,3,2,1]
+输出：[4,3,2,2]
+解释：输入数组表示数字 4321。
+
+示例 3：
+输入：digits = [0]
+输出：[1]
+
+提示：
+1 <= digits.length <= 100
+0 <= digits[i] <= 9
+ */
+public class lc066 {
+    public int[] plusOne(int[] digits) {
+        /*
+            只加一的所以有可能的情况就只有两种：
+            除9之外的数字加一；数字9加一。
+            加一得十进一位个位数为0加法运算如不出现进位就运算结束了且进位只会是一。
+            所以只需要判断有没有进位并模拟出它的进位方式，如十位数加1个位数置为0，如此循环直到判断没有再进位就退出循环返回结果。
+            然后还有一些特殊情况就是当出现99、999之类的数字时，循环到最后也需要进位，出现这种情况时需要手动将它进一位。
+         */
+        for (int i = digits.length - 1; i >= 0; --i) {
+            ++digits[i];
+            digits[i] = digits[i] % 10;
+            if (digits[i] != 0) {
+                return digits;
+            }
+        }
+
+        digits = new int[digits.length + 1];
+        digits[0] = 1;
+
+        return digits;
+    }
+}
+```
+# 67. 二进制求和
+题目链接        
+https://leetcode-cn.com/problems/add-binary/            
+https://leetcode.com/problems/add-binary/        
+```java
+package leetcode;
+
+/*
+给你两个二进制字符串，返回它们的和（用二进制表示）。
+输入为非空字符串且只包含数字1和0。
+
+示例1:
+输入: a = "11", b = "1"
+输出: "100"
+
+示例2:
+输入: a = "1010", b = "1011"
+输出: "10101"
+
+提示：
+每个字符串仅由字符 '0' 或 '1' 组成。
+1 <= a.length, b.length <= 10^4
+字符串如果不是 "0" ，就都不含前导零。
+ */
+public class lc067 {
+    public String addBinary(String a, String b) {
+        StringBuffer ans = new StringBuffer();
+
+        int carry = 0;
+        int i = a.length() - 1;
+        int j = b.length() - 1;
+        while (i >= 0 || j >= 0 || carry == 1) {
+            carry += i >= 0 ? a.charAt(i) - '0' : 0;
+            carry += j >= 0 ? b.charAt(j) - '0' : 0;
+            ans.append((char) (carry % 2 + '0'));
+            carry /= 2;
+            --i;
+            --j;
+        }
+
+        return ans.reverse().toString();
+    }
+}
+```
 # 68.
 题目链接
 # 69.
