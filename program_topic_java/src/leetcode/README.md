@@ -4816,12 +4816,414 @@ public class lc073 {
     }
 }
 ```
-# 74.
-题目链接
-# 75.
-题目链接
-# 76.
-题目链接
+# 74.搜索二维矩阵
+题目链接            
+https://leetcode-cn.com/problems/search-a-2d-matrix/            
+https://leetcode.com/problems/search-a-2d-matrix/            
+```java
+package leetcode;
+
+/*
+编写一个高效的算法来判断m x n矩阵中，是否存在一个目标值。该矩阵具有如下特性：
+每行中的整数从左到右按升序排列。
+每行的第一个整数大于前一行的最后一个整数。
+
+示例 1：
+输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3
+输出：true
+
+示例 2：
+输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 13
+输出：false
+
+提示：
+m == matrix.length
+n == matrix[i].length
+1 <= m, n <= 100
+-10^4 <= matrix[i][j], target <= 10^4
+ */
+public class lc074 {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix == null || matrix.length == 0) {
+            return false;
+        }
+        int row = matrix.length;
+        int col = matrix[0].length;
+
+        int i = 0;
+        int j = col - 1;
+        while (i < row && j >= 0) {
+            if (matrix[i][j] < target) {
+                ++i;
+            } else if (matrix[i][j] > target) {
+                --j;
+            } else {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+```
+# 75.颜色分类
+题目链接                
+https://leetcode-cn.com/problems/sort-colors/               
+https://leetcode.com/problems/sort-colors/           
+```java
+package leetcode;
+
+/*
+给定一个包含红色、白色和蓝色，一共n个元素的数组，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。
+此题中，使用整数 0、1 和 2 分别表示红色、白色和蓝色。
+
+示例 1：
+输入：nums = [2,0,2,1,1,0]
+输出：[0,0,1,1,2,2]
+
+示例 2：
+输入：nums = [2,0,1]
+输出：[0,1,2]
+
+示例 3：
+输入：nums = [0]
+输出：[0]
+
+示例 4：
+输入：nums = [1]
+输出：[1]
+
+提示：
+n == nums.length
+1 <= n <= 300
+nums[i] 为 0、1 或 2
+ */
+public class lc075 {
+    /*
+        时间复杂度：O(n)，其中n是数组 nums 的长度。
+        空间复杂度：O(1)。
+     */
+    public void sortColors(int[] nums) {
+        int left = 0;
+        int right = nums.length - 1;
+        int i = 0;
+        while (i <= right) {
+            if (nums[i] == 0) {
+                swap(nums, i, left);
+                ++left;
+                ++i;
+            } else if (nums[i] == 1) {
+                ++i;
+            } else {
+                swap(nums, i, right);
+                --right;
+            }
+        }
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+```
+# 76.最小覆盖子串
+题目链接            
+https://leetcode-cn.com/problems/minimum-window-substring/              
+https://leetcode.com/problems/minimum-window-substring/
+```java
+package leetcode;
+
+import java.util.HashMap;
+
+/*
+给你一个字符串 s 、一个字符串 t 。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 "" 。
+注意：如果 s 中存在这样的子串，保证它是唯一的答案。
+
+示例 1：
+输入：s = "ADOBECODEBANC", t = "ABC"
+输出："BANC"
+
+示例 2：
+输入：s = "a", t = "a"
+输出："a"
+
+提示：
+1 <= s.length, t.length <= 105
+s 和 t 由英文字母组成
+ */
+public class lc076 {
+    public String minWindow(String s, String t) {
+        int n = s.length();
+        HashMap<Character, Integer> tMap = new HashMap<>();
+        HashMap<Character, Integer> windowMap = new HashMap<>();
+
+        // 记录 t 中所有字符出现的次数
+        for (char c : t.toCharArray()) {
+            tMap.put(c, tMap.getOrDefault(c, 0) + 1);
+        }
+
+        int left = 0, right = 0;
+        // 记录窗口中满足条件的字符个数
+        int count = 0;
+
+        // 记录最小覆盖字串的起始索引及长度
+        int start = 0, minLength = Integer.MAX_VALUE;
+
+        while (right < n) {
+            char c = s.charAt(right);
+
+            // 判断取出的字符是否在 t 中
+            if (tMap.containsKey(c)) {
+                windowMap.put(c, windowMap.getOrDefault(c, 0) + 1);
+                // 判断取出的字符在窗口中的出现次数是否与 t 中该字符的出现次数相同
+                if (windowMap.get(c).equals(tMap.get(c))) {
+                    ++count;
+                }
+            }
+
+            // 判断是否需要缩小窗口(已经找到符合条件的子串)
+            while (count == tMap.size()) {
+                if (right - left + 1 < minLength) {
+
+                    start = left;
+                    minLength = right - left + 1;
+                }
+                char c1 = s.charAt(left);
+                left++;
+                if (tMap.containsKey(c1)) {
+
+                    if (windowMap.get(c1).equals(tMap.get(c1))) {
+
+                        --count;
+                    }
+                    windowMap.put(c1, windowMap.getOrDefault(c1, 0) - 1);
+                }
+            }
+            ++right;
+        }
+
+        return minLength == Integer.MAX_VALUE ? "" : s.substring(start, start + minLength);
+    }
+}
+```
+# 77.组合
+题目链接            
+https://leetcode-cn.com/problems/combinations/          
+https://leetcode.com/problems/combinations/          
+```java
+package leetcode;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/*
+给定两个整数 n 和 k，返回 1 ... n 中所有可能的 k 个数的组合。
+
+示例:
+输入:n = 4, k = 2
+输出:
+[
+  [2,4],
+  [3,4],
+  [2,3],
+  [1,2],
+  [1,3],
+  [1,4],
+]
+ */
+public class lc077 {
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> out = new ArrayList<>();
+        helper(n, k, 1, out, result);
+        return result;
+    }
+
+    private void helper(int n, int k, int start, List<Integer> out, List<List<Integer>> result) {
+        if (out.size() == k) {
+            result.add(new ArrayList<>(out));
+        }
+
+        for (int i = start; i <= n; ++i) {
+            out.add(i);
+            helper(n, k, i + 1, out, result);
+            out.remove(out.size() - 1);
+        }
+    }
+}
+```
+# 78.子集
+题目链接            
+https://leetcode-cn.com/problems/subsets/           
+https://leetcode.com/problems/subsets/           
+```java
+package leetcode;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/*
+给你一个整数数组nums ，数组中的元素互不相同。返回该数组所有可能的子集（幂集）。
+解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。
+
+示例 1：
+输入：nums = [1,2,3]
+输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+
+示例 2：
+输入：nums = [0]
+输出：[[],[0]]
+
+提示：
+1 <= nums.length <= 10
+-10 <= nums[i] <= 10
+nums 中的所有元素 互不相同
+ */
+public class lc078 {
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> out = new ArrayList<>();
+        Arrays.sort(nums);
+        helper(nums, 0, out, result);
+        return result;
+    }
+
+    private void helper(int[] nums, int start, List<Integer> out, List<List<Integer>> result) {
+        result.add(new ArrayList<>(out));
+        for (int i = start; i < nums.length; ++i) {
+            out.add(nums[i]);
+            helper(nums, i + 1, out, result);
+            out.remove(out.size() - 1);
+        }
+    }
+}
+```
+# 79.单词搜索
+题目链接            
+https://leetcode-cn.com/problems/word-search/           
+https://leetcode.com/problems/word-search/
+```java
+package leetcode;
+
+/*
+给定一个m x n 二维字符网格board 和一个字符串单词word 。如果word存在于网格中，返回true ；否则，返回 false 。
+单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+
+示例 1：
+输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
+输出：true
+
+示例 2：
+输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "SEE"
+输出：true
+
+示例 3：
+输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCB"
+输出：false
+
+提示：
+m == board.length
+n = board[i].length
+1 <= m, n <= 6
+1 <= word.length <= 15
+board 和 word 仅由大小写英文字母组成
+ */
+public class lc079 {
+    public boolean exist(char[][] board, String word) {
+        int m = board.length;
+        int n = board[0].length;
+        boolean[][] visited = new boolean[m][n];
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (dfs(board, word, 0, i, j, visited)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean dfs(char[][] board, String word, int index, int rowindex, int colindex, boolean[][] visited) {
+        if (index == word.length()) {
+            return true;
+        }
+
+        if (rowindex < 0 || colindex < 0 || rowindex >= board.length || colindex >= board[0].length) {
+            return false;
+        }
+
+        if (visited[rowindex][colindex]) {
+            return false;
+        }
+
+        if (board[rowindex][colindex] != word.charAt(index)) {
+            return false;
+        }
+
+        visited[rowindex][colindex] = true;
+
+        boolean res =
+                dfs(board, word, index + 1, rowindex - 1, colindex, visited)
+                        || dfs(board, word, index + 1, rowindex + 1, colindex, visited)
+                        || dfs(board, word, index + 1, rowindex, colindex + 1, visited)
+                        || dfs(board, word, index + 1, rowindex, colindex - 1, visited);
+
+        visited[rowindex][colindex] = false;
+        
+        return res;
+    }
+}
+```
+# 80.删除有序数组中的重复项 II
+题目链接            
+https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/            
+https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/        
+```java
+package leetcode;
+
+/*
+给你一个有序数组nums ，请你 原地 删除重复出现的元素，使每个元素 最多出现两次 ，返回删除后数组的新长度。
+不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
+
+示例 1：
+输入：nums = [1,1,1,2,2,3]
+输出：5, nums = [1,1,2,2,3]
+解释：函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。 不需要考虑数组中超出新长度后面的元素。
+
+示例 2：
+输入：nums = [0,0,1,1,1,1,2,3,3]
+输出：7, nums = [0,0,1,1,2,3,3]
+解释：函数应返回新长度 length = 7, 并且原数组的前五个元素被修改为0, 0, 1, 1, 2, 3, 3 。 不需要考虑数组中超出新长度后面的元素。
+
+提示：
+1 <= nums.length <= 3 * 104
+-104 <= nums[i] <= 104
+nums 已按升序排列
+ */
+public class lc080 {
+    public int removeDuplicates(int[] nums) {
+        int n = nums.length;
+        if (n < 3) {
+            return n;
+        }
+
+        int index = 2;
+        for (int i = 2; i < n; ++i) {
+            if (nums[i] != nums[index - 2]) {
+                nums[index] = nums[i];
+                ++index;
+            }
+        }
+
+        return index;
+    }
+}
+```
 
 
 
