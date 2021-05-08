@@ -11,7 +11,7 @@ public class InsertSort {
         insertSort.printArray(arr);
     }
 
-    public void printArray( int[] arr) {
+    public void printArray(int[] arr) {
         int size = arr.length;
         if (size == 0 || arr == null) {
             return;
@@ -29,12 +29,12 @@ public class InsertSort {
             return;
         }
 
-        for (int i = 1; i < size; i++) {
+        for (int i = 1; i < size; ++i) {
             int k = arr[i];
             int j = i - 1;
             while (j >= 0 && arr[j] > k) {
                 arr[j + 1] = arr[j];
-                j--;
+                --j;
             }
             arr[j + 1] = k;
         }
