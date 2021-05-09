@@ -1059,3 +1059,253 @@ public class JZ20_2 {
     }
 }
 ```
+# 21.栈的压入、弹出序列
+```java
+package sword_offer;
+
+import java.util.Stack;
+
+/**
+ * 题目描述
+ * 输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否可能为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如序列1,2,3,4,5是某栈的压入顺序，序列4,5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。（注意：这两个序列的长度是相等的）
+ * 示例1
+ * 输入
+ * [1,2,3,4,5],[4,3,5,1,2]
+ * 返回值
+ * false
+ */
+public class JZ21 {
+    public boolean IsPopOrder(int[] pushA, int[] popA) {
+        int pSize = pushA.length;
+        int vSize = popA.length;
+        if (pSize == 0 || vSize == 0 || pSize != vSize) {
+            return false;
+        }
+
+        Stack<Integer> stk = new Stack<Integer>();
+        int popIndex = 0;
+        for (int i = 0; i < pSize; i++) {
+            stk.push(pushA[i]);
+            while (!stk.isEmpty() && stk.peek() == popA[popIndex]) {
+                stk.pop();
+                ++popIndex;
+            }
+        }
+
+        return stk.isEmpty();
+    }
+}
+```
+# 22.从上往下打印二叉树
+```java
+package sword_offer;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+/**
+ * 题目描述
+ * 从上往下打印出二叉树的每个节点，同层节点从左至右打印。
+ * 示例1
+ * 输入
+ * {5,4,#,3,#,2,#,1}
+ * 返回值
+ * [5,4,3,2,1]
+ */
+public class JZ22 {
+    public ArrayList<Integer> PrintFromTopToBottom(TreeNode root) {
+        LinkedList<TreeNode> que = new LinkedList<TreeNode>();
+        ArrayList<Integer> res = new ArrayList<Integer>();
+
+        if (root == null) {
+            return res;
+        }
+
+        que.offer(root);
+        while (!que.isEmpty()) {
+            root = que.poll();
+            res.add(root.val);
+            if (root.left != null) {
+                que.offer(root.left);
+            }
+            if (root.right != null) {
+                que.offer(root.right);
+            }
+        }
+
+        return res;
+    }
+}
+```
+# 23.二叉搜索树的后序遍历序列
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则返回true,否则返回false。
+ * 假设输入的数组的任意两个数字都互不相同。（ps：我们约定空树不是二叉搜素树）
+ * 示例1
+ * 输入
+ * [4,8,6,12,16,14,10]
+ * 返回值
+ * true
+ */
+
+/*
+后序遍历定义:[左子树|右子树|根节点],即遍历顺序为“左、右、根” 。
+二叉搜索树定义:左子树中所有节点的值小于根节点的值；右子树中所有节点的值大于根节点的值；其左、右子树也分别为二叉搜索树。
+ */
+public class JZ23 {
+    public boolean VerifySquenceOfBST(int[] arr) {
+        int size = arr.length;
+        if (size == 0) {
+            return false;
+        }
+
+        if (size == 1) {
+            return true;
+        }
+
+        return helper(arr, 0, size - 1);
+    }
+
+    private boolean helper(int[] arr, int start, int end) {
+        if (start >= end) {
+            return true;
+        }
+
+        int i = end;
+        while (i > start && arr[i - 1] > arr[end]) {
+            --i;
+        }
+
+        for (int j = start; j < i; ++j) {
+            if (arr[j] > arr[end]) {
+                return false;
+            }
+        }
+
+        return helper(arr, start, i - 1) && helper(arr, i, end - 1);
+    }
+}
+```
+# 24.二叉树中和为某一值的路径
+```java
+package sword_offer;
+
+import java.io.File;
+import java.util.ArrayList;
+
+/**
+ * 题目描述
+ * 输入一颗二叉树的根节点和一个整数，按字典序打印出二叉树中结点值的和为输入整数的所有路径。
+ * 路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。
+ * 示例1
+ * 输入
+ * {10,5,12,4,7},22
+ * 返回值
+ * [[10,5,7],[10,12]]
+ * 示例2
+ * 输入
+ * {10,5,12,4,7},15
+ * 返回值
+ * []
+ */
+
+/*
+思路分析：首先思考节点值的和为输入的整数，每条路径都一定是从根节点到叶子节点，
+在数据结构中从根节点到叶子节点的遍历称之为深度优先遍历DFS。因此整个过程可以采用先序遍历方式的DFS，
+即根节点》左子树》右子树。随后考虑一次遍历完成后的处理，当一次遍历完成后，如果输入整数值恰好等于节点值之和，
+则输出这条路径并且回退一个节点；如果不等于则直接回退一个节点，即回退到当前节点的父节点，如果该父节点有右孩子，
+则继续遍历，否则继续回退。考虑回退到根节点，此时如果它有右孩子，则继续遍历，否则整个DFS结束。
+ */
+public class JZ24 {
+    private ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+    private ArrayList<Integer> path = new ArrayList<>();
+
+    public ArrayList<ArrayList<Integer>> FindPath(TreeNode root, int target) {
+        if (root == null) {
+            return res;
+        }
+
+        path.add(root.val);
+        if (root.val == target && root.left == null && root.right == null) {
+            res.add(new ArrayList<>(path));
+        }
+
+        FindPath(root.left, target - root.val);
+        FindPath(root.right, target - root.val);
+        path.remove(path.size() - 1);
+
+        return res;
+    }
+}
+```
+# 25.复杂链表的复制
+```java
+package sword_offer;
+
+import java.util.HashMap;
+
+/**
+ * 题目描述
+ * 输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针random指向一个随机节点），
+ * 请对此链表进行深拷贝，并返回拷贝后的头结点。（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）
+ */
+
+class RandomListNode {
+    int label;
+    RandomListNode next = null;
+    RandomListNode random = null;
+
+    RandomListNode(int label) {
+        this.label = label;
+    }
+}
+
+public class JZ25 {
+    public RandomListNode Clone(RandomListNode head) {
+        HashMap<RandomListNode, RandomListNode> m = new HashMap<>();
+        if (head == null) {
+            return null;
+        }
+
+        RandomListNode cur = head;
+        while (cur != null) {
+            m.put(cur, new RandomListNode(cur.label));
+            cur = cur.next;
+        }
+
+        cur = head;
+        while (cur != null) {
+            m.get(cur).next = m.get(cur.next);
+            m.get(cur).random = m.get(cur.random);
+            cur = cur.next;
+        }
+
+        return m.get(head);
+    }
+}
+```
+# 26.二叉搜索树与双向链表
+```java
+
+```
+# 27.字符串的排序
+```java
+
+```
+# 28.数组中出现次数超过一半的数字
+```java
+
+```
+# 29.最小的K个数
+```java
+
+```
+# 30.连续子数组的最大和
+```java
+
+```
+# 31.
