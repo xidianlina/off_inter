@@ -4,6 +4,13 @@ package sort_algorithm;
 希尔排序
 希尔排序是把记录按下标的一定增量分组，对每组使用直接插入排序算法排序，随着增量逐渐减少，
 每组包含的关键词越来越多，当增量减至1时，整个数组恰被分成一组，算法便终止。
+
+平均时间复杂度：O(Nlog2N)
+最佳时间复杂度：O(N)
+最差时间复杂度：O(N^2)
+空间复杂度：O(1)
+稳定性：不稳定
+复杂性：较复杂
  */
 public class ShellSort {
     public static void main(String[] args) {

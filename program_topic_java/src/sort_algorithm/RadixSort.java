@@ -1,4 +1,4 @@
-package others.order;
+package sort_algorithm;
 
 /*
 基数排序
@@ -7,11 +7,16 @@ package others.order;
 分配就是：从个位开始，按位数从小到大把数据排好，分别放进0--9这10个桶中。
 收集就是：依次将0-9桶中的数据放进数组中。
 重复这两个过程直到最高位。
+
+平均时间复杂度：O(d(n+r)) r为基数，d为位数
+最佳时间复杂度：O(d(n+r))
+最差时间复杂度：O(d(n+r))
+稳定性：稳定
  */
 public class RadixSort {
     public static void main(String[] args) {
+        int[] arr = {16, 10, 59, 7, 9345, 81, 400, 2, 890, 39};
         RadixSort radixSort = new RadixSort();
-        int[] arr = {8, 0, 5, 7, 9, 1, 4, 2, 6, 3};
         radixSort.printArray(arr);
         radixSort.radixSort(arr, 10);
         radixSort.printArray(arr);
@@ -23,19 +28,12 @@ public class RadixSort {
             return;
         }
 
-        int p = 1;
-        for (int i = 0; i < size; i++) {
-            if (arr[i] >= p) {
-                p *= radix;
-            }
-        }
-
         int[] tmp = new int[size];
         int[] count = new int[radix];
-        int d = radix;
         int divide = 1;
-        //进行d次排序
-        for (int i = 1; i <= d; i++) {
+
+        //进行radix次排序
+        for (int i = 1; i <= radix; i++) {
             //每次分配前清空计数器
             for (int j = 0; j < radix; j++) {
                 count[j] = 0;
@@ -74,7 +72,7 @@ public class RadixSort {
             return;
         }
 
-        for (int i = 0; i < size - 1; i++) {
+        for (int i = 0; i < size - 1; ++i) {
             System.out.print(arr[i] + "\t");
         }
         System.out.println(arr[size - 1]);

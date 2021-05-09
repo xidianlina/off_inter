@@ -1,9 +1,9 @@
-package others;
+package algorithm;
 
 //完美洗牌算法
-public class Shuffle {
+public class Shuffle3 {
     public static void main(String[] args) {
-        Shuffle sf = new Shuffle();
+        Shuffle3 sf = new Shuffle3();
         String[] arr = {"", "a1", "a2", "a3", "a4", "a5", "b1", "b2", "b3", "b4", "b5"};
         sf.PerfectShuffle(arr);
         for (int i = 0; i < arr.length; i++) {

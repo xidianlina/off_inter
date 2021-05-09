@@ -10,10 +10,15 @@ package sort_algorithm;
 (3)然后，左边和右边的数据可以独立排序。对于左侧的数组数据，又可以取一个分界值，将该部分数据分成左右两部分，
 同样在左边放置较小值，右边放置较大值。右侧的数组数据也可以做类似处理。
 (4)重复上述过程。通过递归将左侧部分排好序后，再递归排好右侧部分的顺序。当左、右两个部分各数据排序完成后，整个数组的排序也就完成了。
+
+平均时间复杂度：O(NlogN)
+最佳时间复杂度：O(NlogN)
+最差时间复杂度：O(N^2)
+空间复杂度：根据实现方式的不同而不同
  */
 public class QuickSort {
     public static void main(String[] args) {
-        int[] arr = {8, 0, 5, 7, 9, 1, 4, 2, 6, 3};
+        int[] arr = {6, 10, 5, 7, 9, 81, 4, 2, 8, 3};
         QuickSort quickSort = new QuickSort();
         quickSort.printArray(arr);
         quickSort.quickSort(arr);
@@ -33,6 +38,8 @@ public class QuickSort {
         if (low < high) {
             // 找寻基准数据的正确索引
             int index = partition(arr, low, high);
+            System.out.println("index " + index);
+            printArray(arr);
             quickSortHelper(arr, low, index - 1);
             quickSortHelper(arr, index + 1, high);
         }
@@ -60,9 +67,14 @@ public class QuickSort {
             arr[high] = arr[low];
         }
 
+        System.out.println("pivot " + pivot + " low " + low + " arr[low] " + arr[low] + " arr[high] " + arr[high]);
+        printArray(arr);
+
         //跳出循环时low和high相等,此时的low或high就是pivot的正确索引位置,
         //low位置的值并不是pivot,所以需要将pivot赋值给arr[low]
         arr[low] = pivot;
+
+        printArray(arr);
 
         // 返回pivot的正确位置
         return low;
