@@ -37,6 +37,7 @@ public class JZ06 {
                 }
                 return res;
             }
+
             if (array[mid] >= array[high]) {
                 low = mid;
             } else if (array[mid] <= array[high]) {

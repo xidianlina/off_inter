@@ -17,4 +17,19 @@ public class JZ10 {
         }
         return RectCover(n - 1) + RectCover(n - 2);
     }
+
+    public int RectCover2(int n) {
+        if (n <= 1) {
+            return n;
+        }
+
+        int tmp = 0, pre = 1, res = 1;
+        for (int i = 2; i <= n; ++i) {
+            tmp = res;
+            res = res + pre;
+            pre = tmp;
+        }
+
+        return res;
+    }
 }
