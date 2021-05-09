@@ -488,8 +488,574 @@ public class JZ10 {
     }
 }
 ```
+# 11.二进制中1的个数
+```java
+package sword_offer;
 
+/**
+ * 题目描述
+ * 输入一个整数，输出该数32位二进制表示中1的个数。其中负数用补码表示。
+ * 示例
+ * 输入
+ * 10
+ * 返回值
+ * 2
+ */
+public class JZ11 {
+    public static void main(String[] args) {
+        JZ11 jz11 = new JZ11();
+        int res = jz11.NumberOf1(10);
+        System.out.println(res);
+        int res2 = jz11.NumberOf1_2(10);
+        System.out.println(res2);
+        int res3 = jz11.NumberOf1_3(10);
+        System.out.println(res3);
+    }
 
+    /*
+    利用&运算的特性,把一个整数减去1，再和原整数做与运算，
+    会把该整数最右边一个1变成0.那么一个整数的二进制有多少个1，就可以进行多少次这样的操作。
+     */
+    public int NumberOf1(int n) {
+        int res = 0;
+        while (n != 0) {
+            n &= (n - 1);
+            res++;
+        }
+        return res;
+    }
 
+    /*
+    正整数的二进制数最高位为 0 ，负整数和二进制数最高们为 1 ，
+    则可利用左移、判断正负来实现 1 的个数的计算。
+     */
+    public int NumberOf1_2(int n) {
+        int res = 0;
+        while (n != 0) {
+            if (n < 0) {
+                res++;
+            }
+            //左移一位,左边的最高位为符号位，根据正负数来判断符号位的0,1，从而得到1的个数
+            n = n << 1;
+        }
+        return res;
+    }
 
+    /*
+    通过位移判断奇偶数并计数，标志位初始为1，将其和输入值相与，
+    n & 1 的结果为 1 或 0 ，为 1 的时候 count+=1 ，为 0 的时候 count+=0
+     */
+    public int NumberOf1_3(int n) {
+        int res = 0;
+        int flag = 1;
+        while (flag != 0) {
+            if ((n & flag) != 0) {
+                res++;
+            }
+            flag = flag << 1;
+        }
+        return res;
+    }
+}
+```
+# 12.数值的整数次方
+```java
+package sword_offer;
 
+/**
+ * 题目描述
+ * 给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。
+ * 保证base和exponent不同时为0
+ * 示例1
+ * 输入
+ * 2,3
+ * 返回值
+ * 8.00000
+ */
+public class JZ12 {
+    public double Power(double base, int exponent) {
+        double res = 0;
+        if (exponent == 0) {
+            return 1;
+        } else if (exponent > 0) {
+            res = base;
+            for (int i = 1; i < exponent; i++) {
+                res *= base;
+            }
+            return res;
+        } else {
+            res = base;
+            int flag = -exponent;
+            for (int i = 1; i < flag; i++) {
+                res *= base;
+            }
+            return 1 / res;
+        }
+    }
+
+    public double Power2(double base, int exponent) {
+        double res = 0;
+        if (exponent == 0) {
+            return 1;
+        } else {
+            int flag = exponent > 0 ? exponent : -exponent;
+            res = base;
+            for (int i = 1; i < flag; i++) {
+                res *= base;
+            }
+            return exponent > 0 ? res : 1 / res;
+        }
+    }
+}
+```
+# 13.调整数组顺序使奇数位于偶数前面
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，
+ * 所有的偶数位于数组的后半部分，并保证奇数和奇数，偶数和偶数之间的相对位置不变。
+ * 示例
+ * 输入
+ * [1,2,3,4]
+ * 返回值
+ * [1,3,2,4]
+ */
+public class JZ13 {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5};
+        JZ13 jz13 = new JZ13();
+        jz13.printArray(arr);
+        jz13.reOrderArray(arr);
+        jz13.printArray(arr);
+        System.out.println("-----------------");
+        int[] arr2 = {1, 2, 3, 4, 5};
+        jz13.printArray(arr2);
+        jz13.reOrderArray2(arr2);
+        jz13.printArray(arr2);
+    }
+
+    public int[] reOrderArray(int[] array) {
+        int len = array.length;
+        if (len == 0) {
+            return new int[]{};
+        }
+        for (int i = 0; i < len; i++) {
+            for (int j = len - 1; j > i; j--) {
+                if (array[j] % 2 == 1 && array[j - 1] % 2 == 0) {
+                    array[j] = array[j] + array[j - 1];
+                    array[j - 1] = array[j] - array[j - 1];
+                    array[j] = array[j] - array[j - 1];
+                }
+            }
+        }
+        return array;
+    }
+
+    public int[] reOrderArray2(int[] array) {
+        int len = array.length;
+        if (len == 0) {
+            return new int[]{};
+        }
+        int i = 0;
+        int j = 0;
+        while (i < len) {
+            while (i < len && array[i] % 2 == 1) {
+                i++;
+            }
+            j = i + 1;
+            while (j < len && array[j] % 2 == 0) {
+                j++;
+            }
+            if (j < len) {
+                int tmp = array[j];
+                for (int k = j - 1; k >= i; k--) {
+                    array[k + 1] = array[k];
+                }
+                array[i] = tmp;
+            } else {
+                break;
+            }
+        }
+        return array;
+    }
+
+    public void printArray(int[] arr) {
+        int size = arr.length;
+        if (size == 0) {
+            return;
+        }
+
+        for (int i = 0; i < size - 1; ++i) {
+            System.out.print(arr[i] + "\t");
+        }
+        System.out.println(arr[size - 1]);
+    }
+}
+```
+# 14.链表中倒数第k个结点
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 输入一个链表，输出该链表中倒数第k个结点。
+ * 示例1
+ * 输入
+ * {1,2,3,4,5},1
+ * 返回值
+ * {5}
+ */
+
+public class JZ14 {
+    public ListNode FindKthToTail(ListNode head, int k) {
+        if (head == null || k < 0) {
+            return null;
+        }
+
+        ListNode first = head;
+        ListNode last = head;
+        for (int i = 0; i < k; i++) {
+            if (first != null) {
+                first = first.next;
+            } else {
+                return null;
+            }
+        }
+
+        while (first != null) {
+            first = first.next;
+            last = last.next;
+        }
+
+        return last;
+    }
+}
+```
+# 15.反转链表
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 输入一个链表，反转链表后，输出新链表的表头。
+ * 示例1
+ * 输入
+ * {1,2,3}
+ * 返回值
+ * {3,2,1}
+ */
+public class JZ15 {
+    public ListNode ReverseList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+
+        ListNode cur = head;
+        ListNode pre = null;
+        ListNode next = null;
+        while (cur != null) {
+            next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+}
+```
+# 16.合并两个排序的链表
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 输入两个单调递增的链表，输出两个链表合成后的链表，当然我们需要合成后的链表满足单调不减规则。
+ * 示例1
+ * 输入
+ * {1,3,5},{2,4,6}
+ * 返回值
+ * {1,2,3,4,5,6}
+ */
+public class JZ16 {
+    public ListNode Merge(ListNode list1, ListNode list2) {
+        if (list1 == null) {
+            return list2;
+        } else if (list2 == null) {
+            return list1;
+        }
+        ListNode first = new ListNode(-1);
+        ListNode cur = first;
+        while (list1 != null && list2 != null) {
+            if (list1.val < list2.val) {
+                cur.next = list1;
+                list1 = list1.next;
+            } else {
+                cur.next = list2;
+                list2 = list2.next;
+            }
+            cur = cur.next;
+        }
+        cur.next = list1 != null ? list1 : list2;
+        return first.next;
+    }
+}
+```
+# 17.树的子结构
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）
+ * 示例1
+ * 输入
+ * {8,8,#,9,#,2,#,5},{8,9,#,2}
+ * 返回值
+ * true
+ */
+public class JZ17 {
+    public boolean HasSubtree(TreeNode root1, TreeNode root2) {
+        if (root1 == null || root2 == null) {
+            return false;
+        }
+
+        return isSubtree(root1, root2) || isSubtree(root1.left, root2) || isSubtree(root1.right, root2);
+    }
+
+    private boolean isSubtree(TreeNode root1, TreeNode root2) {
+        if (root2 == null) {
+            return true;
+        }
+
+        if (root1 == null || root1.val != root2.val) {
+            return false;
+        }
+        return isSubtree(root1.left, root2.left) && isSubtree(root1.right, root2.right);
+    }
+}
+```
+# 18.二叉树的镜像
+```java
+package sword_offer;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+/**
+ * 题目描述
+ * 操作给定的二叉树，将其变换为源二叉树的镜像。
+ */
+public class JZ18 {
+    /*
+    方法一 递归
+    先前序遍历这棵树的每个结点，如果遍历到的结点有子结点，就交换它的两个子节点，当交换完所有的非叶子结点的左右子结点之后，就得到了树的镜像。
+     */
+    public TreeNode Mirror(TreeNode root) {
+        //当前节点为空，直接返回
+        if (root == null) {
+            return root;
+        }
+        //当前节点没有叶子节点，直接返回
+        if (root.left == null && root.right == null) {
+            return root;
+        }
+        TreeNode temp = root.left;
+        root.left = root.right;
+        root.right = temp;
+        //递归交换叶子节点
+        if (root.left != null) {
+            Mirror(root.left);
+        }
+        if (root.right != null) {
+            Mirror(root.right);
+        }
+        return root;
+    }
+
+    /*
+    方法二 非递归
+    思路类似于之前的求二叉树高度，以广度优先的方式进行查找。首先查找出每一层的节点，接着对每一层节点的子节点进行镜像，也就是交换操作。全部完成后即镜像完毕。
+     */
+    public TreeNode Mirror2(TreeNode root) {
+        if (root == null) {
+            return root;
+        }
+
+        Queue<TreeNode> que = new LinkedList<TreeNode>();
+        que.offer(root);
+        int count = 1;
+        while (que.size() != 0) {
+            count--;
+            TreeNode top = que.poll();
+            if (top.left != null || top.right != null) {
+                TreeNode temp = top.left;
+                top.left = top.right;
+                top.right = temp;
+                if (top.left != null) {
+                    que.offer(top.left);
+                }
+                if (top.right != null) {
+                    que.offer(top.right);
+                }
+            }
+            if (count == 0) {
+                count = que.size();
+            }
+        }
+
+        return root;
+    }
+}
+```
+# 19.顺时针打印矩阵
+```java
+package sword_offer;
+
+import java.util.ArrayList;
+
+/**
+ * 题目描述
+ * 输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字，例如，如果输入如下4 X 4矩阵： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 则依次打印出数字1,2,3,4,8,12,16,15,14,13,9,5,6,7,11,10.
+ * 示例1
+ * 输入
+ * [[1,2],[3,4]]
+ * 返回值
+ * [1,2,4,3]
+ */
+public class JZ19 {
+    public ArrayList<Integer> printMatrix(int[][] matrix) {
+        int row = matrix.length;
+        int col = matrix[0].length;
+        ArrayList<Integer> res = new ArrayList<>();
+
+        if (matrix == null || row == 0 || col == 0) {
+            return res;
+        }
+
+        int top = 0;
+        int bottom = row - 1;
+        int left = 0;
+        int right = col - 1;
+
+        //螺旋曲线，运动轨迹总是一致的
+        while (top <= bottom && left <= right) {
+            //向右列递增遍历
+            for (int j = left; j <= right; j++) {
+                res.add(matrix[top][j]);
+            }
+
+            //遍历后，去掉此行
+            top++;
+
+            //向下行递增遍历
+            for (int i = top; i <= bottom; i++) {
+                res.add(matrix[i][right]);
+            }
+
+            //遍历后，去掉此行
+            right--;
+
+            if (top <= bottom) {//重要判断，防止重复
+                //向左列递减遍历
+                for (int j = right; j >= left; j--) {
+                    res.add(matrix[bottom][j]);
+                }
+            }
+
+            //遍历后，去掉此行
+            bottom--;
+
+            if (left <= right) {//重要判断，防止重复
+                //向上行递减遍历
+                for (int i = bottom; i >= top; i--) {
+                    res.add(matrix[i][left]);
+                }
+            }
+
+            //遍历后，去掉此列
+            left++;
+        }
+
+        return res;
+    }
+}
+```
+# 20.包含min函数的栈
+```java
+package sword_offer;
+
+import java.util.Stack;
+
+/**
+ * 题目描述
+ * 定义栈的数据结构，请在该类型中实现一个能够得到栈中所含最小元素的min函数（时间复杂度应为O（1））。
+ */
+public class JZ20 {
+    Stack<Integer> s = new Stack<Integer>();
+    Stack<Integer> m = new Stack<Integer>();
+
+    public void push(int node) {
+        s.push(node);
+        if (m.empty()) {
+            m.push(node);
+        } else if (m.peek() > node) {
+            m.push(node);
+        } else {
+            m.push(m.peek());
+        }
+    }
+
+    public void pop() {
+        s.pop();
+        m.pop();
+    }
+
+    public int top() {
+        return s.peek();
+    }
+
+    public int min() {
+        return m.peek();
+    }
+}
+```
+```java
+package sword_offer;
+
+import java.util.Stack;
+
+/**
+ * 题目描述
+ * 定义栈的数据结构，请在该类型中实现一个能够得到栈中所含最小元素的min函数（时间复杂度应为O（1））。
+ */
+public class JZ20_2 {
+    Stack<Integer> s = new Stack<Integer>();
+    Stack<Integer> m = new Stack<Integer>();
+
+    public void push(int node) {
+        s.push(node);
+        if (m.isEmpty()) {
+            m.push(node);
+        } else if (m.peek() > node) {
+            m.push(node);
+        }
+    }
+
+    public void pop() {
+        if (s.peek() == m.peek()) {
+            m.pop();
+        }
+        s.pop();
+    }
+
+    public int top() {
+        return s.peek();
+    }
+
+    public int min() {
+        return m.peek();
+    }
+}
+```
