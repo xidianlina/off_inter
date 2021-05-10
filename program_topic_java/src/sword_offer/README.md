@@ -2328,13 +2328,643 @@ public class JZ40 {
     }
 }
 ```
-# 41.
-# 42.
-# 43.
-# 44.
-# 45.
-# 46.
-# 47.
-# 48.
-# 49.
-# 50.
+# 41.和为S的连续正数序列
+```java
+package sword_offer;
+
+import java.util.ArrayList;
+
+/**
+ * 题目描述
+ * 小明很喜欢数学,有一天他在做数学作业时,要求计算出9~16的和,他马上就写出了正确答案是100。
+ * 但是他并不满足于此,他在想究竟有多少种连续的正数序列的和为100(至少包括两个数)。
+ * 没多久,他就得到另一组连续正数和为100的序列:18,19,20,21,22。现在把问题交给你,
+ * 你能不能也很快的找出所有和为S的连续正数序列? Good Luck!
+ * 返回值描述:
+ * 输出所有和为S的连续正数序列。序列内按照从小至大的顺序，序列间按照开始数字从小到大的顺序
+ * 示例1
+ * 输入
+ * 9
+ * 返回值
+ * [[2,3,4],[4,5]]
+ */
+public class JZ41 {
+    public ArrayList<ArrayList<Integer>> FindContinuousSequence(int sum) {
+        ArrayList<ArrayList<Integer>> lists = new ArrayList<ArrayList<Integer>>();
+
+        if (sum <= 1) {
+            return lists;
+        }
+
+        int start = 1;
+        int end = 2;
+        while (start != (1 + sum) / 2) {
+            int curSum = (start + end) * (end - start + 1) / 2;
+            if (curSum == sum) {
+                ArrayList<Integer> res = new ArrayList<>();
+                for (int i = start; i <= end; i++) {
+                    res.add(i);
+                }
+                lists.add(res);
+                ++start;
+                ++end;
+            } else if (curSum > sum) {
+                ++start;
+            } else {
+                ++end;
+            }
+        }
+
+        return lists;
+    }
+}
+```
+# 42.和为S的两个数字
+```java
+package sword_offer;
+
+import java.util.ArrayList;
+
+/**
+ * 题目描述
+ * 输入一个递增排序的数组和一个数字S，在数组中查找两个数，使得他们的和正好是S，如果有多对数字的和等于S，输出两个数的乘积最小的。
+ * 返回值描述:
+ * 对应每个测试案例，输出两个数，小的先输出。
+ * 示例1
+ * 输入
+ * [1,2,4,7,11,15],15
+ * 返回值
+ * [4,11]
+ */
+public class JZ42 {
+    public ArrayList<Integer> FindNumbersWithSum(int[] array, int sum) {
+        int size = array.length;
+        ArrayList<Integer> res = new ArrayList<>();
+        if (array == null || size < 2) {
+            return res;
+        }
+
+        int i = 0;
+        int j = size - 1;
+        while (i < j) {
+            if (array[i] + array[j] == sum) {
+                res.add(array[i]);
+                res.add(array[j]);
+                return res;
+            } else if (array[i] + array[j] > sum) {
+                --j;
+            } else {
+                ++i;
+            }
+        }
+
+        return res;
+    }
+
+    public ArrayList<Integer> FindNumbersWithSum2(int[] array, int sum) {
+        int size = array.length;
+        ArrayList<Integer> res = new ArrayList<>();
+        if (array == null || size < 2) {
+            return res;
+        }
+
+        for (int i = 0; i < size; i++) {
+            for (int j = i; j < size; j++) {
+                if (array[i] + array[j] == sum) {
+                    res.add(array[i]);
+                    res.add(array[j]);
+                    return res;
+                }
+            }
+        }
+
+        return res;
+    }
+}
+```
+# 43.左旋转字符串
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 汇编语言中有一种移位指令叫做循环左移（ROL），现在有个简单的任务，就是用字符串模拟这个指令的运算结果。对于一个给定的字符序列S，请你把其循环左移K位后的序列输出。例如，字符序列S=”abcXYZdef”,要求输出循环左移3位后的结果，即“XYZdefabc”。是不是很简单？OK，搞定它！
+ * 示例1
+ * 输入
+ * "abcXYZdef",3
+ * 返回值
+ * "XYZdefabc"
+ */
+public class JZ43 {
+    public String LeftRotateString(String str, int n) {
+        int size = str.length();
+        if (size == 0 || str.isEmpty()) {
+            return "";
+        }
+
+        n %= size;
+        str = str + str;
+        return str.substring(n, n + size);
+    }
+
+    public String LeftRotateString2(String str, int n) {
+        int size = str.length();
+        if (size == 0 || str.isEmpty()) {
+            return "";
+        }
+
+        n %= size;
+        String s = str.substring(0, n);
+        String p = str.substring(n);
+
+        return p + s;
+    }
+
+    public String LeftRotateString3(String str, int n) {
+        int size = str.length();
+        if (size == 0 || str.isEmpty()) {
+            return "";
+        }
+
+        char[] ch = str.toCharArray();
+        reverse(ch, 0, n - 1);
+        reverse(ch, n, size - 1);
+        reverse(ch, 0, size - 1);
+
+        return new String(ch);
+    }
+
+    private void reverse(char[] ch, int low, int high) {
+        char tmp;
+        while (low < high) {
+            tmp = ch[low];
+            ch[low] = ch[high];
+            ch[high] = tmp;
+            ++low;
+            --high;
+        }
+    }
+}
+```
+# 44.翻转单词序列
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 牛客最近来了一个新员工Fish，每天早晨总是会拿着一本英文杂志，写些句子在本子上。同事Cat对Fish写的内容颇感兴趣，
+ * 有一天他向Fish借来翻看，但却读不懂它的意思。例如，“student. a am I”。后来才意识到，这家伙原来把句子单词的顺序翻转了，
+ * 正确的句子应该是“I am a student.”。Cat对一一的翻转这些单词顺序可不在行，你能帮助他么？
+ * 示例1
+ * 输入
+ * "nowcoder. a am I"
+ * 返回值
+ * "I am a nowcoder."
+ */
+public class JZ44 {
+    public String ReverseSentence(String str) {
+        if (str.trim().equals("")) {
+            return str;
+        }
+
+        String[] s = str.split(" ");
+        StringBuffer sb = new StringBuffer();
+        for (int i = s.length - 1; i >= 0; --i) {
+            sb.append(s[i] + " ");
+        }
+
+        return sb.toString().trim();
+    }
+
+    public String ReverseSentence2(String str) {
+        int size = str.length();
+        if (size == 0 || str.isEmpty()) {
+            return str;
+        }
+
+        String tmp = "", res = "";
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == ' ') {
+                res = " " + tmp + res;
+                tmp = "";
+            } else {
+                tmp += str.charAt(i);
+            }
+        }
+
+        if (tmp.length() > 1) {
+            res = tmp + res;
+        }
+
+        return res;
+    }
+}
+```
+# 45.扑克牌顺子
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * LL今天心情特别好,因为他去买了一副扑克牌,发现里面居然有2个大王,2个小王(一副牌原本是54张^_^)...他随机从中抽出了5张牌,
+ * 想测测自己的手气,看看能不能抽到顺子,如果抽到的话,他决定去买体育彩票,嘿嘿！！“红心A,黑桃3,小王,大王,方片5”,“Oh My God!”
+ * 不是顺子.....LL不高兴了,他想了想,决定大\小 王可以看成任何数字,并且A看作1,J为11,Q为12,K为13。
+ * 上面的5张牌就可以变成“1,2,3,4,5”(大小王分别看作2和4),“So Lucky!”。LL决定去买体育彩票啦。现在,要求你使用这幅牌模拟上面
+ * 的过程,然后告诉我们LL的运气如何， 如果牌能组成顺子就输出true，否则就输出false。为了方便起见,你可以认为大小王是0。
+ * 示例1
+ * 输入
+ * [0,3,2,6,4]
+ * 返回值
+ * true
+ */
+public class JZ45 {
+    public boolean IsContinuous(int[] array) {
+        int size = array.length;
+        if (array == null || size != 5) {
+            return false;
+        }
+
+        quickSort(array, 0, size - 1);
+
+        int sub = 0;
+        for (int i = 0; i < 4; ++i) {
+            if (array[i] == 0) {
+                continue;
+            }
+            if (array[i] == array[i + 1]) {
+                return false;
+            }
+
+            sub += array[i + 1] - array[i];
+        }
+
+        return sub < 5;
+    }
+
+    private void quickSort(int[] array, int low, int high) {
+        int pivot = 0;
+        if (low < high) {
+            pivot = quickPartition(array, low, high);
+            quickSort(array, low, pivot - 1);
+            quickSort(array, pivot + 1, high);
+        }
+    }
+
+    private int quickPartition(int[] array, int low, int high) {
+        int pivot = array[low];
+        while (low < high) {
+            while (low < high && array[high] >= pivot) {
+                --high;
+            }
+            array[low] = array[high];
+            while (low < high && array[low] <= pivot) {
+                ++low;
+            }
+            array[high] = array[low];
+        }
+        array[low] = pivot;
+        return low;
+    }
+}
+```
+# 46.孩子们的游戏(圆圈中最后剩下的数)	
+```java
+package sword_offer;
+
+import java.util.LinkedList;
+
+/**
+ * 题目描述  孩子们的游戏(圆圈中最后剩下的数) 约瑟夫环
+ * 每年六一儿童节,牛客都会准备一些小礼物去看望孤儿院的小朋友,今年亦是如此。
+ * HF作为牛客的资深元老,自然也准备了一些小游戏。其中,有个游戏是这样的:
+ * 首先,让小朋友们围成一个大圈。然后,他随机指定一个数m,让编号为0的小朋友开始报数。
+ * 每次喊到m-1的那个小朋友要出列唱首歌,然后可以在礼品箱中任意的挑选礼物,并且不再回到圈中,
+ * 从他的下一个小朋友开始,继续0...m-1报数....这样下去....直到剩下最后一个小朋友,可以不用表演,
+ * 并且拿到牛客名贵的“名侦探柯南”典藏版(名额有限哦!!^_^)。请你试着想下,哪个小朋友会得到这份礼品呢？(注：小朋友的编号是从0到n-1)
+ * 如果没有小朋友，请返回-1
+ * 示例
+ * 输入
+ * 5,3
+ * 返回值
+ * 3
+ */
+public class JZ46 {
+    /*
+    f(n,m) 表示序号为 0,1,...,n-1 的圈要一直淘汰第 m 个人最终剩下来的序号，这里序号和对应的值是一致的。
+    f(n-1,m) 表示序号为 0,1,...,n-2 的圈要一直淘汰第 m 个人最终剩下来的序号，这里序号和对应的值是一致的。
+    当从 f(n,m) 中第一次淘汰第 m 个人（序号为 (m-1)%n ）时，该序列的长度就变成了 n-1，再淘汰一个第 m 个人时，
+    情况就变成了 f'(n-1,m), 但是此时 f'(n-1,m) 是以 m%n 为序号开始的，而 f(n-1,m) 是以 0 为序号开始的。
+    要想将 f(n-1,m) 对应的索引转换成 f(n,m) 对应的索引值，则 f(n,m) = (m%n +f(n-1,m) ) % n = (m+f(n-1,m)) % n
+     */
+    public int LastRemaining_Solution(int n, int m) {
+        if (n == 0) {
+            return -1;
+        }
+
+        if (n == 1) {
+            return 0;
+        }
+
+        return (m % n + LastRemaining_Solution(n - 1, m)) % n;
+    }
+
+    public int LastRemaining_Solution2(int n, int m) {
+        LinkedList<Integer> list = new LinkedList<Integer>();
+        for (int i = 0; i < n; i++) {
+            list.add(i);
+        }
+
+        int index = 0;
+        while (list.size() > 1) {
+            index = (index + m - 1) % list.size();
+            list.remove(index);
+        }
+
+        return list.size() == 1 ? list.get(0) : -1;
+    }
+}
+```
+# 47.求1+2+3+...+n
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 求1+2+3+...+n，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。
+ * 示例1
+ * 输入
+ * 5
+ * 返回值
+ * 15
+ */
+public class JZ47 {
+    public int Sum_Solution(int n) {
+        if (n == 0) {
+            return 0;
+        }
+
+        return n + Sum_Solution(n - 1);
+    }
+
+    public int Sum_Solution2(int n) {
+        int sum = n;
+        boolean ans = (n > 0) && ((sum += Sum_Solution2(n - 1)) > 0);
+        return sum;
+    }
+}
+```
+# 48.不用加减乘除做加法
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 写一个函数，求两个整数之和，要求在函数体内不得使用+、-、*、/四则运算符号。
+ * 示例1
+ * 输入
+ * 1,2
+ * 返回值
+ * 3
+ */
+public class JZ48 {
+    /*
+    用异或可以模拟不带进位的加法运算, 因为异或相同则0, 不同则1, 正好与不带进位的加法结果相同
+    用与运算可以模拟出每一位的是否有进位
+    用位运算来实现:
+    1.进行异或运算，计算两个数各个位置上的相加，不考虑进位；
+    2.进行位与运算，然后左移一位，计算进位值；
+    3.把异或运算的结果赋给num1，把进位值赋给num2，依此循环，进位值为空的时候结束循环，num1就是两数之和。
+     */
+    public int Add(int num1, int num2) {
+        while (num2 != 0) {
+            int tmp = num1 ^ num2;
+            num2 = (num1 & num2) << 1;
+            num1 = tmp;
+        }
+
+        return num1;
+    }
+}
+```
+# 49.把字符串转换成整数
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 将一个字符串转换成一个整数，要求不能使用字符串转换整数的库函数。 数值为0或者字符串不是一个合法的数值则返回0
+ * 输入描述:
+ * 输入一个字符串,包括数字字母符号,可以为空
+ * 返回值描述:
+ * 如果是合法的数值表达则返回该数字，否则返回0
+ * 示例1
+ * 输入
+ * "+2147483647"
+ * 返回值
+ * 2147483647
+ * 示例2
+ * 输入
+ * "1a33"
+ * 返回值
+ * 0
+ */
+public class JZ49 {
+    public int StrToInt(String str) {
+        int size = str.length();
+        if (size == 0 || str.isEmpty()) {
+            return 0;
+        }
+
+        int sum = 0;
+        int sign = 1;
+        if (str.charAt(0) == '-') {
+            sign = -1;
+        } else if (str.charAt(0) == '+') {
+            sign = 1;
+        } else if (str.charAt(0) >= '1' && str.charAt(0) <= '9') {
+            sum = str.charAt(0) - '0';
+        } else {
+            return 0;
+        }
+
+        for (int i = 1; i < size; i++) {
+            if (str.charAt(i) < '1' || str.charAt(i) > '9') {
+                return 0;
+            }
+            sum = sum * 10 + str.charAt(i) - '0';
+        }
+
+        return sum * sign;
+    }
+}
+```
+# 50.数组中重复的数字
+```java
+package sword_offer;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * 题目描述
+ * 在一个长度为n的数组里的所有数字都在0到n-1的范围内。 数组中某些数字是重复的，但不知道有几个数字是重复的。
+ * 也不知道每个数字重复几次。请找出数组中第一个重复的数字。 例如，如果输入长度为7的数组[2,3,1,0,2,5,3]，
+ * 那么对应的输出是第一个重复的数字2。没有重复的数字返回-1。
+ * 示例1
+ * 输入
+ * [2,3,1,0,2,5,3]
+ * 返回值
+ * 2
+ */
+public class JZ50 {
+    public int duplicate(int[] array) {
+        int size = array.length;
+        if (size < 1 || array == null) {
+            return -1;
+        }
+
+        int[] hash = new int[size];
+        for (int num : array) {
+            ++hash[num];
+            if (hash[num] > 1) {
+                return num;
+            }
+        }
+
+        return -1;
+    }
+
+    public int duplicate2(int[] array) {
+        int size = array.length;
+        if (size < 1 || array == null) {
+            return -1;
+        }
+
+        Map<Integer, Integer> m = new HashMap<>();
+        for (int num : array) {
+            if (m.containsKey(num)) {
+                return num;
+            }
+            m.put(num, 1);
+        }
+
+        return -1;
+    }
+}
+```
+# 51.构建乘积数组
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 给定一个数组A[0,1,...,n-1],请构建一个数组B[0,1,...,n-1],其中B中的元素B[i]=A[0]*A[1]*...*A[i-1]*A[i+1]*...*A[n-1]。
+ * 不能使用除法。（注意：规定B[0] = A[1] * A[2] * ... * A[n-1]，B[n-1] = A[0] * A[1] * ... * A[n-2];）
+ * 对于A长度为1的情况，B无意义，故而无法构建，因此该情况不会存在。
+ * 示例1
+ * 输入
+ * [1,2,3,4,5]
+ * 返回值
+ * [120,60,40,30,24]
+ */
+public class JZ51 {
+    public int[] multiply(int[] array) {
+        int size = array.length;
+        if (size == 0 || array == null) {
+            return null;
+        }
+
+        int[] res = new int[size];
+        res[0] = 1;
+        for (int i = 1; i < size; i++) {
+            res[i] = res[i - 1] * array[i - 1];
+        }
+
+        int tmp = 1;
+        for (int i = size - 2; i >= 0; i--) {
+            tmp *= array[i + 1];
+            res[i] *= tmp;
+        }
+
+        return res;
+    }
+}
+```
+# 52.正则表达式匹配
+> ![jz52](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/sword/picture/jz52.png)                           
+```java
+package sword_offer;
+
+/*
+题目描述
+请实现一个函数用来匹配包括'.'和'*'的正则表达式。模式中的字符'.'表示任意一个字符，而'*'表示它前面的字符可以出现任意次（包含0次）。
+在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串"aaa"与模式"a.a"和"ab*ac*a"匹配，但是与"aa.a"和"ab*a"均不匹配
+
+示例
+输入
+"aaa","a*a"
+返回值
+true
+ */
+public class JZ52 {
+    public boolean match(String str, String pattern) {
+        int m = str.length();
+        int n = pattern.length();
+
+        boolean[][] f = new boolean[m + 1][n + 1];
+        f[0][0] = true;
+        for (int i = 0; i <= m; ++i) {
+            for (int j = 1; j <= n; ++j) {
+                if (pattern.charAt(j - 1) == '*') {
+                    f[i][j] = f[i][j - 2];
+                    if (match(str, pattern, i, j - 1)) {
+                        f[i][j] = f[i][j] || f[i - 1][j];
+                    }
+                } else {
+                    if (match(str, pattern, i, j)) {
+                        f[i][j] = f[i - 1][j - 1];
+                    }
+                }
+            }
+        }
+
+        return f[m][n];
+    }
+
+    private boolean match(String s, String p, int i, int j) {
+        if (i == 0) {
+            return false;
+        }
+
+        if (p.charAt(j - 1) == '.') {
+            return true;
+        }
+
+        return s.charAt(i - 1) == p.charAt(j - 1);
+    }
+}
+```
+# 53.表示数值的字符串
+```java
+
+```
+# 54.字符流中第一个不重复的字符
+```java
+
+```
+# 55.链表中环的入口结点	
+```java
+
+```
+# 51.删除链表中重复的结点
+# 51.二叉树的下一个结点
+# 51.对称的二叉树
+# 51.按之字形顺序打印二叉树
+# 51.把二叉树打印成多行
+# 51.序列化二叉树
+# 51.二叉搜索树的第k个结点
+# 51.数据流中的中位数
+# 51.滑动窗口的最大值
+# 51.矩阵中的路径
+# 51.机器人的运动范围
+# 51.剪绳子
