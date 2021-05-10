@@ -1290,22 +1290,1051 @@ public class JZ25 {
 ```
 # 26.二叉搜索树与双向链表
 ```java
+package sword_offer;
 
+import java.util.Stack;
+
+/**
+ * 题目描述
+ * 输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。
+ */
+public class JZ26 {
+    /*
+    解析：在二叉搜索树中，每个结点都有两个分别指向其左、右子树的指针，左子树结点的值总是小于父结点的值，
+    右子树结点的值总是大于父结点的值。在双向链表中，每个结点也有两个指针，它们分别指向前一个结点和后一个结点。
+    所以这两种数据结构的结点是一致，二叉搜索树和双向链表只是因为两个指针的指向不同而已，通过改变其指针的指向来实现是完全可能的。
+    为了减少指针的变换次数，并让操作更加简单，在转换成排序双向链表时，原先指向左子结点的指针调整为链表中指向前一个结点的指针，
+    原先指向右子结点的指针调整为链表中指向下一个结点的指针。由于要求链表是有序的，可以借助二叉树中序遍历，
+    因为中序遍历算法的特点就是从小到大访问结点。当遍历访问到根结点时，假设根结点的左侧已经处理好，
+    只需将根结点与上次访问的最近结点（左子树中最大值结点）的指针连接好即可。进而更新当前链表的最后一个结点指针。
+    同时中序遍历过程正好是转换成链表的过程，可采用递归方法处理。
+     */
+    public TreeNode Convert(TreeNode root) {
+        if (root == null || root.left == null && root.right == null) {
+            return root;
+        }
+
+        Stack<TreeNode> stk = new Stack<TreeNode>();
+        TreeNode node = null;
+        while (root != null || !stk.isEmpty()) {
+            if (root != null) {
+                stk.push(root);
+                root = root.right;
+            } else {
+                root = stk.pop();
+                if (node == null) {
+                    node = root;
+                } else {
+                    node.left = root;
+                    root.right = node;
+                    node = root;
+                }
+                root = root.left;
+            }
+        }
+        return node;
+    }
+
+    public TreeNode Convert2(TreeNode root) {
+        if (root == null || root.left == null && root.right == null) {
+            return root;
+        }
+
+        TreeNode left = Convert2(root.left);
+        TreeNode node = left;
+        while (node != null && node.right != null) {
+            node = node.right;
+        }
+
+        if (node != null) {
+            node.right = root;
+            root.left = node;
+        }
+
+        TreeNode right = Convert2(root.right);
+        if (right != null) {
+            root.right = right;
+            right.left = root;
+        }
+
+        return left != null ? left : root;
+    }
+}
 ```
 # 27.字符串的排序
 ```java
+package sword_offer;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+
+/**
+ * 题目描述
+ * 输入一个字符串,按字典序打印出该字符串中字符的所有排列。例如输入字符串abc,则按字典序打印出由字符a,b,c所能排列出来的所有字符串abc,acb,bac,bca,cab和cba。
+ * 输入描述:
+ * 输入一个字符串,长度不超过9(可能有字符重复),字符只包括大小写字母。
+ * 示例1
+ * 输入
+ * "ab"
+ * 返回值
+ * ["ab","ba"]
+ */
+public class JZ27 {
+    /*
+    以三个字符abc为例来分析一下求字符串排列的过程。首先固定第一个字符a，求后面两个字符bc的排列。
+    当两个字符bc的排列求好之后，把第一个字符a和后面的b交换，得到bac，接着固定第一个字符b，
+    求后面两个字符ac的排列。现在是把c放到第一位置的时候了。记住前面已经把原先的第一个字符a和后面的b做了交换，
+    为了保证这次c仍然是和原先处在第一位置的a交换，在拿c和第一个字符交换之前，先要把b和a交换回来。
+    在交换b和a之后，再拿c和处在第一位置的a进行交换，得到cba。再次固定第一个字符c，求后面两个字符b、a的排列。
+     */
+    public ArrayList<String> Permutation(String str) {
+        ArrayList<String> res = new ArrayList<>();
+        if (str.isEmpty() || str.length() == 0) {
+            return res;
+        }
+
+        HashSet<String> set = new HashSet<>();
+        helper(set, str.toCharArray(), 0);
+        res.addAll(set);
+        Collections.sort(res);
+        return res;
+    }
+
+    private void helper(HashSet<String> set, char[] s, int k) {
+        if (k == s.length) {
+            set.add(new String(s));
+            return;
+        }
+
+        for (int i = k; i < s.length; i++) {
+            swap(s, i, k);
+            helper(set, s, k + 1);
+            swap(s, i, k);
+        }
+    }
+
+    private void swap(char[] s, int i, int j) {
+        char tmp = s[i];
+        s[i] = s[j];
+        s[j] = tmp;
+    }
+}
 ```
 # 28.数组中出现次数超过一半的数字
 ```java
+package sword_offer;
 
+/**
+ * 题目描述
+ * 数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。例如输入一个长度为9的数组{1,2,3,2,2,2,5,4,2}。
+ * 由于数字2在数组中出现了5次，超过数组长度的一半，因此输出2。如果不存在则输出0。
+ * 示例1
+ * 输入
+ * [1,2,3,2,2,2,5,4,2]
+ * 返回值
+ * 2
+ */
+
+public class JZ28 {
+    /*
+    数组中有一个数字出现的次数超过数组长度的一半，也就是说它出现的次数比其他所有数字出现次数的和还要多。
+    因此在遍历数组的时候保存两个值：一个是数组中的一个数字，一个是次数，当遍历到下一个数字时，如果下一
+    个数字和之前保存的数字相同，则次数加1；如果下一个数字和之前保存的数字不同，则次数减1.如果次数为0，
+    需要保存下一个数字，并把次数设为1。由于要找的数字出现的次数比其他所有数字出现的次数之和还要多，那么
+    要找的数字肯定是最后一次次数设为1时对应的数字。
+     */
+    public int MoreThanHalfNum_Solution(int[] array) {
+        int size = array.length;
+        if (size == 0 || array == null) {
+            return 0;
+        }
+
+        int num = array[0];
+        int cnt = 1;
+        for (int i = 1; i < size; i++) {
+            if (array[i] == num) {
+                ++cnt;
+            } else {
+                --cnt;
+                if (cnt == 0) {
+                    num = array[i];
+                    cnt = 1;
+                }
+            }
+        }
+
+        cnt = 0;
+        for (int i = 0; i < size; i++) {
+            if (num == array[i]) {
+                ++cnt;
+            }
+        }
+
+        if (2 * cnt > size) {
+            return num;
+        } else {
+            return 0;
+        }
+    }
+
+    public int MoreThanHalfNum_Solution2(int[] array) {
+        int size = array.length;
+        if (size == 0 || array == null) {
+            return 0;
+        }
+
+        int mid = size >> 1;
+        int start = 0;
+        int end = size - 1;
+        int index = partition(array, start, end);
+        while (index != mid) {
+            if (index > mid) {
+                end = index - 1;
+                index = partition(array, start, end);
+            } else if (index < mid) {
+                start = index + 1;
+                index = partition(array, start, end);
+            }
+        }
+
+        int res = array[mid];
+        int cnt = 0;
+        for (int i = 0; i < size; i++) {
+            if (array[i] == res) {
+                ++cnt;
+            }
+        }
+
+        if (2 * cnt > size) {
+            return res;
+        } else {
+            return 0;
+        }
+    }
+
+    private int partition(int[] array, int low, int high) {
+        int pivot = array[low];
+        while (low < high) {
+            while (low < high && array[high] >= pivot) {
+                --high;
+            }
+            array[low] = array[high];
+            while (low < high && array[low] <= pivot) {
+                ++low;
+            }
+            array[high] = array[low];
+        }
+        array[low] = pivot;
+        return low;
+    }
+}
 ```
 # 29.最小的K个数
 ```java
+package sword_offer;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
+/**
+ * 题目描述
+ * 给定一个数组，找出其中最小的K个数。例如数组元素是4,5,1,6,2,7,3,8这8个数字，则最小的4个数字是1,2,3,4。如果K>数组的长度，那么返回一个空的数组
+ * 示例1
+ * 输入
+ * [4,5,1,6,2,7,3,8],4
+ * 返回值
+ * [1,2,3,4]
+ */
+public class JZ29 {
+    public ArrayList<Integer> GetLeastNumbers_Solution(int[] input, int k) {
+        int size = input.length;
+        ArrayList<Integer> res = new ArrayList<>();
+        if (size == 0 || input == null || size < k || k <= 0) {
+            return res;
+        }
+
+        int start = 0;
+        int end = size - 1;
+        int index = partition(input, start, end);
+        while (index != k - 1) {
+            if (index > k - 1) {
+                end = index - 1;
+                index = partition(input, start, end);
+            } else if (index < k - 1) {
+                start = index + 1;
+                index = partition(input, start, end);
+            }
+        }
+
+        for (int i = 0; i < k; i++) {
+            res.add(input[i]);
+        }
+
+        return res;
+    }
+
+    private int partition(int[] array, int low, int high) {
+        int pivot = array[low];
+        while (low < high) {
+            while (low < high && array[high] >= pivot) {
+                --high;
+            }
+            array[low] = array[high];
+            while (low < high && array[low] <= pivot) {
+                ++low;
+            }
+            array[high] = array[low];
+        }
+        array[low] = pivot;
+        return low;
+    }
+
+    public ArrayList<Integer> GetLeastNumbers_Solution2(int[] input, int k) {
+        int size = input.length;
+        ArrayList<Integer> res = new ArrayList<>();
+        if (size == 0 || input == null || size < k || k <= 0) {
+            return res;
+        }
+
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(k, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2.compareTo(o1);
+            }
+        });
+
+        for (int i = 0; i < size; i++) {
+            if (maxHeap.size() != k) {
+                maxHeap.offer(input[i]);
+            } else {
+                if (maxHeap.peek() > input[i]) {
+                    maxHeap.poll();
+                    maxHeap.offer(input[i]);
+                }
+            }
+        }
+
+        for (Integer num : maxHeap) {
+            res.add(num);
+        }
+
+        return res;
+    }
+}
 ```
 # 30.连续子数组的最大和
 ```java
+package sword_offer;
 
+/**
+ * 题目描述
+ * 输入一个整型数组，数组里有正数也有负数。数组中的一个或连续多个整数组成一个子数组。求所有子数组的和的最大值。要求时间复杂度为 O(n).
+ * 示例1
+ * 输入
+ * [1,-2,3,10,-4,7,2,-5]
+ * 返回值
+ * 18
+ * 说明
+ * 输入的数组为{1,-2,3,10,—4,7,2,一5}，和最大的子数组为{3,10,一4,7,2}，因此输出为该子数组的和 18。
+ */
+public class JZ30 {
+    public int FindGreatestSumOfSubArray(int[] array) {
+        int size = array.length;
+        if (size == 0 || array == null) {
+            return -1;
+        }
+
+        int maxSum = array[0];
+        for (int i = 0; i < size; i++) {
+            int curSum = 0;
+            for (int j = i; j < size; j++) {
+                curSum += array[j];
+                if (curSum > maxSum) {
+                    maxSum = curSum;
+                }
+            }
+        }
+
+        return maxSum;
+    }
+
+    public int FindGreatestSumOfSubArray2(int[] array) {
+        int size = array.length;
+        if (size == 0 || array == null) {
+            return -1;
+        }
+
+        int maxSum = array[0];
+        int curSum = array[0];
+        for (int i = 1; i < size; i++) {
+            if (curSum <= 0) {
+                curSum = array[i];
+            } else {
+                curSum += array[i];
+            }
+
+            if (curSum > maxSum) {
+                maxSum = curSum;
+            }
+        }
+
+        return maxSum;
+    }
+}
 ```
-# 31.
+# 31.整数中1出现的次数（从1到n整数中1出现的次数）
+```java
+package sword_offer;
+
+/**
+ * 题目描述:输入一个整数n，求从1到n这n个整数的十进制表示中1出现的次数。
+ * 例如输入12，从1到12这些整数中包含1的数字有1，10，11，和12，1一共出现了5次。
+ */
+public class JZ31 {
+    /*
+    主要思路：设定整数点（如1、10、100等等）作为位置点i（对应n的各位、十位、百位等等），分别对每个数位上有多少包含1的点进行分析
+    根据设定的整数位置，对n进行分割，分为两部分，高位n/i，低位n%i
+    当i表示百位，且百位对应的数>=2,如n=31456,i=100，则a=314,b=56，此时百位为1的次数有a/10+1=32（最高两位0~31），
+    每一次都包含100个连续的点，即共有(a/10+1)*100个点的百位为1
+    当i表示百位，且百位对应的数为1，如n=31156,i=100，则a=311,b=56，此时百位对应的就是1，则共有a/10(最高两位0-30)次是包含100个连续点，
+    当最高两位为31（即a=311），本次只对应局部点00~56，共b+1次，所有点加起来共有（a/10*100）+(b+1)，这些点百位对应为1
+    当i表示百位，且百位对应的数为0,如n=31056,i=100，则a=310,b=56，此时百位为1的次数有a/10=31（最高两位0~30）
+    综合以上三种情况，当百位对应0或>=2时，有(a+8)/10次包含所有100个点，还有当百位为1(a%10==1)，需要增加局部点b+1
+    之所以补8，是因为当百位为0，则a/10==(a+8)/10，当百位>=2，补8会产生进位位，效果等同于(a/10+1)
+     */
+    public int NumberOf1Between1AndN_Solution(int n) {
+        int cnt = 0;
+        for (int m = 1; m <= n; m *= 10) {
+            int a = n / m;
+            int b = n % m;
+            if (a % 10 == 0) {
+                cnt += a / 10 * m;
+            } else if (a % 10 == 1) {
+                cnt += a / 10 * m + b + 1;
+            } else {
+                cnt += (a / 10 + 1) * m;
+            }
+        }
+
+        return cnt;
+    }
+
+    public int NumberOf1Between1AndN_Solution2(int n) {
+        int cnt = 0;
+        for (int m = 1; m <= n; m *= 10) {
+            int a = n / m;
+            int b = n % m;
+            if (a % 10 == 1) {
+                cnt += a / 10 * m + b + 1;
+            } else {
+                cnt += ((a + 8) / 10) * m;
+            }
+        }
+
+        return cnt;
+    }
+
+    public int NumberOf1Between1AndN_Solution3(int n) {
+        if (n == 0) {
+            return 0;
+        }
+        if (n < 9) {
+            return 1;
+        }
+
+        int cnt = 1;
+        for (int i = 10; i <= n; i++) {
+            int tmp = i;
+            while (tmp != 0) {
+                if (tmp % 10 == 1) {
+                    cnt++;
+                }
+                tmp /= 10;
+            }
+        }
+
+        return cnt;
+    }
+
+    public int NumberOf1Between1AndN_Solution4(int n) {
+        int cnt = 0;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= n; i++) {
+            sb.append(String.valueOf(i));
+        }
+
+        String arr = sb.toString();
+        for (int i = 0; i < arr.length(); i++) {
+            if (arr.charAt(i) == '1') {
+                cnt++;
+            }
+        }
+
+        return cnt;
+    }
+}
+```
+# 32.把数组排成最小的数
+```java
+package sword_offer;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+/**
+ * 题目描述
+ * 输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。
+ * 例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323。
+ * 示例1
+ * 输入
+ * [3,32,321]
+ * 返回值
+ * "321323"
+ */
+public class JZ32 {
+    public String PrintMinNumber(int[] numbers) {
+        ArrayList<Integer> list = new ArrayList<>();
+        StringBuffer sb = new StringBuffer();
+        for (int number : numbers) {
+            list.add(number);
+        }
+
+        Collections.sort(list, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer str1, Integer str2) {
+                String s1 = str1 + "" + str2;
+                String s2 = str2 + "" + str1;
+                return s1.compareTo(s2);
+            }
+        });
+
+        for (Integer n : list) {
+            sb.append(n);
+        }
+
+        return sb.toString();
+    }
+}
+```
+# 33.丑数
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 把只包含质因子2、3和5的数称作丑数（Ugly Number）。例如6、8都是丑数，但14不是，因为它包含质因子7。
+ * 习惯上把1当做是第一个丑数。求按从小到大的顺序的第N个丑数。
+ * 示例1
+ * 输入
+ * 7
+ * 返回值
+ * 8
+ */
+public class JZ33 {
+    public int GetUglyNumber_Solution(int index) {
+        if (index <= 1) {
+            return index;
+        }
+
+        int[] res = new int[index];
+        res[0] = 1;
+        int t2 = 0, t3 = 0, t5 = 0;
+        for (int i = 1; i < index; i++) {
+            res[i] = Math.min(Math.min(res[t2] * 2, res[t3] * 3), res[t5] * 5);
+            if (res[i] == res[t2] * 2) {
+                t2++;
+            }
+            if (res[i] == res[t3] * 3) {
+                t3++;
+            }
+            if (res[i] == res[t5] * 5) {
+                t5++;
+            }
+        }
+
+        return res[index - 1];
+    }
+}
+```
+# 34.第一个只出现一次的字符位置
+```java
+package sword_offer;
+
+import java.util.HashMap;
+
+/**
+ * 题目描述
+ * 在一个字符串(0<=字符串长度<=10000，全部由字母组成)中找到第一个只出现一次的字符,并返回它的位置, 如果没有则返回 -1（需要区分大小写）.（从0开始计数）
+ * 示例1
+ * 输入
+ * "google"
+ * 返回值
+ * 4
+ */
+public class JZ34 {
+    public int FirstNotRepeatingChar(String str) {
+        int size = str.length();
+        if (size == 0 || str.isEmpty()) {
+            return -1;
+        }
+
+        char[] cs = str.toCharArray();
+        int[] hash = new int[256];
+        for (int i = 0; i < size; i++) {
+            ++hash[cs[i]];
+        }
+
+        for (int i = 0; i < size; i++) {
+            if (hash[cs[i]] == 1) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    public int FirstNotRepeatingChar2(String str) {
+        int size = str.length();
+        if (size == 0 || str.isEmpty()) {
+            return -1;
+        }
+
+        HashMap<Character, Integer> m = new HashMap<>();
+        for (int i = 0; i < size; i++) {
+            if (m.containsKey(str.charAt(i))) {
+                m.put(str.charAt(i), m.get(str.charAt(i)) + 1);
+            } else {
+                m.put(str.charAt(i), 1);
+            }
+        }
+
+        for (int i = 0; i < size; i++) {
+            if (m.get(str.charAt(i)) == 1) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+}
+```
+# 35.数组中的逆序对
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组,求出这个数组中的逆序对的总数P。
+ * 并将P对1000000007取模的结果输出。 即输出P%1000000007
+ * 对于50%的数据,size≤10
+ * 对于75%的数据,size≤10
+ * 对于100%的数据,size≤2∗10
+ * 输入描述:
+ * 题目保证输入的数组中没有的相同的数字
+ * 示例1
+ * 输入
+ * [1,2,3,4,5,6,7,0]
+ * 返回值
+ * 7
+ */
+public class JZ35 {
+    static int pairNum;
+
+    public int InversePairs(int[] array) {
+        pairNum = 0;
+        if (array != null) {
+            mergeSort(array, 0, array.length - 1);
+        }
+        return pairNum;
+    }
+
+    private void mergeSort(int[] array, int start, int end) {
+        int mid = (start + end) >> 1;
+        if (start < end) {
+            mergeSort(array, start, mid);
+            mergeSort(array, mid + 1, end);
+            mergeHelper(array, start, mid, end);
+        }
+    }
+
+    private void mergeHelper(int[] array, int left, int mid, int right) {
+        int[] tmp = new int[right - left + 1];
+        int i = left;
+        int j = mid + 1;
+        int k = 0;
+        while (i <= mid && j <= right) {
+            if (array[i] < array[j]) {
+                tmp[k++] = array[i++];
+            } else {
+                tmp[k++] = array[j++];
+                pairNum += mid - i + 1;
+                if (pairNum > 1000000007) {
+                    pairNum %= 1000000007;
+                }
+            }
+        }
+
+        while (i <= mid) {
+            tmp[k++] = array[i++];
+        }
+
+        while (j <= right) {
+            tmp[k++] = array[j++];
+        }
+
+        for (int m = 0; m < tmp.length; m++) {
+            array[m + left] = tmp[m];
+        }
+    }
+}
+```
+# 36.两个链表的第一个公共结点
+```java
+package sword_offer;
+
+import java.util.HashMap;
+import java.util.Stack;
+
+/**
+ * 题目描述
+ * 输入两个链表，找出它们的第一个公共结点。（注意因为传入数据是链表，所以错误测试数据的提示是用其他方式显示的，保证传入数据是正确的）
+ */
+public class JZ36 {
+    public ListNode FindFirstCommonNode(ListNode head1, ListNode head2) {
+        if (head1 == null || head2 == null) {
+            return null;
+        }
+
+        Stack<ListNode> stk1 = new Stack<ListNode>();
+        Stack<ListNode> stk2 = new Stack<ListNode>();
+        while (head1 != null) {
+            stk1.push(head1);
+            head1 = head1.next;
+        }
+
+        while (head2 != null) {
+            stk2.push(head2);
+            head2 = head2.next;
+        }
+
+        ListNode commonNode = null;
+        while (!stk1.isEmpty() && !stk2.isEmpty() && stk1.peek() == stk2.peek()) {
+            stk1.pop();
+            commonNode = stk2.pop();
+        }
+
+        return commonNode;
+    }
+
+    public ListNode FindFirstCommonNode2(ListNode head1, ListNode head2) {
+        if (head1 == null || head2 == null) {
+            return null;
+        }
+
+        HashMap<ListNode, ListNode> m = new HashMap<>();
+        while (head1 != null) {
+            m.put(head1, head1);
+            head1 = head1.next;
+        }
+
+        while (head2 != null) {
+            if (m.containsKey(head2)) {
+                return head2;
+            }
+            head2 = head2.next;
+        }
+
+        return null;
+    }
+
+    public ListNode FindFirstCommonNode3(ListNode head1, ListNode head2) {
+        if (head1 == null || head2 == null) {
+            return null;
+        }
+
+        ListNode cur = head1;
+        int n = 0;
+        while (cur != null) {
+            ++n;
+            cur = cur.next;
+        }
+
+        cur = head2;
+        while (cur != null) {
+            --n;
+            cur = cur.next;
+        }
+
+        ListNode shortList = null;
+        ListNode longList = null;
+        if (n < 0) {
+            shortList = head1;
+            longList = head2;
+        } else {
+            shortList = head2;
+            longList = head1;
+        }
+        n = n < 0 ? -n : n;
+        for (int i = 0; i < n; i++) {
+            longList = longList.next;
+        }
+
+        while (shortList != null && longList != null && shortList.val != longList.val) {
+            shortList = shortList.next;
+            longList = longList.next;
+        }
+
+        return longList;
+    }
+}
+```
+# 37.数字在排序数组中出现的次数
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 统计一个数字在升序数组中出现的次数。
+ * 示例1
+ * 输入
+ * [1,2,3,3,3,3,4,5],3
+ * 返回值
+ * 4
+ */
+public class JZ37 {
+    public int GetNumberOfK(int[] array, int k) {
+        int size = array.length;
+        if (size == 0 || array == null) {
+            return 0;
+        }
+
+        int index = 0, low = 0, high = size - 1, mid = 0;
+        while (low < high) {
+            mid = (low + high) >> 1;
+            if (array[mid] == k) {
+                index = mid;
+                break;
+            } else if (array[mid] > k) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        int cnt = 0;
+        for (int i = index; i < size; i++) {
+            if (array[i] == k) {
+                cnt++;
+            }
+        }
+
+        for (int i = index - 1; i >= 0; i--) {
+            if (array[i] == k) {
+                cnt++;
+            }
+        }
+
+        return cnt;
+    }
+}
+```
+# 38.二叉树的深度
+```java
+package sword_offer;
+
+import java.util.LinkedList;
+
+/**
+ * 题目描述
+ * 输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
+ * 示例1
+ * 输入
+ * {1,2,3,4,5,#,6,#,#,7}
+ * 返回值
+ * 4
+ */
+public class JZ38 {
+    public int TreeDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        int left = TreeDepth(root.left);
+        int right = TreeDepth(root.right);
+
+        return left > right ? left + 1 : right + 1;
+    }
+
+    public int TreeDepth2(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        LinkedList<TreeNode> que = new LinkedList<>();
+        que.offer(root);
+        int curNode = 1;
+        int depth = 0;
+        while (!que.isEmpty()) {
+            root = que.poll();
+            --curNode;
+            if (root.left != null) {
+                que.offer(root.left);
+            }
+            if (root.right != null) {
+                que.offer(root.right);
+            }
+
+            if (curNode == 0) {
+                curNode = que.size();
+                ++depth;
+            }
+        }
+
+        return depth;
+    }
+}
+```
+# 39.平衡二叉树
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 输入一棵二叉树，判断该二叉树是否是平衡二叉树。
+ * 在这里，我们只需要考虑其平衡性，不需要考虑其是不是排序二叉树
+ * 平衡二叉树（Balanced Binary Tree），具有以下性质：它是一棵空树或它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵平衡二叉树。
+ * 示例1
+ * 输入
+ * {1,2,3,4,5,6,7}
+ * 返回值
+ * true
+ */
+public class JZ39 {
+    private boolean isBalanced = true;
+
+    public boolean IsBalanced_Solution(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+
+        getDepth(root);
+        return isBalanced;
+    }
+
+    private int getDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        int left = getDepth(root.left);
+        int right = getDepth(root.right);
+        if (Math.abs(left - right) > 1) {
+            isBalanced = false;
+        }
+
+        return left > right ? left + 1 : right + 1;
+    }
+}
+```
+# 40.数组中只出现一次的数字
+```java
+package sword_offer;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * 题目描述
+ * 一个整型数组里除了两个数字之外，其他的数字都出现了两次。请写程序找出这两个只出现一次的数字。
+ * 示例1
+ * 输入
+ * [1,4,1,6]
+ * 返回值
+ * [4,6]
+ * 说明
+ * 返回的结果中较小的数排在前面
+ */
+public class JZ40 {
+    public int[] FindNumsAppearOnce(int[] array) {
+        int size = array.length;
+        int[] res = new int[2];
+        if (array == null || size < 2) {
+            return res;
+        }
+
+        int sum = 0;
+        for (int i = 0; i < size; i++) {
+            sum ^= array[i];
+        }
+
+        int n = 1;
+        if ((sum & n) == 0) {
+            n <<= 1;
+        }
+
+        for (int i = 0; i < size; i++) {
+            if ((array[i] & n) != 0) {
+                res[0] ^= array[i];
+            } else {
+                res[1] ^= array[i];
+            }
+        }
+
+        Arrays.sort(res);
+        return res;
+    }
+
+    public int[] FindNumsAppearOnce2(int[] array) {
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 0; i < array.length; i++) {
+            //检索是否存在这一个数字
+            int flag = list.indexOf(array[i]);
+            if (flag == -1) {
+                //不存在则添加
+                list.add(array[i]);
+            } else {
+                //存在则删除
+                list.remove(flag);
+            }
+        }
+
+        //最后剩下两个即是只出现一次的
+        return new int[]{list.get(0), list.get(1)};
+    }
+
+    public int[] FindNumsAppearOnce3(int[] array) {
+        HashMap<Integer, Integer> m = new HashMap<>();
+        for (int n : array) {
+            int times = m.getOrDefault(n, 0);
+            times++;
+            m.put(n, times);
+        }
+
+        int[] res = new int[2];
+        int index = 0;
+        for (Map.Entry<Integer, Integer> entry : m.entrySet()) {
+            if (entry.getValue() == 1) {
+                res[index] = entry.getKey();
+                index++;
+            }
+        }
+
+        return res;
+    }
+}
+```
+# 41.
+# 42.
+# 43.
+# 44.
+# 45.
+# 46.
+# 47.
+# 48.
+# 49.
+# 50.
