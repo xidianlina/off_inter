@@ -2891,7 +2891,7 @@ public class JZ51 {
 }
 ```
 # 52.正则表达式匹配
-> ![jz52](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/sword/picture/jz52.png)                           
+> ![jz52](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/sword_offer/picture/jz52.png)                           
 ```java
 package sword_offer;
 
