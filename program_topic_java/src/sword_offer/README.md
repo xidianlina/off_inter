@@ -2946,25 +2946,850 @@ public class JZ52 {
 ```
 # 53.表示数值的字符串
 ```java
+package sword_offer;
 
+/**
+ * 题目描述
+ * 请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。例如，字符串"+100","5e2","-123","3.1416"和"-1E-16"都表示数值。
+ * 但是"12e","1a3.14","1.2.3","+-5"和"12e+4.3"都不是。
+ * 示例1
+ * 输入
+ * "123.45e+6"
+ * 返回值
+ * true
+ * 示例2
+ * 输入
+ * "1.2.3"
+ * 返回值
+ * false
+ */
+public class JZ53 {
+    public boolean isNumeric(String str) {
+        int size = str.length();
+        if (size == 0 || str.isEmpty()) {
+            return true;
+        }
+
+        boolean hasE = false, sign = false, decimal = false;
+        for (int i = 0; i < size; i++) {
+            if (str.charAt(i) == 'e' || str.charAt(i) == 'E') {
+                if (i == size - 1 || hasE) {
+                    return false;
+                }
+                hasE = true;
+            } else if (str.charAt(i) == '+' || str.charAt(i) == '-') {
+                if (sign && str.charAt(i - 1) != 'e' && str.charAt(i - 1) != 'E') {
+                    return false;
+                }
+                if (!sign && i > 0 && str.charAt(i - 1) != 'e' && str.charAt(i - 1) != 'E') {
+                    return false;
+                }
+                sign = true;
+            } else if (str.charAt(i) == '.') {
+                if (hasE) {
+                    return false;
+                }
+                if (decimal) {
+                    return false;
+                }
+                decimal = true;
+            } else if (str.charAt(i) < '0' || str.charAt(i) > '9') {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
 ```
 # 54.字符流中第一个不重复的字符
 ```java
+package sword_offer;
 
+import java.util.HashMap;
+
+/**
+ * 题目描述
+ * 请实现一个函数用来找出字符流中第一个只出现一次的字符。例如，当从字符流中只读出前两个字符"go"时，
+ * 第一个只出现一次的字符是"g"。当从该字符流中读出前六个字符“google"时，第一个只出现一次的字符是"l"。
+ * 返回值描述:
+ * 如果当前字符流没有存在出现一次的字符，返回#字符。
+ */
+public class JZ54 {
+    HashMap<Character, Integer> map = new HashMap<Character, Integer>();
+    StringBuffer s = new StringBuffer();
+
+    public void Insert(char ch) {
+        s.append(ch);
+        if (map.containsKey(ch)) {
+            map.put(ch, map.get(ch) + 1);
+        } else {
+            map.put(ch, 1);
+        }
+    }
+
+    public char FirstAppearingOnce() {
+        for (int i = 0; i < s.length(); i++) {
+            if (map.get(s.charAt(i)) == 1) {
+                return s.charAt(i);
+            }
+        }
+        return '#';
+    }
+}
+```
+
+```java
+package sword_offer;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+/**
+ * 题目描述
+ * 请实现一个函数用来找出字符流中第一个只出现一次的字符。例如，当从字符流中只读出前两个字符"go"时，
+ * 第一个只出现一次的字符是"g"。当从该字符流中读出前六个字符“google"时，第一个只出现一次的字符是"l"。
+ * 返回值描述:
+ * 如果当前字符流没有存在出现一次的字符，返回#字符。
+ */
+public class JZ54_2 {
+    HashMap<Character, Integer> map = new LinkedHashMap<>();
+
+    public void Insert(char ch) {
+        if (map.containsKey(ch)) {
+            map.put(ch, map.get(ch) + 1);
+        } else {
+            map.put(ch, 1);
+        }
+    }
+
+    public char FirstAppearingOnce() {
+        for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+            if (entry.getValue() == 1) {
+                return entry.getKey();
+            }
+        }
+        return '#';
+    }
+}
+```
+```java
+package sword_offer;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+/**
+ * 题目描述
+ * 请实现一个函数用来找出字符流中第一个只出现一次的字符。例如，当从字符流中只读出前两个字符"go"时，
+ * 第一个只出现一次的字符是"g"。当从该字符流中读出前六个字符“google"时，第一个只出现一次的字符是"l"。
+ * 返回值描述:
+ * 如果当前字符流没有存在出现一次的字符，返回#字符。
+ */
+public class JZ54_3 {
+    HashMap<Character, Integer> map = new LinkedHashMap<>();
+
+    public void Insert(char ch) {
+        if (map.containsKey(ch)) {
+            map.put(ch, map.get(ch) + 1);
+        } else {
+            map.put(ch, 1);
+        }
+    }
+
+    public char FirstAppearingOnce() {
+        for (Character c : map.keySet()) {
+            if (map.get(c) == 1) {
+                return c;
+            }
+        }
+        return '#';
+    }
+}
 ```
 # 55.链表中环的入口结点	
 ```java
+package sword_offer;
 
+import java.util.HashMap;
+
+/**
+ * 题目描述
+ * 给一个链表，若其中包含环，请找出该链表的环的入口结点，否则，输出null。
+ */
+public class JZ55 {
+    /*
+    第一步，找环中相汇点。分别用p1，p2指向链表头部，p1每次走一步，p2每次走二步，直到p1==p2找到在环中的相汇点。
+    第二步，找环的入口。接上步，当p1==p2时，p2所经过节点数为2x,p1所经过节点数为x,设环中有n个节点,p2比p1多走一圈有2x=n+x; n=x;
+    可以看出p1实际走了一个环的步数，再让p2指向链表头部，p1位置不变，p1,p2每次走一步直到p1==p2; 此时p1指向环的入口。
+     */
+    public ListNode EntryNodeOfLoop(ListNode head) {
+        if (head == null || head.next == null) {
+            return null;
+        }
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) {
+                fast = head;
+                while (slow != fast) {
+                    slow = slow.next;
+                    fast = fast.next;
+                }
+                return slow;
+            }
+        }
+        return null;
+    }
+
+    public ListNode EntryNodeOfLoop2(ListNode head) {
+        if (head == null || head.next == null) {
+            return null;
+        }
+
+        HashMap<ListNode, Boolean> m = new HashMap<>();
+        ListNode node = head;
+        while (node != null) {
+            if (m.containsKey(node)) {
+                return node;
+            } else {
+                m.put(node, true);
+                node = node.next;
+            }
+        }
+
+        return null;
+    }
+}
 ```
-# 51.删除链表中重复的结点
-# 51.二叉树的下一个结点
-# 51.对称的二叉树
-# 51.按之字形顺序打印二叉树
-# 51.把二叉树打印成多行
-# 51.序列化二叉树
-# 51.二叉搜索树的第k个结点
-# 51.数据流中的中位数
-# 51.滑动窗口的最大值
-# 51.矩阵中的路径
-# 51.机器人的运动范围
-# 51.剪绳子
+# 56.删除链表中重复的结点
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 在一个排序的链表中，存在重复的结点，请删除该链表中重复的结点，重复的结点不保留，返回链表头指针。 例如，链表1->2->3->3->4->4->5 处理后为 1->2->5
+ * 示例1
+ * 输入
+ * {1,2,3,3,4,4,5}
+ * 返回值
+ * {1,2,5}
+ */
+public class JZ56 {
+    public ListNode deleteDuplication(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+
+        if (head != null && head.next == null) {
+            return head;
+        }
+
+        ListNode cur = null;
+        if (head.val == head.next.val) {
+            cur = head.next.next;
+            while (cur != null && cur.val == head.val) {
+                cur = cur.next;
+            }
+            return deleteDuplication(cur);
+        } else {
+            cur = head.next;
+            head.next = deleteDuplication(cur);
+            return head;
+        }
+    }
+
+    public ListNode deleteDuplication2(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        if (head != null && head.next == null) {
+            return head;
+        }
+        ListNode first = new ListNode(-1);
+        first.next = head;
+        ListNode last = first;
+        ListNode p = head;
+        while (p != null && p.next != null) {
+            if (p.val == p.next.val) {
+                int val = p.val;
+                while (p != null && p.val == val) {
+                    p = p.next;
+                }
+                last.next = p;
+            } else {
+                last = p;
+                p = p.next;
+            }
+        }
+        return first.next;
+    }
+}
+```
+# 57.二叉树的下一个结点
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。
+ * 注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。
+ */
+
+class TreeLinkNode {
+    int val;
+    TreeLinkNode left = null;
+    TreeLinkNode right = null;
+    TreeLinkNode next = null;
+
+    TreeLinkNode(int val) {
+        this.val = val;
+    }
+}
+
+public class JZ57 {
+    public TreeLinkNode GetNext(TreeLinkNode node) {
+        if (node == null) {
+            return null;
+        }
+
+        if (node.right != null) {
+            node = node.right;
+            while (node.left != null) {
+                node = node.left;
+            }
+
+            return node;
+        }
+
+        while (node.next != null) {
+            TreeLinkNode root = node.next;
+            if (root.left == node) {
+                return root;
+            }
+            node = node.next;
+        }
+
+        return null;
+    }
+}
+```
+# 58.对称的二叉树
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 请实现一个函数，用来判断一棵二叉树是不是对称的。注意，如果一个二叉树同此二叉树的镜像是同样的，定义其为对称的。
+ * 示例1
+ * 输入
+ * {8,6,6,5,7,7,5}
+ * 返回值
+ * true
+ * 示例2
+ * 输入
+ * {8,6,9,5,7,7,5}
+ * 返回值
+ * false
+ */
+public class JZ58 {
+    boolean isSymmetrical(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+
+        return helper(root.left, root.right);
+    }
+
+    boolean helper(TreeNode left, TreeNode right) {
+        if (left == null && right == null) {
+            return true;
+        }
+
+        if (left == null || right == null) {
+            return false;
+        }
+
+        if (left.val != right.val) {
+            return false;
+        }
+
+        return helper(left.left, right.right) && helper(left.right, right.left);
+    }
+}
+```
+# 59.按之字形顺序打印二叉树
+```java
+package sword_offer;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+/**
+ * 题目描述
+ * 请实现一个函数按照之字形打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右至左的顺序打印，
+ * 第三行按照从左到右的顺序打印，其他行以此类推。
+ * 示例1
+ * 输入
+ * {8,6,10,5,7,9,11}
+ * 返回值
+ * [[8],[10,6],[5,7,9,11]]
+ */
+public class JZ59 {
+    public ArrayList<ArrayList<Integer>> Print(TreeNode root) {
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+
+        ArrayList<Integer> list = new ArrayList<>();
+        LinkedList<TreeNode> que = new LinkedList<>();
+        que.offer(root);
+        int curNode = 1;
+        boolean leftToRight = true;
+        while (!que.isEmpty()) {
+            root = que.poll();
+            --curNode;
+            if (root.left != null) {
+                que.offer(root.left);
+            }
+            if (root.right != null) {
+                que.offer(root.right);
+            }
+            list.add(root.val);
+
+            if (curNode == 0) {
+                curNode = que.size();
+                if (leftToRight) {
+                    res.add(list);
+                } else {
+                    res.add(reverseList(list));
+                }
+                leftToRight = !leftToRight;
+                list = new ArrayList<>();
+            }
+        }
+
+        return res;
+    }
+
+    private ArrayList<Integer> reverseList(ArrayList<Integer> list) {
+        int size = list.size();
+        ArrayList<Integer> res = new ArrayList<>();
+        for (int i = size - 1; i >= 0; i--) {
+            res.add(list.get(i));
+        }
+        return res;
+    }
+}
+```
+
+```java
+package sword_offer;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+/**
+ * 题目描述
+ * 请实现一个函数按照之字形打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右至左的顺序打印，第三行按照从左到右的顺序打印，其他行以此类推。
+ * 示例1
+ * 输入
+ * {8,6,10,5,7,9,11}
+ * 返回值
+ * [[8],[10,6],[5,7,9,11]]
+ */
+public class JZ59_2 {
+    public ArrayList<ArrayList<Integer>> Print(TreeNode root) {
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+
+        ArrayList<Integer> list = new ArrayList<>();
+        ArrayList<TreeNode> arr = new ArrayList<>();
+        arr.add(root);
+        int curNode = 1;
+        boolean leftToRight = true;
+        while (!arr.isEmpty()) {
+            root = arr.get(0);
+            arr.remove(0);
+            --curNode;
+            if (root.left != null) {
+                arr.add(root.left);
+            }
+            if (root.right != null) {
+                arr.add(root.right);
+            }
+            list.add(root.val);
+
+            if (curNode == 0) {
+                curNode = arr.size();
+                if (leftToRight) {
+                    res.add(list);
+                } else {
+                    res.add(reverseList(list));
+                }
+                leftToRight = !leftToRight;
+                list = new ArrayList<>();
+            }
+        }
+
+        return res;
+    }
+
+    private ArrayList<Integer> reverseList(ArrayList<Integer> list) {
+        int size = list.size();
+        ArrayList<Integer> res = new ArrayList<>();
+        for (int i = size - 1; i >= 0; i--) {
+            res.add(list.get(i));
+        }
+        return res;
+    }
+}
+```
+# 60.把二叉树打印成多行
+```java
+package sword_offer;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+/**
+ * 题目描述
+ * 从上到下按层打印二叉树，同一层结点从左至右输出。每一层输出一行。
+ * 示例1
+ * 输入
+ * {8,6,10,5,7,9,11}
+ * 返回值
+ * [[8],[6,10],[5,7,9,11]]
+ */
+public class JZ60 {
+    ArrayList<ArrayList<Integer>> Print(TreeNode root) {
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+
+        ArrayList<Integer> list = new ArrayList<>();
+        LinkedList<TreeNode> que = new LinkedList<>();
+        que.offer(root);
+        int curNode = 1;
+        while (!que.isEmpty()) {
+            root = que.poll();
+            --curNode;
+            if (root.left != null) {
+                que.offer(root.left);
+            }
+            if (root.right != null) {
+                que.offer(root.right);
+            }
+            list.add(root.val);
+            if (curNode == 0) {
+                curNode = que.size();
+                res.add(list);
+                list = new ArrayList<>();
+            }
+        }
+
+        return res;
+    }
+
+    ArrayList<ArrayList<Integer>> Print2(TreeNode root) {
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+
+        ArrayList<Integer> list = new ArrayList<>();
+        ArrayList<TreeNode> arr = new ArrayList<>();
+        arr.add(root);
+        int curNode = 1;
+        while (!arr.isEmpty()) {
+            root = arr.get(0);
+            arr.remove(0);
+            --curNode;
+            if (root.left != null) {
+                arr.add(root.left);
+            }
+            if (root.right != null) {
+                arr.add(root.right);
+            }
+            list.add(root.val);
+            if (curNode == 0) {
+                curNode = arr.size();
+                res.add(list);
+                list = new ArrayList<>();
+            }
+        }
+
+        return res;
+    }
+}
+```
+# 61.序列化二叉树
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 请实现两个函数，分别用来序列化和反序列化二叉树
+ * 二叉树的序列化是指：把一棵二叉树按照某种遍历方式的结果以某种格式保存为字符串，从而使得内存中建立起来的二叉树可以持久保存。序列化可以基于先序、中序、后序、层序的二叉树遍历方式来进行修改，序列化的结果是一个字符串，序列化时通过 某种符号表示空节点（#），以 ！ 表示一个结点值的结束（value!）。
+ * 二叉树的反序列化是指：根据某种遍历顺序得到的序列化字符串结果str，重构二叉树。
+ * 例如，我们可以把一个只有根节点为1的二叉树序列化为"1,"，然后通过自己的函数来解析回这个二叉树
+ * 示例1
+ * 输入
+ * {8,6,10,5,7,9,11}
+ * 返回值
+ * {8,6,10,5,7,9,11}
+ */
+public class JZ61 {
+    String Serialize(TreeNode root) {
+        StringBuffer sb = new StringBuffer();
+        if (root == null) {
+            sb.append("#,");
+            return sb.toString();
+        }
+
+        sb.append(root.val + ",");
+        sb.append(Serialize(root.left));
+        sb.append(Serialize(root.right));
+
+        return sb.toString();
+    }
+
+    public Integer index = -1;
+
+    TreeNode Deserialize(String str) {
+        ++index;
+        if (str.length() <= 0) {
+            return null;
+        }
+
+        String[] s = str.split(",");
+        TreeNode node = null;
+        if (!s[index].equals("#")) {
+            node = new TreeNode(Integer.valueOf(s[index]));
+            node.left = Deserialize(str);
+            node.right = Deserialize(str);
+        }
+
+        return node;
+    }
+}
+```
+# 62.二叉搜索树的第k个结点
+```java
+package sword_offer;
+
+import java.util.Stack;
+import java.util.ArrayList;
+
+/**
+ * 题目描述
+ * 给定一棵二叉搜索树，请找出其中的第k小的TreeNode结点。
+ * 示例1
+ * 输入
+ * {5,3,7,2,4,6,8},3
+ * 返回值
+ * {4}
+ * 说明
+ * 按结点数值大小顺序第三小结点的值为4
+ */
+public class JZ62 {
+    TreeNode KthNode(TreeNode root, int k) {
+        if (root == null || k <= 0) {
+            return null;
+        }
+
+        Stack<TreeNode> stk = new Stack<>();
+        while (!stk.isEmpty() || root != null) {
+            if (root != null) {
+                stk.push(root);
+                root = root.left;
+            } else {
+                root = stk.pop();
+                if (k == 1) {
+                    return root;
+                }
+                --k;
+                root = root.right;
+            }
+        }
+
+        return null;
+    }
+
+    TreeNode KthNode2(TreeNode root, int k) {
+        if (root == null || k <= 0) {
+            return null;
+        }
+
+        ArrayList<TreeNode> arr = new ArrayList<>();
+        while (!arr.isEmpty() || root != null) {
+            if (root != null) {
+                arr.add(root);
+                root = root.left;
+            } else {
+                root = arr.get(arr.size() - 1);
+                arr.remove(arr.size() - 1);
+                if (k == 1) {
+                    return root;
+                }
+                --k;
+                root = root.right;
+            }
+        }
+
+        return null;
+    }
+}
+```
+# 63.数据流中的中位数
+```java
+package sword_offer;
+
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
+/**
+ * 题目描述
+ * 如何得到一个数据流中的中位数？如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。
+ * 如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。
+ * 使用Insert()方法读取数据流，使用GetMedian()方法获取当前读取数据的中位数。
+ */
+public class JZ63 {
+    PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+    PriorityQueue<Integer> maxHeap = new PriorityQueue<>(11, new Comparator<Integer>() {
+        @Override
+        public int compare(Integer o1, Integer o2) {
+            //PriorityQueue默认是小顶堆，实现大顶堆，需要反转默认排序器
+            return o2.compareTo(o1);
+        }
+    });
+
+    public void Insert(Integer num) {
+        if (maxHeap.size() < minHeap.size()) {
+            maxHeap.add(num);
+            minHeap.add(maxHeap.poll());
+            maxHeap.add(minHeap.poll());
+        } else {
+            minHeap.add(num);
+            maxHeap.add(minHeap.poll());
+            minHeap.add(maxHeap.poll());
+        }
+    }
+
+    public Double GetMedian() {
+        if (maxHeap.size() < minHeap.size()) {
+            return minHeap.peek() * 1.0;
+        } else if (minHeap.size() < maxHeap.size()) {
+            return maxHeap.peek() * 1.0;
+        } else {
+            return (minHeap.peek() + maxHeap.peek()) / 2.0;
+        }
+    }
+}
+```
+# 64.滑动窗口的最大值
+```java
+package sword_offer;
+
+import java.util.ArrayList;
+
+/**
+ * 题目描述
+ * 给定一个数组和滑动窗口的大小，找出所有滑动窗口里数值的最大值。例如，如果输入数组{2,3,4,2,6,2,5,1}及滑动窗口的大小3，
+ * 那么一共存在6个滑动窗口，他们的最大值分别为{4,4,6,6,6,5}； 针对数组{2,3,4,2,6,2,5,1}的滑动窗口有以下6个：
+ * {[2,3,4],2,6,2,5,1}， {2,[3,4,2],6,2,5,1}， {2,3,[4,2,6],2,5,1}， {2,3,4,[2,6,2],5,1}， {2,3,4,2,[6,2,5],1}， {2,3,4,2,6,[2,5,1]}。
+ * 窗口大于数组长度的时候，返回空
+ * 示例1
+ * 输入
+ * [2,3,4,2,6,2,5,1],3
+ * 返回值
+ * [4,4,6,6,6,5]
+ */
+public class JZ64 {
+    public ArrayList<Integer> maxInWindows(int[] num, int size) {
+        int len = num.length;
+        ArrayList<Integer> res = new ArrayList<>();
+        if (len < size || size == 0 || num == null) {
+            return res;
+        }
+
+        int m = 0;
+        for (int i = 0; i < len - size + 1; i++) {
+            m = num[i];
+            for (int j = i; j < i + size; j++) {
+                if (m < num[j]) {
+                    m = num[j];
+                }
+            }
+            res.add(m);
+        }
+
+        return res;
+    }
+}
+```
+# 67.剪绳子
+```java
+package sword_offer;
+
+/**
+ * 题目描述
+ * 给你一根长度为n的绳子，请把绳子剪成整数长的m段（m、n都是整数，n>1并且m>1，m<=n），每段绳子的长度记为k[1],...,k[m]。
+ * 请问k[1]x...xk[m]可能的最大乘积是多少？例如，当绳子的长度是8时，我们把它剪成长度分别为2、3、3的三段，此时得到的最大乘积是18。
+ * 输入描述:
+ * 输入一个数n，意义见题面。（2 <= n <= 60）
+ * 返回值描述:
+ * 输出答案。
+ * 示例1
+ * 输入
+ * 8
+ * 返回值
+ * 18
+ */
+public class JZ67 {
+    /*
+    解题思路
+    首先判断k[0]到k[m]可能有哪些数字，实际上只可能是2或者3。
+    当然也可能有4，但是4=2*2，所以简单些不考虑了。
+    5<2*3,6<3*3,比6更大的数字就更不用考虑了，肯定要继续分。
+    其次看2和3的数量，2的数量肯定小于3个，为什么呢？
+    因为2*2*2<3*3，那么题目就简单了。
+    直接用n除以3，根据得到的余数判断是一个2还是两个2还是没有2就行了。
+    由于题目规定m>1，所以2只能是1*1，3只能是2*1，这两个特殊情况直接返回就行了。
+     */
+    public int cutRope(int target) {
+        if (target < 3) {
+            return target - 1;
+        }
+
+        int x = target % 3, y = target / 3;
+        if (x == 0) {
+            return pow_helper(3, y);
+        } else if (x == 1) {
+            return 2 * 2 * pow_helper(3, y - 1);
+        } else {
+            return 2 * pow_helper(3, y);
+        }
+    }
+
+    private int pow_helper(int n, int m) {
+        if (m == 0) {
+            return 1;
+        }
+        int res = n;
+        for (int i = 1; i < m; i++) {
+            res *= n;
+        }
+
+        return res;
+    }
+}
+```

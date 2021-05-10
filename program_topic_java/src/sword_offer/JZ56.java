@@ -48,9 +48,7 @@ public class JZ56 {
             if (p.val == p.next.val) {
                 int val = p.val;
                 while (p != null && p.val == val) {
-                    if (p.val == val) {
                         p = p.next;
-                    }
                 }
                 last.next = p;
             } else {
