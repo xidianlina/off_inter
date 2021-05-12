@@ -202,9 +202,54 @@ public class Shuffle2 {
     }
 }
 ```
-
-
+> 参考 https://www.jianshu.com/p/9c841ad88ded                     
 # 3.两个线程分别打印1-100，a线程打印偶数，b线程打印奇数
+```java
+package algorithm;
+
+public class ThreadPrint {
+    public static void main(String[] args) {
+        for (int i = 1; i <= 100; ++i) {
+            PrintOddThread odd = new PrintOddThread(i);
+            PrintEvenThread even = new PrintEvenThread(i);
+            Thread oddThread = new Thread(odd);
+            Thread evenThread = new Thread(even);
+            oddThread.start();
+            evenThread.start();
+        }
+    }
+}
+
+class PrintOddThread implements Runnable {
+    private int i;
+
+    public PrintOddThread(int i) {
+        this.i = i;
+    }
+
+    @Override
+    public void run() {
+        if (i % 2 == 1) {
+            System.out.println("odd thread " + i);
+        }
+    }
+}
+
+class PrintEvenThread implements Runnable {
+    private int i;
+
+    public PrintEvenThread(int i) {
+        this.i = i;
+    }
+
+    @Override
+    public void run() {
+        if (i % 2 == 0) {
+            System.out.println("even thread " + i);
+        }
+    }
+}
+```
 # 4.一个链表，奇数位升序偶数位降序，让链表变成升序的
 ```java
 package algorithm;

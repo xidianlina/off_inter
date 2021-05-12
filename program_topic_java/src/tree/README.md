@@ -804,12 +804,95 @@ public class GetLowestCommonAncestor {
 ```
 ## 10.求任意两结点距离
 ```java
+package tree;
 
+import java.util.Scanner;
+
+/*
+首先找到两个结点的 LCA，然后分别计算 LCA 与它们的距离，最后相加即可。
+ */
+public class DistanceTreeNodes {
+    public static void main(String[] args) {
+        DistanceTreeNodes distanceTreeNodes = new DistanceTreeNodes();
+        TreeNode root = distanceTreeNodes.createTree();
+        TreeNode node1 = root.left.left;
+        TreeNode node2 = root.right.right;
+        int distance = distanceTreeNodes.distanceTreeNodes(root, node1, node2);
+        System.out.println(distance);
+    }
+
+    public int distanceTreeNodes(TreeNode root, TreeNode node1, TreeNode node2) {
+        TreeNode lca = findLCA(root, node1, node2);
+        int leftLevel = findLevel(lca, node1);
+        int rightLevel = findLevel(lca, node2);
+
+        return leftLevel + rightLevel;
+    }
+
+    public TreeNode findLCA(TreeNode root, TreeNode node1, TreeNode node2) {
+        if (root == null || node1 == null || node2 == null) {
+            return null;
+        }
+
+        if (root == node1 || root == node2) {
+            return root;
+        }
+
+        TreeNode left = findLCA(root.left, node1, node2);
+        TreeNode right = findLCA(root.right, node1, node2);
+
+        if (left != null && right != null) {
+            return root;
+        }
+
+        return left != null ? left : right;
+    }
+
+    public int findLevel(TreeNode lca, TreeNode node) {
+        if (lca == null) {
+            return -1;
+        }
+
+        if (lca == node) {
+            return 0;
+        }
+
+        //先在左子树查找
+        int level = findLevel(lca.left, node);
+
+        //如果左子树没找到，就在右子树查找
+        if (level == -1) {
+            level = findLevel(lca.right, node);
+        }
+
+        //查找到，回溯
+        if (level != -1) {
+            return level + 1;
+        }
+
+        return -1;
+    }
+
+    public TreeNode createTree() {
+        TreeNode tree;
+        Scanner sc = new Scanner(System.in);
+        int data = sc.nextInt();
+        if (data == 0) {
+            tree = null;
+        } else {
+            tree = new TreeNode();
+            tree.data = data;
+            tree.left = createTree();
+            tree.right = createTree();
+        }
+
+        return tree;
+    }
+}
 ```
-## 11.
-## 12.
-## 13.
-## 14.
-## 15.
-## 16.
-## 17.
+## 11.找出二叉树中某个结点的所有祖先结点
+## 12.判断二叉树是不是完全二叉树
+## 13.有序链表转化为平衡的二分查找树
+## 14.判断是否是二叉查找树。假定二叉树没有重复元素，即对于每个结点，其左右孩子都是严格的小于和大于
+## 15.求二叉树中节点的最大距离，即二叉树中相距最远的两个节点之间的距离
+## 16.二叉排序树中插入新的节点
