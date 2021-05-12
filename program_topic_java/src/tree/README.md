@@ -891,8 +891,193 @@ public class DistanceTreeNodes {
 }
 ```
 ## 11.找出二叉树中某个结点的所有祖先结点
+```java
+package tree;
+
+import java.util.Scanner;
+
+public class FindAllAncestors {
+    public static void main(String[] args) {
+        FindAllAncestors findAllAncestors = new FindAllAncestors();
+        TreeNode root = findAllAncestors.createTree();
+        TreeNode target = root.left.right;
+        TreeNode node = root.right.right;
+        findAllAncestors.findAllAncestors(root, target);
+        findAllAncestors.findAllAncestors(root, node);
+    }
+
+    public boolean findAllAncestors(TreeNode node, TreeNode target) {
+        if (node == null) {
+            return false;
+        }
+
+        if (node == target) {
+            return true;
+        }
+
+        if (findAllAncestors(node.left, target) || findAllAncestors(node.right, target)) {
+            System.out.print(node.data + "\t");
+            return true;
+        }
+
+        return false;
+    }
+
+    public TreeNode createTree() {
+        TreeNode tree;
+        Scanner sc = new Scanner(System.in);
+        int data = sc.nextInt();
+
+        if (data == 0) {
+            return null;
+        } else {
+            tree = new TreeNode();
+            tree.data = data;
+            tree.left = createTree();
+            tree.right = createTree();
+        }
+
+        return tree;
+    }
+}
+```
 ## 12.判断二叉树是不是完全二叉树
-## 13.有序链表转化为平衡的二分查找树
-## 14.判断是否是二叉查找树。假定二叉树没有重复元素，即对于每个结点，其左右孩子都是严格的小于和大于
-## 15.求二叉树中节点的最大距离，即二叉树中相距最远的两个节点之间的距离
-## 16.二叉排序树中插入新的节点
+```java
+package tree;
+
+import java.util.LinkedList;
+import java.util.Scanner;
+
+public class IsCompleteBinaryTree {
+    public static void main(String[] args) {
+        IsCompleteBinaryTree isCompleteBinaryTree = new IsCompleteBinaryTree();
+        TreeNode root = isCompleteBinaryTree.createTree();
+        boolean flag = isCompleteBinaryTree.isCompleteBinaryTree(root);
+        System.out.println(flag);
+    }
+
+    public boolean isCompleteBinaryTree(TreeNode root) {
+        if (root == null) {
+            return false;
+        }
+
+        LinkedList<TreeNode> que = new LinkedList<>();
+        que.offer(root);
+        boolean flag = false;
+        while (!que.isEmpty()) {
+            TreeNode node = que.poll();
+
+            //右孩子不等于空，左孩子等于空  -> false
+            if ((node.left == null && node.right != null) ||
+                    //开启叶节点判断标志位时，如果层次遍历中的后继结点不是叶节点 -> false
+                    (flag && (node.left != null || node.right != null))) {
+                return false;
+            }
+
+            if (node.left != null) {
+                que.offer(node.left);
+            }
+            if (node.right != null) {
+                que.offer(node.right);
+            } else {
+                flag = true;
+            }
+        }
+
+        return true;
+    }
+
+    public TreeNode createTree() {
+        TreeNode tree;
+        Scanner sc = new Scanner(System.in);
+        int data = sc.nextInt();
+
+        if (data == 0) {
+            return null;
+        } else {
+            tree = new TreeNode();
+            tree.data = data;
+            tree.left = createTree();
+            tree.right = createTree();
+        }
+
+        return tree;
+    }
+}
+```
+## 13.二叉排序树中插入新的节点
+```java
+package tree;
+
+public class InsertTreeNode {
+    public static void main(String[] args) {
+        int[] arr = {0, 5, 8, 4, 2, 3, 8, 10};
+
+        TreeNode root = null;
+        for (int i = 0; i < arr.length; ++i) {
+            root = insertTreeNode(root, arr[i]);
+        }
+
+        inTraverseTree(root);
+    }
+
+    //往二叉排序树中插入一个新节点(递归实现)
+    public static TreeNode insertTreeNode(TreeNode node, int data) {
+        if (node == null) {
+            return new TreeNode(data);
+        } else {
+            TreeNode cur = null;
+            if (data <= node.data) {
+                cur = insertTreeNodeRecursion(node.left, data);
+                node.left = cur;
+            } else {
+                cur = insertTreeNodeRecursion(node.right, data);
+                node.right = cur;
+            }
+        }
+
+        return node;
+    }
+
+    //往二叉排序树中插入一个新节点(非递归实现)
+    public static TreeNode insertTreeNodeRecursion(TreeNode root, int data) {
+        TreeNode node = new TreeNode(data);
+        if (root == null) {
+            return node;
+        } else {
+            TreeNode curNode = root;
+            while (true) {
+                if (data < curNode.data) {
+                    if (curNode.left == null) {
+                        curNode.left = node;
+                        return root;
+                    } else {
+                        curNode = curNode.left;
+                    }
+                } else if (data > curNode.data) {
+                    if (curNode.right == null) {
+                        curNode.right = node;
+                        return root;
+                    } else {
+                        curNode = curNode.right;
+                    }
+                } else {
+                    System.out.println(data + " 结点已存在");
+                    return root;
+                }
+            }
+        }
+    }
+
+    //中序遍历二叉树
+    public static void inTraverseTree(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+
+        inTraverseTree(root.left);
+        System.out.print(root.data + "\t");
+        inTraverseTree(root.right);
+    }
+}
+```
