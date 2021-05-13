@@ -5304,7 +5304,58 @@ class TreeNode {
     }
 }
 ```
-# 109.
+# 109.有序链表转换二叉搜索树
+```java
+package leetcode;
+
+/*
+给定一个单链表，其中的元素按升序排序，将其转换为高度平衡的二叉搜索树。
+本题中，一个高度平衡二叉树是指一个二叉树每个节点的左右两个子树的高度差的绝对值不超过 1。
+
+示例:
+给定的有序链表： [-10, -3, 0, 5, 9],
+一个可能的答案是：[0, -3, 9, -10, null, 5], 它可以表示下面这个高度平衡二叉搜索树：
+
+      0
+     / \
+   -3   9
+   /   /
+ -10  5
+ */
+public class lc109 {
+    /*
+        时间复杂度：O(nlogn)，其中n是链表的长度。
+        设长度为n的链表构造二叉搜索树的时间为T(n)，递推式为T(n)=2⋅T(n/2)+O(n)，根据主定理，T(n)=O(nlogn)。
+        空间复杂度：O(logn)，这里只计算除了返回答案之外的空间。平衡二叉树的高度为O(logn)，即为递归过程中栈的最大深度，也就是需要的空间。
+     */
+    public TreeNode sortedListToBST(ListNode head) {
+        return buildTree(head, null);
+    }
+
+    public TreeNode buildTree(ListNode left, ListNode right) {
+        if (left == right) {
+            return null;
+        }
+
+        ListNode mid = getMedian(left, right);
+        TreeNode root = new TreeNode(mid.val);
+        root.left = buildTree(left, mid);
+        root.right = buildTree(mid.next, right);
+        return root;
+    }
+
+    public ListNode getMedian(ListNode left, ListNode right) {
+        ListNode slow = left;
+        ListNode fast = left;
+        while (fast != right && fast.next != right) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+
+        return slow;
+    }
+}
+```
 
 
 
@@ -5492,3 +5543,65 @@ public class lc328 {
     }
 }
 ```
+
+# 543.二叉树的直径(二叉树中节点的最大距离)
+```java
+package leetcode;
+
+/*
+给定一棵二叉树，你需要计算它的直径长度。一棵二叉树的直径长度是任意两个结点路径长度中的最大值。
+这条路径可能穿过也可能不穿过根结点。
+
+示例 :
+给定二叉树
+
+          1
+         / \
+        2   3
+       / \
+      4   5
+返回3, 它的长度是路径 [4,2,1,3] 或者[5,2,1,3]。
+
+注意：两结点之间的路径长度是以它们之间边的数目表示。
+ */
+public class lc543 {
+    /*
+        一条路径的长度为该路径经过的节点数减一，所以求直径（即求路径长度的最大值）等效于求路径经过节点数的最大值减一。
+        而任意一条路径均可以被看作由某个节点为起点，从其左儿子和右儿子向下遍历的路径拼接得到。
+        
+        时间复杂度:O(N)，其中N为二叉树的节点数，即遍历一棵二叉树的时间复杂度，每个结点只被访问一次。
+        空间复杂度:O(Height)，其中Height为二叉树的高度。由于递归函数在递归过程中需要为每一层递归函数分配栈空间，
+        所以这里需要额外的空间且该空间取决于递归的深度，而递归的深度显然为二叉树的高度，并且每次递归调用的函数里又只用了常数个变量，
+        所以所需空间复杂度为O(Height)。
+     */
+
+    int ans;
+
+    public int diameterOfBinaryTree(TreeNode root) {
+        ans = 1;
+        getDepth(root);
+
+        return ans - 1;
+    }
+
+    public int getDepth(TreeNode node) {
+        if (node == null) {
+            // 访问到空节点了，返回0
+            return 0;
+        }
+
+        // 左儿子为根的子树的深度
+        int left = getDepth(node.left);
+        // 右儿子为根的子树的深度
+        int right = getDepth(node.right);
+
+        // 以该节点为起点的路径经过节点数的最大值为left+right+1
+        ans = Math.max(ans, left + right + 1);
+
+        // 返回该节点为根的子树的深度
+        return Math.max(left, right) + 1;
+    }
+}
+```
+
+
