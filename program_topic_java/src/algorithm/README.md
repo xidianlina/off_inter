@@ -414,3 +414,1336 @@ class ListNode {
     }
 }
 ```
+# 5.IP转换成整数及整数转换成IP
+```java
+package algorithm;
+
+import java.util.Scanner;
+
+public class IpToInt {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            String strIP = sc.nextLine();
+            int intIP = ipToInt(strIP);
+            System.out.println(intIP);
+            System.out.println(intToIp(intIP));
+        }
+    }
+
+    /*
+        ip地址分为四段，每段都是0~255之间的数，每段可以用8位来装下它，4x8=32位，也就是可以将ip地址转为32位的整数
+        将ip转为数字其实就是时间换空间的一种方式。String类型的ip占用7(如0.0.0.0)到15(如 255.255.255.255)个字节，而int只需要4个字节
+        思路就是将ip的每一段数字转为8位二进制数，并将它们放在结果的适当位置上
+     */
+    public static int ipToInt(String ip) {
+        //取IP的各段
+        String[] ipSlices = ip.split("\\.");
+
+        int res = 0;
+        for (int i = 0; i < ipSlices.length; ++i) {
+            // 将ip的每一段解析为int，并根据位置左移8位
+            int intSlice = Integer.parseInt(ipSlices[i]) << 8 * i;
+            // 或运算
+            res = res | intSlice;
+        }
+
+        return res;
+    }
+
+    public static String intToIp(int ip) {
+        String[] res = new String[4];
+        for (int i = 3; i >= 0; --i) {
+            int ipInt = (ip >> (8 * i)) & (0xff);
+            res[i] = String.valueOf(ipInt);
+        }
+
+        return String.join(".", res);
+    }
+}
+```
+# 6.IP转换成长整数及长整数转换成IP
+```java
+package algorithm;
+
+import java.util.Scanner;
+
+public class IpToLong {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            String strIp = sc.nextLine();
+            long numIp = Long.valueOf(sc.nextLine());
+            System.out.println(ipToNum(strIp));
+            System.out.println(numToIp(numIp));
+        }
+    }
+
+    public static long ipToNum(String ip) {
+        String[] arr = ip.split("\\.");
+        long n = Long.parseLong(arr[0]);
+
+        for (int i = 1; i < arr.length; i++) {
+            n = n << 8;
+            n = n + Long.parseLong(arr[i]);
+        }
+
+        return n;
+    }
+
+    public static String numToIp(long num) {
+        // 先把数字转化为32位的二进制串
+        String binaryStr = num2binary(num, 32);    
+        StringBuilder sb = new StringBuilder();
+        // 每8个字符将二进制串转化为十进制数
+        for (int i = 0; i < 32; i += 8) {
+            String tempStr = binaryStr.substring(i, i + 8);
+            int tempInt = 0;
+            for (int j = tempStr.length() - 1; j >= 0; j--)
+                tempInt += Math.pow(2, tempStr.length() - 1 - j) * (tempStr.charAt(j) - '0');
+            sb.append(tempInt + ".");
+        }
+        return sb.deleteCharAt(sb.length() - 1).toString();
+    }
+
+
+    private static long ip2num(String[] ip) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < ip.length; i++)
+            sb.append(num2binary(Long.parseLong(ip[i]), 8));      // 将数字转化为8位二进制串
+        long res = 0;
+        String str = sb.toString();
+        for (int i = str.length() - 1; i >= 0; i--)
+            res += Math.pow(2, str.length() - 1 - i) * (str.charAt(i) - '0');
+        return res;
+    }
+
+    // 除二取余法
+    private static String num2binary(long num, int bit) {
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+        while (num > 0) {
+            sb.append(num % 2);
+            num /= 2;
+            count++;
+        }
+        // 高位补0
+        while (count < bit) {
+            sb.append(0);
+            count++;
+        }
+        return sb.reverse().toString();
+    }
+}
+```
+# 7.给一个字符串表示IP地址，检测是否合法
+```java
+package algorithm;
+
+import java.util.Scanner;
+
+public class IsValidIp {
+    public static void main(String[] args) {
+        IsValidIp isValidIp = new IsValidIp();
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            String ip = sc.nextLine();
+            System.out.println(isValidIp.isValidIp(ip));
+        }
+    }
+
+    public boolean isValidIp(String ip) {
+        int size = ip.length();
+        if (ip.isEmpty() || size < 7 || size > 15) {
+            return false;
+        }
+
+        String[] arr = ip.split("\\.");
+        if (arr.length != 4) {
+            return false;
+        }
+
+        for (int i = 0; i < arr.length; ++i) {
+            if (arr[i].length() > 1 && arr[i].charAt(0) == '0') {
+                return false;
+            }
+
+            for (int j = 0; j < arr[i].length(); ++j) {
+                if (arr[i].charAt(j) < '0' || arr[j].charAt(j) > '9') {
+                    return false;
+                }
+            }
+        }
+
+        for (int i = 0; i < arr.length; ++i) {
+            int tmp = Integer.parseInt(arr[i]);
+            if (i == 0) {
+                if (tmp < 1 || tmp > 255) {
+                    return false;
+                }
+            } else {
+                if (tmp < 0 || tmp > 255) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+}
+```
+# 8.杨辉三角
+```java
+package algorithm;
+
+import java.util.Scanner;
+
+public class YangHuiSanJiao {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int[][] res = yangHuiSanJiao(sc.nextInt());
+        printYangHuiSanJiao(res);
+    }
+
+    public static int[][] yangHuiSanJiao(int n) {
+        int[][] res = new int[n][n];
+        for (int i = 0; i < n; ++i) {
+            res[i] = new int[i + 1];
+        }
+
+        for (int i = 0; i < n; ++i) {
+            res[i][0] = 1;
+            res[i][i] = 1;
+            for (int j = 1; j < i; ++j) {
+                res[i][j] = res[i - 1][j] + res[i - 1][j - 1];
+            }
+        }
+
+        return res;
+    }
+
+    public static void printYangHuiSanJiao(int[][] res) {
+        for(int i=0;i<res.length;++i){
+            for(int k=0;k<res.length-i;++k){
+                System.out.print(" ");
+            }
+            for(int j=0;j<res[i].length;++j){
+                System.out.print(res[i][j]+" ");
+            }
+            System.out.println();
+        }
+    }
+}
+```
+# 9.字符串翻转
+```java
+package algorithm;
+
+public class StringReverse {
+    public static void main(String[] args) {
+        StringReverse stringReverse = new StringReverse();
+        String str = stringReverse.reverseString("abcdefg");
+        System.out.println(str);
+    }
+
+    public String reverseString(String str) {
+        int n = str.length();
+        if (n == 0 || str.isEmpty()) {
+            return str;
+        }
+
+        char[] chars = str.toCharArray();
+        for (int i = 0, j = n - 1; i < j; ++i, --j) {
+            char c = chars[i];
+            chars[i] = chars[j];
+            chars[j] = c;
+        }
+
+        return new String(chars);
+    }
+}
+```
+# 10.判断两个日期之间相隔的天数
+```java
+package algorithm;
+
+public class DiffDay {
+    public static void main(String[] args) {
+        int year1 = 2017, month1 = 4, day1 = 23;
+        int year2 = 2018, month2 = 9, day2 = 25;
+        DiffDay diffDay = new DiffDay();
+        int diff = diffDay.getDiffDay(year1, month1, day1, year2, month2, day2);
+        System.out.println(diff);
+    }
+
+    public int getDiffDay(int year1, int month1, int day1, int year2, int month2, int day2) {
+        int d1 = getDay(year1, month1, day1);
+        int d2 = getDay(year2, month2, day2);
+
+        int res = 0;
+        if (year1 == year2) {
+            res = Math.abs(year1 - year2);
+        } else if (year1 > year2) {
+            res = getDaySum(year1, year2, d1, d2);
+        } else {
+            res = getDaySum(year2, year1, d2, d1);
+        }
+
+        return res;
+    }
+
+    public int getDaySum(int year1, int year2, int d1, int d2) {
+        int res = 0;
+        for (int i = year2 + 1; i < year1; ++i) {
+            if (isLeap(i)) {
+                res += 366;
+            } else {
+                res += 365;
+            }
+        }
+        res += d1;
+        if (isLeap(year2)) {
+            res += (366 - d2);
+        } else {
+            res += (365 - d2);
+        }
+
+        return res;
+    }
+
+    private int getDay(int year, int month, int day) {
+        int days = 0;
+        int d = 0;
+        for (int i = 1; i < month; ++i) {
+            switch (i) {
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                case 8:
+                case 10:
+                case 12:
+                    d = 31;
+                    days += d;
+                    break;
+                case 2:
+                    if (isLeap(year)) {
+                        d = 29;
+                    } else {
+                        d = 28;
+                    }
+                    days += d;
+                    break;
+                case 4:
+                case 6:
+                case 9:
+                case 11:
+                    d = 30;
+                    days += d;
+                    break;
+            }
+        }
+        return days + day;
+    }
+
+    private boolean isLeap(int year) {
+        if ((year % 4 == 0 && year % 100 == 0) || year % 400 == 0) {
+            return true;
+        }
+        return false;
+    }
+}
+```
+# 11.给定A, B两个整数，不使用除法和取模运算，求A/B的商和余数
+```java
+package algorithm;
+
+public class Divide {
+    public static void main(String[] args) {
+        divide(10, 3);
+    }
+
+    public static void divide(int a, int b) {
+        for (int i = 2; i < a; ++i) {
+            if (i * b > a) {
+                System.out.println((i - 1) + " " + (a - (i - 1) * b));
+                break;
+            }
+        }
+    }
+}
+```
+# 12.压缩驼峰字符串
+```java
+package algorithm;
+
+public class CamelAndSnakeString {
+    public static void main(String[] args) {
+        String s = "get_set_where";
+        System.out.println(camelString(s));
+        String str = "getSetWhere";
+        System.out.println(snakeString(str));
+    }
+
+    public static String camelString(String str) {
+        int size = str.length();
+        if (size == 0 || str.isEmpty()) {
+            return str;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < size; ++i) {
+            if (str.charAt(i) == '_') {
+                continue;
+            }
+
+            if (i != 0 && str.charAt(i - 1) == '_') {
+                sb.append(new Character(str.charAt(i)).toString().toUpperCase());
+            } else {
+                sb.append(str.charAt(i));
+            }
+        }
+
+        return new String(sb);
+    }
+
+    public static String snakeString(String str) {
+        int size = str.length();
+        if (size == 0 || str.isEmpty()) {
+            return str;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < size; ++i) {
+            if (str.charAt(i) >= 'A' && str.charAt(i) <= 'Z') {
+                sb.append('_' + new Character(str.charAt(i)).toString().toLowerCase());
+            } else {
+                sb.append(str.charAt(i));
+            }
+        }
+
+        return new String(sb);
+    }
+}
+```
+# 13,除去s1中与s2中相同的字符
+```java
+package algorithm;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Squeeze {
+    public static void main(String[] args) {
+        String str1 = "abcde";
+        String str2 = "ace";
+        System.out.println(squeeze(str1, str2));
+        System.out.println(squeeze2(str1, str2));
+    }
+
+    private static String squeeze(String str1, String str2) {
+        int i = 0, j = 0;
+        StringBuilder sb = null;
+        while (j < str2.length()) {
+            sb = new StringBuilder();
+            while (i < str1.length()) {
+                if (str1.charAt(i) != str2.charAt(j)) {
+                    sb.append(str1.charAt(i));
+                }
+                ++i;
+            }
+            str1 = new String(sb);
+            i = 0;
+            ++j;
+        }
+        return str1;
+    }
+
+    private static String squeeze2(String str1, String str2) {
+        Map<Character, Boolean> m = new HashMap<>();
+
+        for (int i = 0; i < str2.length(); ++i) {
+            if (!m.containsKey(str2.charAt(i))) {
+                m.put(str2.charAt(i), true);
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < str1.length(); ++i) {
+            if (!m.containsKey(str1.charAt(i))) {
+                sb.append(str1.charAt(i));
+            }
+        }
+
+        return new String(sb);
+    }
+}
+```
+# 14.给定n个数，要求比较1.5n次同时找出最大值和最小值
+```java
+package algorithm;
+
+/*
+要求比较次数为1.5n，使用一般的逐个遍历每个元素然后判断其是否为最大最小值是需要2n次比较的。
+现在考虑采用，每次从数组中取出两个元素，判断其大小，然后再分别判断其是否是最大或最小值，
+这样一次处理两个元素，每一次比较3次，最终的比较次数就是n/2*3=1.5n。
+ */
+public class FindMaxMin {
+    public static void main(String[] args) {
+        int num[] = {2, 4, 5, 6, 8, 3, 7, 1, 9, 10};
+        findMaxMin(num);
+    }
+
+    private static void findMaxMin(int[] arr) {
+        int size = arr.length;
+        if (size == 0 || arr == null) {
+            return;
+        }
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        int i = 0;
+        int j = size - 1;
+        int tmin, tmax;
+        int count = 0;
+        while (i < j) {
+            if (arr[i] < arr[j]) {
+                tmax = arr[j];
+                tmin = arr[i];
+                ++count;
+            } else {
+                tmax = arr[i];
+                tmin = arr[j];
+                ++count;
+            }
+            if (min > tmin) {
+                min = tmin;
+            }
+            if (max < tmax) {
+                max = tmax;
+            }
+            count += 2;
+            ++i;
+            --j;
+        }
+        System.out.println("The max number is " + max);
+        System.out.println("The min number is " + min);
+        System.out.println("Compare number is " + count);
+    }
+}
+```
+# 15.按照map的value进行排序，并按value有序输出
+```java
+package algorithm;
+
+import java.util.*;
+
+public class MapValueSort {
+    public static void main(String[] args) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("three", 3);
+        map.put("nine", 9);
+        map.put("zero", 0);
+        map.put("five", 5);
+        map.put("two", 2);
+        map.put("six", 6);
+        MapValueSort m = new MapValueSort();
+        Map<String, Integer> res = m.mapValueSort(map);
+        for (String key : res.keySet()) {
+            System.out.println(key + " " + res.get(key));
+        }
+    }
+    
+    public <T extends Comparable> Map<String, T> mapValueSort(Map<String, T> map) {
+        int size = map.size();
+        if (size == 0 || map == null) {
+            return map;
+        }
+        List<Map.Entry<String, T>> list = new ArrayList<>();
+        for (Map.Entry<String, T> entry : map.entrySet()) {
+            list.add(entry);
+        }
+        Collections.sort(list, new Comparator<Map.Entry<String, T>>() {
+            @Override
+            public int compare(Map.Entry<String, T> o1, Map.Entry<String, T> o2) {
+                return o1.getValue().compareTo(o2.getValue());
+            }
+        });
+
+        LinkedHashMap<String, T> m = new LinkedHashMap<>();
+        for (Map.Entry<String, T> entry : list) {
+            m.put(entry.getKey(), entry.getValue());
+        }
+        return m;
+    }
+}
+```
+# 16.找出数组里出现次数超过总数1/3的数(可能存在一个也可能存在两个)
+```java
+package algorithm;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MajorityElement {
+    public List<Integer> majorityElement(int[] nums) {
+        List<Integer> res = new ArrayList<Integer>();
+        if (nums == null || nums.length == 0) {
+            return res;
+        }
+        int a = nums[0], cnta = 0;
+        int b = nums[0], cntb = 0;
+        for (int num : nums) {
+            if (num == a) {
+                ++cnta;
+            } else if (num == b) {
+                ++cntb;
+            } else if (cnta == 0) {
+                a = num;
+                cnta = 1;
+            } else if (cntb == 0) {
+                b = num;
+                cntb = 1;
+            } else {
+                --cnta;
+                --cntb;
+            }
+        }
+        cnta = 0;
+        cntb = 0;
+        for (int num : nums) {
+            if (num == a) {
+                ++cnta;
+            } else if (num == b) {
+                ++cntb;
+            }
+        }
+        if (cnta > nums.length / 3) {
+            res.add(a);
+        }
+        if (cntb > nums.length / 3) {
+            res.add(b);
+        }
+        return res;
+    }
+}
+```
+# 17.判断一个字符串是否是回文字符串
+```java
+package algorithm;
+
+public class IsPalindrome {
+    public static void main(String[] args) {
+        String str = "abceda";
+        String str2 = "";
+        String str3 = "abdba";
+        boolean flag = isPalindrome(str3);
+        System.out.println(flag);
+    }
+
+    public static boolean isPalindrome(String str) {
+        int size = str.length();
+        if (size == 0 || str.isEmpty()) {
+            return false;
+        }
+        int i = 0;
+        while (i < size / 2) {
+            if (str.charAt(i) != str.charAt(size - i - 1)) {
+                return false;
+            }
+            ++i;
+        }
+
+        return true;
+    }
+}
+```
+# 18.不使用循环，判断一个数是否是2的N次方
+```java
+package algorithm;
+
+//凡是2的N次方的整数，其二进制码只有一个1
+public class Is2N {
+    public static void main(String[] args) {
+        boolean flag = is2N(34);
+        System.out.println(flag);
+    }
+
+    public static boolean is2N(int n) {
+        if (n > 0 && (n & (n - 1)) == 0) {
+            return true;
+        }
+
+        return false;
+    }
+}
+```
+# 19.求1!+2!+3!+4!+...+n!的结果
+```java
+package algorithm;
+
+public class JieChengHe {
+    public static void main(String[] args) {
+        System.out.println(jieChengHe(4));
+        System.out.println(jieChengHeNoRec(4));
+    }
+
+    public static long jieChengHeNoRec(int n) {
+        long sum = 0;
+        long num = 1;
+        for (int i = 1; i <= n; ++i) {
+            num *= i;
+            sum += num;
+        }
+
+        return sum;
+    }
+
+
+    public static long jieChengHe(int n) {
+        if (n == 1) {
+            return 1;
+        }
+
+        return jieChengHe(n - 1) + jieCheng(n);
+    }
+
+    public static int jieCheng(int n) {
+        if (n == 1) {
+            return 1;
+        }
+
+        return jieCheng(n - 1) * n;
+    }
+}
+```
+# 20.在字符串中求最长数字子序列的长度
+```java
+package algorithm;
+
+public class LongestNumSubString {
+    public static void main(String[] args) {
+        String str = "ad3299adfa3239028903afd";
+        System.out.println(longestNumSubString(str));
+    }
+
+    public static int longestNumSubString(String str) {
+        int size = str.length();
+        if (size == 0 || str.isEmpty()) {
+            return 0;
+        }
+
+        int cnt = 0;
+        int num = 0;
+        for (int i = 0; i < size; ++i) {
+            if (isNumber(str.charAt(i))) {
+                ++cnt;
+                if (cnt > num) {
+                    num = cnt;
+                }
+            } else {
+                cnt = 0;
+            }
+        }
+
+        return num;
+    }
+
+    public static boolean isNumber(char c) {
+        int n = c - 48;
+        if (n >= 0 && n <= 9) {
+            return true;
+        }
+
+        return false;
+    }
+}
+```
+# 21.打印最长递增子序列
+```java
+package algorithm;
+
+/*
+
+ */
+public class LongestIncreasingSubsequence {
+    public static void main(String[] args) {
+        int[] arr = {0, 1, 0, 3, 2, 3};
+        int[] res = longestIncreasingSubsequence(arr);
+        for (int i = 0; i < res.length; ++i) {
+            System.out.print(res[i] + " ");
+        }
+    }
+
+    public static int[] longestIncreasingSubsequence(int[] arr) {
+        int size = arr.length;
+        if (size == 0 || arr == null) {
+            return null;
+        }
+
+        // 记录当前各元素作为最大元素的最长递增序列长度
+        int[] maxLen = new int[size];
+
+        // 记录当前以该元素作为最大元素的递增序列中该元素的前驱节点，用于打印序列用
+        int[] pre = new int[size];
+
+        for (int i = 0; i < size; ++i) {
+            maxLen[i] = 1;
+            pre[i] = i;
+        }
+
+        int k = 0;
+        int m = 1;
+        for (int i = 0; i < size; ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (arr[j] < arr[i] && maxLen[j] + 1 > maxLen[i]) {
+                    maxLen[i] = maxLen[j] + 1;
+                    pre[i] = j;
+                }
+
+                if (m < maxLen[i]) {
+                    m = maxLen[i];
+                    k = i;
+                }
+            }
+        }
+
+        int i = m - 1;
+        int[] res = new int[m];
+        while (pre[k] != k) {
+            res[i--] = arr[k];
+            k = pre[k];
+        }
+
+        res[i] = arr[k];
+
+        return res;
+    }
+}
+```
+# 22.打印最长连续递增子序列
+```java
+package algorithm;
+
+public class LongestContinuousIncreasingSubsequence {
+    public static void main(String[] args) {
+        int[] arr = {4, 1, 2, 5, 0, 3, 6, 8};
+        longestContinuousIncreasingSubsequence(arr);
+    }
+
+    public static void longestContinuousIncreasingSubsequence(int[] arr) {
+        int size = arr.length;
+        if (size == 0 || arr == null) {
+            return;
+        }
+
+        int curLen = 1;
+        int maxLen = 1;
+        int index = 0;
+        for (int i = 1; i < size; ++i) {
+            if (arr[i] > arr[i - 1]) {
+                ++curLen;
+                if (curLen > maxLen) {
+                    maxLen = curLen;
+                    index = i;
+                }
+            } else {
+                curLen = 1;
+            }
+        }
+
+        int i = index - maxLen + 1;
+        while (maxLen != 0) {
+            System.out.print(arr[i] + "\t");
+            ++i;
+            maxLen--;
+        }
+    }
+}
+```
+# 22.没有优先级的"+","-","x"
+```java
+package algorithm;
+
+import java.util.Scanner;
+
+//没有优先级的"+","-","x"
+public class NoPriority {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String str = sc.nextLine();
+        int res = noPriority(str);
+        System.out.println(res);
+    }
+
+    public static int noPriority(String str) {
+        int size = str.length();
+        if (size == 0 || str.isEmpty()) {
+            return 0;
+        }
+
+        int res = str.charAt(0) - '0';
+        for (int i = 1; i < size; ++i) {
+            int cur = str.charAt(i) - '0';
+            if (cur >= 0 && cur <= 9) {
+                int pre = str.charAt(i - 1);
+                if (pre == '+') {
+                    res += cur;
+                } else if (pre == '-') {
+                    res -= cur;
+                } else if (pre == '*') {
+                    res *= cur;
+                }
+            }
+        }
+
+        return res;
+    }
+}
+```
+# 23.在不使用循环的条件下，如何计算出一个数其2的n次方的最大数字（这个比较绕，例如17-->16，31-- >16）
+```java
+package algorithm;
+
+public class Max2N {
+    public static void main(String[] args) {
+        System.out.println(max2N(17));
+        System.out.println(max2N(31));
+    }
+
+    public static int max2N(int n) {
+        if ((n > 0) && (n & (n - 1)) == 0) {
+            return n;
+        }
+
+        return max2N(n - 1);
+    }
+}
+```
+# 24.未排序数组中累加和为给定值的最长子数组的长度
+```java
+package algorithm;
+
+import java.util.HashMap;
+
+public class MaxLength {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 1, 1, 1};
+        int target = 3;
+        System.out.println(maxLength(arr, target));
+        System.out.println(maxLength2(arr, target));
+    }
+
+    /**
+     * 0到位置i的累加和我们用sum[0~i]，存在j使得sum[0~j] - sum[0~i] = k，则k = sum[i+1~j]
+     * 补充题目1：给定一个无序数组 arr，其中元素可正、可负、可 0。
+     * 求 arr 所有的子数组中正数与负数个数相等的最长子数组长度。
+     * 要求：时间复杂度 O(N)
+     * 分析：将数组中的正数变成1，负数变成-1,零仍然为零。然后求累加和为0的最长子数组，
+     * 这样就将这个问题转化成未排序数组中累加和为给0的最长子数组问题了。
+     * 补充题目2：给定一个无序数组 arr，其中元素只是 1 或 0。求 arr 所有的子数组中 0 和 1 个 数相等的最长子数组长度。
+     * 要求：时间复杂度 O(N)
+     * 分析：将数组中的0变成-1,1仍然为1，求累加和为0的最长子数组，可以求出1和-1个数相同，代表着0和1个数相同。
+     * <p>
+     * 方法一：
+     */
+    public static int maxLength(int[] arr, int target) {
+        int size = arr.length;
+        if (size == 0 || arr == null) {
+            return 0;
+        }
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(0, -1);
+        int len = 0;
+        int sum = 0;
+        for (int i = 0; i < size; ++i) {
+            sum += arr[i];
+            if (map.containsKey(sum - target)) {
+                len = (i - map.get(sum - target)) > len ? (i - map.get(sum - target)) : len;
+            }
+            if (!map.containsKey(sum)) {
+                map.put(sum, i);
+            }
+        }
+
+        return len;
+    }
+
+    /**
+     * 方法二：使用两个指针left和right,记录从left到right之间的元素的值得和，使用一个变量len记录长度。
+     * 如果这个和大于目标，那么left加1，如果这个和小于目标，那么right加1,如果这个值等于目标，那么比较并更新len，
+     * 同时left++。right超过最右边的时候结束循环。
+     */
+    public static int maxLength2(int[] arr, int target) {
+        int size = arr.length;
+        if (size == 0 || arr == null) {
+            return 0;
+        }
+
+        int left = 0;
+        int right = 0;
+        int len = 0;
+        int sum = 0;
+        while (right < size) {
+            if (sum < target) {
+                ++right;
+                if (right == size) {
+                    break;
+                }
+                sum += arr[right];
+            } else if (sum > target) {
+                sum += arr[left];
+                ++left;
+            } else {
+                len = Math.max(len, right - left + 1);
+                sum -= arr[left++];
+            }
+        }
+
+        return len;
+    }
+}
+```
+# 25.N的阶乘二进制表示的最低位1的位置
+```java
+package algorithm;
+
+public class PosOfOneBinary {
+    public static void main(String[] args) {
+        System.out.println(posOfOneBinary(3));
+    }
+
+    /*
+        这个问题实际上等同于求N!含有质因数2的个数+1。即答案等于N!含有质因数2的个数加1。 
+        如果一个质数是某个数的因数，那么就说这个质数是这个数的质因数。因为每存在一个2，则在数的最低位多1个0。
+        实际上N！都为偶数，因为质因数里面都有一个2，除了1以外，因为1的阶乘是1，是个奇数，其他数的阶乘都是偶数。
+     */
+    public static int posOfOneBinary(int n) {
+        if (n < 0) {
+            return -1;
+        }
+
+        int res = 0;
+        while (n != 0) {
+            n >>= 1;
+            res += n;
+        }
+
+        return (res + 1);
+    }
+}
+```
+# 26.输入一个正整数N，输出大于N且最接近这个数的素数
+```java
+package algorithm;
+
+public class FindPrime {
+    public static void main(String[] args) {
+        FindPrime findPrime = new FindPrime();
+        findPrime.findPrime(34);
+        findPrime.findPrime(9);
+    }
+
+    private static void findPrime(int n) {
+        if (n <= 1) {
+            System.out.println(2);
+        }
+        while (n > 0) {
+            if (!isPrime(n)) {
+                ++n;
+            } else {
+                System.out.println(n);
+                break;
+            }
+        }
+    }
+
+    private static boolean isPrime(int n) {
+        if (n == 0 || n == 1) {
+            return false;
+        }
+        for (int i = 2; i <= Math.sqrt(n); ++i) {
+            if (n % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+# 27.字符串转换float
+```java
+package algorithm;
+
+public class StringToFloat {
+    public static void main(String[] args) {
+        StringToFloat stf = new StringToFloat();
+        float res = stf.stringToFloat("89.432");
+        System.out.println(res);
+    }
+
+    public float stringToFloat(String str) {
+        int size = str.length();
+        if (str.isEmpty() || size == 0) {
+            return Float.MIN_VALUE;
+        }
+
+        float res = 0;
+        int sign = 1;
+        if (str.charAt(0) == '+') {
+            sign = 1;
+        } else if (str.charAt(0) == '-') {
+            sign = -1;
+        } else if (str.charAt(0) >= '0' && str.charAt(0) <= '9') {
+            res += str.charAt(0) - '0';
+        } else {
+            return Float.MIN_VALUE;
+        }
+
+        int index = str.indexOf('.');
+        for (int i = 1; i < index; ++i) {
+            if (str.charAt(i) < '0' || str.charAt(i) > '9') {
+                return Float.MIN_VALUE;
+            }
+            res = res * 10 + (str.charAt(i) - '0');
+        }
+
+        float total = 0;
+        for (int i = index + 1; i < size; ++i) {
+            if (str.charAt(i) < '0' || str.charAt(i) > '9') {
+                return Float.MIN_VALUE;
+            }
+            total = total * 10 + (str.charAt(i) - '0');
+        }
+
+        int pos = 1;
+        for (int i = 0; i < (size - index - 1); ++i) {
+            pos *= 10;
+        }
+
+        total = total / pos;
+
+        return sign == 1 ? (res + total) : -(res + total);
+    }
+}
+```
+# 28.字符串数组的字符串是否都能首尾相接
+```java
+package algorithm;
+
+import java.util.*;
+
+public class StrOrgEnd {
+    public static void main(String[] args) {
+        String[] str = {"gj", "jl", "dg", "ad", "gg"};
+        String[] str2 = {"aes", "dwewe", "ea", "sd"};
+        String[] str3 = {"as", "st", "ta", "ar"};
+        StrOrgEnd sre = new StrOrgEnd();
+        System.out.println(sre.strOrgEnd(str));
+        System.out.println(sre.strOrgEnd(str2));
+        System.out.println(sre.strOrgEnd(str3));
+        System.out.println("------------------");
+        sre.strOrgEnd2(str);
+    }
+
+    public boolean strOrgEnd(String[] str) {
+        //用于保存字符串的首尾字符
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < str.length; ++i) {
+            char start = str[i].charAt(0);
+            char end = str[i].charAt(str[i].length() - 1);
+            sb.append(start).append(end);
+        }
+
+        char[] chars = sb.toString().toCharArray();
+        //用于保存字符出现的个数
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < chars.length; ++i) {
+            char key = chars[i];
+            if (map.containsKey(key)) {
+                int value = map.get(key);
+                map.put(key, ++value);
+            } else {
+                map.put(key, 1);
+            }
+        }
+
+        Collection collection = map.values();
+        Iterator<Integer> iter = collection.iterator();
+        while (iter.hasNext()) {
+            int count = iter.next();
+            if (count % 2 != 0) {
+                //如果有一个不是出现偶数次,则说明不能组成环
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void strOrgEnd2(String[] str) {
+        int size = str.length;
+        if (size == 0) {
+            return;
+        }
+
+        strOrgEndhelper(str, 0);
+    }
+
+    public void strOrgEndhelper(String[] str, int k) {
+        if (k == str.length) {
+            System.out.println(Arrays.toString(str));
+            return;
+        }
+        for (int i = k; i < str.length; ++i) {
+            /**
+             *  交换k+1和i
+             *  k=0,表明为第一个字符串，必须和自己以及后面每一个交换
+             *  k>0时，假设0-(k-1)是排序好的，需比较k-1和i的顺序
+             */
+            if ((k > 0 && judge(str[k - 1], str[i])) || k == 0) {
+                swap(str, k, i);
+                strOrgEndhelper(str, k + 1);
+                swap(str, k, i);
+            }
+        }
+    }
+
+    private boolean judge(String str1, String str2) {
+        if (str1.charAt(str1.length() - 1) == str2.charAt(0)) {
+            return true;
+        }
+        return false;
+    }
+
+    private void swap(String[] str, int i, int j) {
+        String tmp = str[i];
+        str[i] = str[j];
+        str[j] = tmp;
+    }
+}
+```
+# 29.递归求和
+```java
+package algorithm;
+
+public class SumWithRecur {
+    public static void main(String[] args) {
+        SumWithRecur sumWithRecur = new SumWithRecur();
+        int sum = sumWithRecur.sumWithRecur(5);
+        System.out.println(sum);
+    }
+
+    public int sumWithRecur(int n) {
+        if (n == 1) {
+            return 1;
+        }
+
+        return sumWithRecur(n - 1) + n;
+    }
+}
+```
+# 30.递归算法判断一个数组是否是递增数组
+```java
+package algorithm;
+
+public class ArrayIsIncrement {
+    public static void main(String[] args) {
+        ArrayIsIncrement main = new ArrayIsIncrement();
+        int[] arr = {1, 2, 3, 4, 5, 6, 7};
+        System.out.println(main.arrayIsIncrement(arr, arr.length));
+        int[] ar = {0, 9, 4};
+        System.out.println(main.arrayIsIncrement(ar, ar.length));
+    }
+
+    public boolean arrayIsIncrement(int[] arr, int size) {
+        if (size == 1) {
+            return true;
+        }
+
+        return arr[size - 1] >= arr[size - 2] && arrayIsIncrement(arr, size - 1);
+    }
+}
+```
+# 31.二分查找的递归与非递归实现
+```java
+package algorithm;
+
+public class BinarySearch {
+    public static void main(String[] args) {
+        int arr[] = {1, 2, 3, 5, 7, 9, 11};
+        int target = 7;
+        BinarySearch bs = new BinarySearch();
+        int index = bs.binarySearchRecur(arr, 0, arr.length - 1, target);
+        System.out.println(index);
+        index=bs.binarySearch(arr,target);
+        System.out.println(index);
+    }
+
+    public int binarySearch(int[] arr, int target) {
+        int size = arr.length;
+        if (size == 0 || arr == null) {
+            return -1;
+        }
+
+        int start = 0;
+        int end = size - 1;
+        int mid = 0;
+        while (start <= end) {
+            mid = (start + end) >> 1;
+            if (arr[mid] > target) {
+                end = mid - 1;
+            } else if (arr[mid] < target) {
+                start = mid + 1;
+            } else {
+                while (mid - 1 >= 0) {
+                    if (arr[mid - 1] == target) {
+                        --mid;
+                    } else {
+                        break;
+                    }
+                }
+
+                return mid;
+            }
+        }
+
+        return -1;
+    }
+
+    public int binarySearchRecur(int[] arr, int start, int end, int target) {
+        if (start > end) {
+            return -1;
+        }
+
+        int mid = (start + end) >> 1;
+        if (arr[mid] == target) {
+            return mid;
+        } else if (arr[mid] > target) {
+            return binarySearchRecur(arr, start, mid - 1, target);
+        } else {
+            return binarySearchRecur(arr, mid + 1, end, target);
+        }
+    }
+}
+```
+# 32.正整数序列Q中的每个元素都至少能被正整数a和b中的一个整除，现给定a和b，如何计算出Q中的前N项？
+# 33.如何判断一个整数 x 是否可以表示成 n（n >= 2）个连续正整数的和?
+# 34.给一个由n-1个数组成的未经排序的数列，其元素都是1—n中的不同的整数。找出缺失的整数？
+# 35.求两个数组的交集
+# 36.如何判断一个数组中的数值是否连续相邻
+# 37.找出数组中重复数字最多的数
+# 38.将数组的后m个数移动为前m个数
+# 39.找出数组中出现奇数次的元素：有一个整数数组arr，其中的元素只有一个元素出现奇数次，请找出这个元素。
+# 40.数组a[N]，1-N-1这（N-1）个数存放在a[N]中，其中某个数重复一次，找出这个数。时间复杂度不超过
+# 41.一个序列先增后减，求峰值
+# 42.递归求数组的和
+# 43.输入一个字符串，输出该字符串中字符的所有组合。举个例子，如果输入abc，它的组合有a、b、c、ab、ac、bc、abc
+# 44.在两个数组中寻找两个数的和等于指定的数值
+# 45.不用两个指针求有环单链表的结点数
+# 46.计算给定的日期是一年中的第多少天
+# 47.求A的B次的后三位
+# 48.
+# 49.
+# 50.

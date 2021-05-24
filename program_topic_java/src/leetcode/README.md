@@ -5356,6 +5356,146 @@ public class lc109 {
     }
 }
 ```
+# 146.LRU缓存机制
+```java
+package leetcode;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+
+/*
+运用你所掌握的数据结构，设计和实现一个LRU (最近最少使用) 缓存机制 。
+实现 LRUCache 类：
+LRUCache(int capacity) 以正整数作为容量capacity 初始化 LRU 缓存
+int get(int key) 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 。
+void put(int key, int value)如果关键字已经存在，则变更其数据值；如果关键字不存在，则插入该组「关键字-值」。
+当缓存容量达到上限时，它应该在写入新数据之前删除最久未使用的数据值，从而为新的数据值留出空间。
+
+进阶：你是否可以在O(1) 时间复杂度内完成这两种操作？
+
+示例：
+输入
+["LRUCache", "put", "put", "get", "put", "get", "put", "get", "get", "get"]
+[[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]
+
+输出
+[null, null, null, 1, null, -1, null, -1, 3, 4]
+
+解释
+LRUCache lRUCache = new LRUCache(2);
+lRUCache.put(1, 1); // 缓存是 {1=1}
+lRUCache.put(2, 2); // 缓存是 {1=1, 2=2}
+lRUCache.get(1);    // 返回 1
+lRUCache.put(3, 3); // 该操作会使得关键字 2 作废，缓存是 {1=1, 3=3}
+lRUCache.get(2);    // 返回 -1 (未找到)
+lRUCache.put(4, 4); // 该操作会使得关键字 1 作废，缓存是 {4=4, 3=3}
+lRUCache.get(1);    // 返回 -1 (未找到)
+lRUCache.get(3);    // 返回 3
+lRUCache.get(4);    // 返回 4
+
+提示：
+1 <= capacity <= 3000
+0 <= key <= 3000
+0 <= value <= 104
+最多调用 3 * 104 次 get 和 put
+ */
+public class lc146 {
+    private Queue<Integer> que;
+    private Map<Integer, Integer> m;
+    private int cap;
+
+    public lc146(int capacity) {
+        this.que = new LinkedList<>();
+        this.m = new HashMap<Integer, Integer>();
+        this.cap = capacity;
+    }
+
+    public int get(int key) {
+        if (m.containsKey(key)) {
+            que.remove(new Integer(key));
+            que.add(key);
+            return m.get(key);
+        } else {
+            return -1;
+        }
+    }
+
+    public void put(int key, int value) {
+        if (m.containsKey(key)) {
+            que.remove(new Integer(key));
+        }
+
+        if (que.size() == cap) {
+            int val = que.poll();
+            m.remove(val);
+        }
+
+        que.add(key);
+        m.put(key, value);
+    }
+}
+```
+# 172.阶乘后的零
+```java
+package leetcode;
+
+/*
+给定一个整数n，返回n!结果尾数中零的数量。
+
+示例 1:
+输入: 3
+输出: 0
+解释:3! = 6, 尾数中没有零。
+
+示例2:
+输入: 5
+输出: 1
+解释:5! = 120, 尾数中有1个零.
+说明: 你算法的时间复杂度应为O(logn)。
+ */
+public class lc172 {
+    /*
+        N的阶乘可以分解为:2的X次方，3的Y次方，4的K次方，5次Z方，.....的乘积。
+        由于10 = 2 * 5,所以M只能和X和Z有关，每一对2和5相乘就可以得到一个10，
+        于是M = MIN(X,Z),不难看出X大于Z，因为被2整除的频率比被5整除的频率高的多。
+        所以可以把公式简化为M=Z。
+     */
+    public int trailingZeroes(int n) {
+        if (n < 0) {
+            return 0;
+        }
+        int res = 0;
+        for (int i = 5; i <= n; ++i) {
+            int j = i;
+            while (j % 5 == 0) {
+                ++res;
+                j = j / 5;
+            }
+        }
+        return res;
+    }
+
+    /*
+        时间复杂度:O(logn)。在这种方法中,将n除以5的每个幂。根据定义，5的log5n幂小于或等于n。
+        由于乘法和除法在32位整数范围内，将这些计算视为O(1)。因此，正在执行log5nxO(1)=logn操作
+        空间复杂度:O(1)，只是用了常数空间。
+     */
+    public int trailingZeroes2(int n) {
+        int zeroCount = 0;
+        while (n > 0) {
+            n /= 5;
+            zeroCount += n;
+        }
+        return zeroCount;
+    }
+}
+```
+
+
+
+
 
 
 
@@ -5484,6 +5624,172 @@ public class lc228 {
 }
 ```
 
+# 300.最长递增子序列
+题目链接            
+https://leetcode-cn.com/problems/longest-increasing-subsequence/           
+https://leetcode.com/problems/longest-increasing-subsequence/               
+```java
+package leetcode;
+
+/*
+给你一个整数数组nums ，找到其中最长严格递增子序列的长度。
+子序列是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，[3,6,2,7] 是数组 [0,3,1,6,2,2,7] 的子序列。
+
+示例 1：
+输入：nums = [10,9,2,5,3,7,101,18]
+输出：4
+解释：最长递增子序列是 [2,3,7,101]，因此长度为 4 。
+
+示例 2：
+输入：nums = [0,1,0,3,2,3]
+输出：4
+
+示例 3：
+输入：nums = [7,7,7,7,7,7,7]
+输出：1
+
+提示：
+1 <= nums.length <= 2500
+-104 <= nums[i] <= 104
+
+进阶：
+你可以设计时间复杂度为 O(n2) 的解决方案吗？
+你能将算法的时间复杂度降低到O(nlog(n)) 吗?
+ */
+public class lc300 {
+    /*
+        方法一：动态规划
+        dp[i]表示以nums[i]这个数结尾的最长递增子序列的长度。
+        时间复杂度：O(n^2)，其中n为数组nums的长度。动态规划的状态数为n，计算状态dp[i] 时，需要O(n)的时间遍历dp[0…i−1]的所有状态，所以总时间复杂度为O(n^2)
+        空间复杂度：O(n)，需要额外使用长度为n的dp数组。
+     */
+    public int lengthOfLIS(int[] nums) {
+        int size = nums.length;
+        if (size == 0) {
+            return 0;
+        }
+
+        int[] dp = new int[size];
+        dp[0] = 1;
+
+        int maxLen = 1;
+        for (int i = 1; i < size; ++i) {
+            dp[i] = 1;
+            for (int j = 0; j < i; ++j) {
+                if (nums[i] > nums[j]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+            maxLen = Math.max(maxLen, dp[i]);
+        }
+
+        return maxLen;
+    }
+
+    /*
+           只能把点数小的牌压到点数比它大的牌上；如果当前牌点数较大没有可以放置的堆，则新建一个堆，把这张牌放进去；
+           如果当前牌有多个堆可供选择，则选择最左边的那一堆放置。
+           时间复杂度：O(nlogn)。
+           空间复杂度：O(n)，需要额外使用长度为n的数组。
+     */
+    public int lengthOfLIS2(int[] nums) {
+        int[] top = new int[nums.length];
+
+        // 牌堆数初始化为0
+        int piles = 0;
+        for (int i = 0; i < nums.length; i++) {
+            // 要处理的扑克牌
+            int poker = nums[i];
+
+            /**搜索左侧边界的二分查找 **/
+            int left = 0, right = piles;
+            while (left < right) {
+                int mid = (left + right) / 2;
+                if (top[mid] > poker) {
+                    right = mid;
+                } else if (top[mid] < poker) {
+                    left = mid + 1;
+                } else {
+                    right = mid;
+                }
+            }
+
+            // 没找到合适的牌堆，新建一堆
+            if (left == piles) {
+                piles++;
+            }
+
+            // 把这张牌放到牌堆顶
+            top[left] = poker;
+        }
+
+        // 牌堆数就是LIS长度
+        return piles;
+    }
+}
+```
+# 322.零钱兑换
+题目链接        
+https://leetcode-cn.com/problems/coin-change/submissions/           
+https://leetcode.com/problems/coin-change/submissions/           
+```java
+package leetcode;
+
+import java.util.Arrays;
+
+/*
+给定不同面额的硬币coins和一个总金额amount。编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回-1。
+你可以认为每种硬币的数量是无限的。
+
+示例1：
+输入：coins = [1, 2, 5], amount = 11
+输出：3
+解释：11 = 5 + 5 + 1
+
+示例 2：
+输入：coins = [2], amount = 3
+输出：-1
+
+示例 3：
+输入：coins = [1], amount = 0
+输出：0
+
+示例 4：
+输入：coins = [1], amount = 1
+输出：1
+
+示例 5：
+输入：coins = [1], amount = 2
+输出：2
+
+提示：
+1 <= coins.length <= 12
+1 <= coins[i] <= 2^31 - 1
+0 <= amount <= 10^4
+ */
+public class lc322 {
+    /*
+        维护一个一维动态数组dp，其中dp[i]表示钱数为i时的最小硬币数的找零
+        更新dp[i]的方法就是遍历每个硬币，如果遍历到的硬币值小于等于i值时，用dp[i - coins[j]]+1来更新dp[i]，
+        所以状态转移方程为:dp[i] = min(dp[i], dp[i - coins[j]] + 1)
+     */
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, amount + 1);
+        dp[0] = 0;
+        for (int i = 1; i <= amount; ++i) {
+            for (int j = 0; j < coins.length; ++j) {
+                if (coins[j] <= i) {
+                    dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);
+                }
+            }
+        }
+
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
+}
+```
+
 # 328.奇偶链表
 题目链接    
 https://leetcode-cn.com/problems/odd-even-linked-list/      
@@ -5603,5 +5909,148 @@ public class lc543 {
     }
 }
 ```
+# 674.最长连续递增序列
+```java
+package leetcode;
 
+/*
+给定一个未经排序的整数数组，找到最长且连续递增的子序列，并返回该序列的长度。
+连续递增的子序列 可以由两个下标 l 和 r（l < r）确定，如果对于每个 l <= i < r，都有 nums[i] < nums[i + 1] ，
+那么子序列 [nums[l], nums[l + 1], ..., nums[r - 1], nums[r]] 就是连续递增子序列。
 
+示例 1：
+输入：nums = [1,3,5,4,7]
+输出：3
+解释：最长连续递增序列是 [1,3,5], 长度为3。
+尽管 [1,3,5,7] 也是升序的子序列, 但它不是连续的，因为 5 和 7 在原数组里被 4 隔开。
+
+示例 2：
+输入：nums = [2,2,2,2,2]
+输出：1
+解释：最长连续递增序列是 [2], 长度为1。
+
+提示：
+0 <= nums.length <= 104
+-109 <= nums[i] <= 109
+ */
+public class lc674 {
+    /*
+        时间复杂度：O(n)，其中n是数组nums的长度。需要遍历数组一次。
+        空间复杂度：O(1)。额外使用的空间为常数。
+     */
+    public int findLengthOfLCIS(int[] nums) {
+        int ans = 0;
+        int n = nums.length;
+        int start = 0;
+        for (int i = 0; i < n; ++i) {
+            if (i > 0 && nums[i] <= nums[i - 1]) {
+                start = i;
+            }
+            ans = Math.max(ans, i - start + 1);
+        }
+
+        return ans;
+    }
+}
+```
+# 796.旋转字符串
+题目链接            
+https://leetcode-cn.com/problems/rotate-string/             
+https://leetcode.com/problems/rotate-string/
+```java
+package leetcode;
+
+import java.util.Arrays;
+
+/*
+给定两个字符串, A和B。
+A的旋转操作就是将A最左边的字符移动到最右边。例如, 若A = 'abcde'，在移动一次之后结果就是'bcdea'。如果在若干次旋转操作之后，A能变成B，那么返回True。
+
+示例 1:
+输入: A = 'abcde', B = 'cdeab'
+输出: true
+
+示例 2:
+输入: A = 'abcde', B = 'abced'
+输出: false
+注意：
+A和B长度不超过100。
+ */
+public class lc796 {
+    /*
+        方法一：穷举法
+        时间复杂度：O(N^2)，其中N是字符串 A 的长度。
+        空间复杂度：O(1)。
+     */
+    public boolean rotateString(String A, String B) {
+        if (A.equals("") && B.equals("")) {
+            return true;
+        }
+
+        int len = A.length();
+        for (int i = 0; i < len; ++i) {
+            String begin = A.substring(0, 1);
+            String end = A.substring(1, len);
+            A = end + begin;
+            if (A.equals(B)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /*
+        方法二：判断子串
+        时间复杂度：O(N^2)，其中N是字符串 A 的长度。
+        空间复杂度：O(1)。
+     */
+    public boolean rotateString2(String A, String B) {
+        return A.length() == B.length() && (A + A).contains(B);
+    }
+
+    /*
+        方法三：KMP算法
+        时间复杂度：O(N)，其中N是字符串A的长度。
+        空间复杂度：O(N)。
+     */
+    public boolean rotateString3(String A, String B) {
+        if (A.length() != B.length()) {
+            return false;
+        }
+        int i = 0;
+        int j = -1;
+        int BSize = B.length();
+        int[] next = new int[BSize + 1];
+        next[0] = -1;
+        while (i < BSize) {
+            if (j == -1 || B.charAt(i) == B.charAt(j)) {
+                ++i;
+                ++j;
+                next[i] = j;
+            } else {
+                j = next[j];
+            }
+        }
+
+        A = A + A;
+        int ASize = A.length();
+        i = 0;
+        j = 0;
+        while (i < ASize && j < BSize) {
+            if (j == -1 || A.charAt(i) == B.charAt(j)) {
+                ++i;
+                ++j;
+            } else {
+                j = next[j];
+            }
+        }
+
+        if (j == BSize) {
+            return true;
+        }
+
+        return false;
+    }
+}
+```
