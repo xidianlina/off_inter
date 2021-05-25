@@ -1729,21 +1729,837 @@ public class BinarySearch {
 }
 ```
 # 32.正整数序列Q中的每个元素都至少能被正整数a和b中的一个整除，现给定a和b，如何计算出Q中的前N项？
+```java
+package algorithm;
+
+/*
+正整数序列Q中的每个元素都至少能被正整数a和b中的一个整除，现给定a和b，如何计算出Q中的前N项？
+例如，当 a=3，b=5，N=6时，序列为3，5，6，9，10，12。
+
+分析：可以和归并排序联系起来，给定两个数组 A、B，数组 A 存放：3 x 1，3 x 2，3 x 3，…
+数组 B 存放 5 x 1，5 x 2，5 x 3，… 有两个指针 i、j，分别指向 A、B 的第一个元素，取 Min(A[ i ], B[ j ])，
+并将较小值的指针前移，然后继续比较（即归并排序中的“合并两个有序序列“）。
+当然，实现时没有必要申请两个数组，用两个变量即可
+ */
+public class CreateQArray {
+    public static void main(String[] args) {
+        CreateQArray createArray = new CreateQArray();
+        int[] res = createArray.createArray(3, 5, 6);
+        for (int i = 0; i < res.length; ++i) {
+            System.out.print(res[i] + "\t");
+        }
+    }
+
+    public int[] createArray(int a, int b, int n) {
+        int[] res = new int[n];
+        if (n <= 0) {
+            return null;
+        }
+
+        int i = 1, j = 1;
+        int k = 0;
+        while (k < n) {
+            if (i * a < j * b) {
+                res[k++] = i * a;
+                ++i;
+            } else {
+                res[k++] = j * b;
+                ++j;
+            }
+        }
+
+        return res;
+    }
+}
+```
 # 33.如何判断一个整数 x 是否可以表示成 n（n >= 2）个连续正整数的和?
+```java
+package algorithm;
+
+/*
+如何判断一个整数x是否可以表示成 n（n >= 2）个连续正整数的和。
+分析：假设x可以表示成n（n >= 2）个连续正整数的和，那么x = m + (m + 1) + (m + 2) + … + (m + n - 1)，
+其中m为分解成的连续整数中最小的那一个（且 m 是大于等于 1 的正整数），可推出 x = (2m + n - 1)*n/2，
+变换之后 m = (2*x/n - n + 1)/2；由 m 的取值范围可知 (2*x/n - n + 1)/2 >= 1，又因为m是正整数，
+所以(2*x/n - n + 1) 一定要为偶数；否则m = (2*x/n - n + 1)/2 就是小数，不符合要求；
+（注意：(2*x/n - n + 1) 看成是 float 类型的）。给定一个 n，看 x 是否能分解成 n 个连续整数的和，
+可以判断是否存在 m，也就是 (2*x/n - n + 1) 是否是偶数的问题。
+ */
+public class ContinuousSequence {
+    public static void main(String[] args) {
+        findContinuousSequence(32, 5);
+    }
+
+    public static void findContinuousSequence(int x, int n) {
+        float tmp = (float) 2 * x / n - (float) (n - 1);
+        int m = (int) tmp / 2;
+        if ((int) tmp % 2 == 0 && m >= 1) {
+            System.out.print("x可分解为: ");
+            int start = m;
+            int end = m + n - 1;
+            while (start <= end) {
+                System.out.print(start + "\t");
+                ++start;
+            }
+            System.out.println();
+        } else {
+            System.out.println("x不可分解");
+        }
+    }
+}
+```
 # 34.给一个由n-1个数组成的未经排序的数列，其元素都是1—n中的不同的整数。找出缺失的整数？
+```java
+package algorithm;
+
+public class FindLost {
+    public static void main(String[] args) {
+        FindLost findLost = new FindLost();
+        int arr[] = {1, 2, 3, 5, 9, 7, 8, 6, 4, 11};
+        findLost.findLost(arr);
+    }
+
+    public void findLost(int[] arr) {
+        int size = arr.length;
+        if (size == 0 || arr == null) {
+            return;
+        }
+
+        int sum1 = 0;
+        int sum2 = 0;
+        for (int i = 0; i < size; ++i) {
+            sum1 += arr[i];
+            sum2 += i;
+        }
+        sum2 += size;
+
+        System.out.println((sum2 - sum1 + size + 1));
+    }
+}
+```
 # 35.求两个数组的交集
+```java
+package algorithm;
+
+import java.util.Arrays;
+
+public class IntersectArray {
+    public static void main(String[] args) {
+        IntersectArray intersectArray = new IntersectArray();
+        int[] arr1 = {9, 4, 3, 0, 2, 7, 6, 8};
+        int[] arr2 = {5, 2, 8, 1, 0, 3};
+        intersectArray.intersectArray(arr1, arr2);
+    }
+
+    public void intersectArray(int[] arr1, int[] arr2) {
+        int size1 = arr1.length;
+        int size2 = arr2.length;
+        if (arr1 == null || arr2 == null || size1 == 0 || size2 == 0) {
+            return;
+        }
+
+        Arrays.sort(arr1);
+        Arrays.sort(arr2);
+
+        int i = 0;
+        int j = 0;
+        while (i < size1 && j < size2) {
+            if (arr1[i] == arr2[j]) {
+                System.out.print(arr1[i] + "\t");
+                ++i;
+                ++j;
+            } else if (arr1[i] > arr2[j]) {
+                ++j;
+            } else {
+                ++i;
+            }
+        }
+    }
+}
+```
 # 36.如何判断一个数组中的数值是否连续相邻
+```java
+package algorithm;
+
+/*
+如何判断一个数组中的数值是否连续相邻
+一个整数数组，元素取值可能是0~65535中的任意一个数，相同数值不会重复出现；0是例外，可以反复出现。
+设计一个算法，判断这个数组中的元素是否连续相邻。
+需要注意以下4点：
+（1）数值允许是乱序的，如 8 7 5 0 6。
+（2）0可以通配任意数值，如8 7 5 0 6中的0可以通配成9或者4.
+（3）0可以多次出现。
+（4）全0算连续，只有一个非0算连续。
+分析：如果没有0的存在，要组成连续的数列，最大值和最小值的差距必须是n-1；存在0的情况下，
+只要最大值可最小值的差距小于n-1就可以了，缺失的数值可以用0通配。所以找出数列中非0的最大值和非0的最小值，
+时间复杂度为O(n)。如果非0最大-非0最小+1<n，即非0最大-非0最小<=n-1，则这n个数值连续相邻。否则，不连续相邻。
+因此，总体复杂度为O(n)。
+ */
+public class ArrayIsContinues {
+    public static void main(String[] args) {
+        ArrayIsContinues isContinues = new ArrayIsContinues();
+        int[] arr = {8, 7, 5, 0, 6, 10, 12};
+        System.out.println(isContinues.arrayIsContinues(arr));
+    }
+
+    public boolean arrayIsContinues(int[] arr) {
+        int size = arr.length;
+        if (size == 0 || arr == null) {
+            return true;
+        }
+
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < size; ++i) {
+            if (arr[i] != 0) {
+                if (arr[i] > max) {
+                    max = arr[i];
+                }
+                if (arr[i] < min) {
+                    min = arr[i];
+                }
+            }
+        }
+
+        return (max - min) <= (size - 1) ? true : false;
+    }
+}
+```
 # 37.找出数组中重复数字最多的数
+```java
+package algorithm;
+
+public class DuplicateMaxCount {
+    public static void main(String[] args) {
+        DuplicateMaxCount maxCount = new DuplicateMaxCount();
+        int[] arr = {9, 3, 5, 2, 1, 6, 3, 1, 2, 4, 5, 3, 5};
+        int res = maxCount.duplicateMaxCount(arr);
+        System.out.println(res);
+    }
+
+    public int duplicateMaxCount(int[] arr) {
+        int size = arr.length;
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+
+        for (int i = 0; i < size; ++i) {
+            if (max < arr[i]) {
+                max = arr[i];
+            }
+
+            if (min > arr[i]) {
+                min = arr[i];
+            }
+        }
+
+        int[] helper = new int[max - min + 1];
+        for (int i = 0; i < size; ++i) {
+            ++helper[arr[i] - min];
+        }
+
+        int count = 0;
+        int res = 0;
+        for (int i = 0; i < size; ++i) {
+            if (helper[arr[i] - min] > count) {
+                count = helper[arr[i] - min];
+                res = arr[i];
+            }
+        }
+
+        return res;
+    }
+}
+```
 # 38.将数组的后m个数移动为前m个数
+```java
+package algorithm;
+
+public class MoveArrayReverse {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5, 6, 7, 8};
+        MoveArrayReverse mr = new MoveArrayReverse();
+        mr.printArray(arr);
+        mr.moveArrayReverse(arr, 3);
+        mr.printArray(arr);
+    }
+
+    public void moveArrayReverse(int[] arr, int n) {
+        int size = arr.length;
+        if (size == 0 || arr == null) {
+            return;
+        }
+
+        int m = size - n;
+        reverse(arr, 0, m - 1);
+        reverse(arr, m, size - 1);
+        reverse(arr, 0, size - 1);
+    }
+
+    public void reverse(int[] arr, int i, int j) {
+        int size = arr.length;
+        if (size == 0 || arr == null) {
+            return;
+        }
+
+        int tmp = 0;
+        while (i < j) {
+            tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+            ++i;
+            --j;
+        }
+    }
+
+    public void printArray(int[] arr) {
+        int size = arr.length;
+        if (size == 0 || arr == null) {
+            return;
+        }
+
+        for (int i = 0; i < size; ++i) {
+            System.out.print(arr[i] + "\t");
+        }
+        System.out.println(arr[size - 1]);
+    }
+}
+```
 # 39.找出数组中出现奇数次的元素：有一个整数数组arr，其中的元素只有一个元素出现奇数次，请找出这个元素。
+```java
+package algorithm;
+
+/*
+找出数组中出现奇数次的元素：有一个整数数组arr，其中的元素只有一个元素出现奇数次，请找出这个元素。
+对于任意一个数k，有k^k = 0，k^0 = k，所以将arr中所有元素进行异或，那么出现次数为偶数的元素异或后都变成了0，出现次数为奇数的元素异或后得到元素本身。
+ */
+public class OddElement {
+    public static void main(String[] args) {
+        OddElement oe = new OddElement();
+        int[] arr = {1, 2, 3, 4, 2, 1, 4, 3, 2};
+        int res = oe.oddElement(arr);
+        System.out.println(res);
+    }
+
+    public int oddElement(int[] arr) {
+        int res = 0;
+        for (int i = 0; i < arr.length; ++i) {
+            res ^= arr[i];
+        }
+
+        return res;
+    }
+}
+```
 # 40.数组a[N]，1-N-1这（N-1）个数存放在a[N]中，其中某个数重复一次，找出这个数。时间复杂度不超过
+```java
+package algorithm;
+
+public class OnlyRepeateOnce {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 3, 4, 5, 6, 7};
+        OnlyRepeateOnce oto = new OnlyRepeateOnce();
+        int rep = oto.onlyRepeateOnce(arr);
+        System.out.println(rep);
+        int res = oto.onlyRepeate(arr);
+        System.out.println(res);
+    }
+
+    public int onlyRepeateOnce(int[] arr) {
+        int size = arr.length;
+        if (size == 0 || arr == null) {
+            return -1;
+        }
+
+        int res = 0;
+        for (int i = 0; i < size; ++i) {
+            res ^= arr[i];
+        }
+
+        for (int i = 1; i < size; ++i) {
+            res ^= i;
+        }
+
+        return res;
+    }
+
+    /*
+        数学推导法: 不重复时sum=1+2+...+ d + (d+1)...+N；现在less=1+2+...+ d + d + (d+1)+...+(N-1)。
+        sum和less都有N个数，由于less中只有一个重复的数字d，则必有1<=d<=(N-1)，sum>less。
+        sum - less = 0+0+...+ 0 + (-d) + 0...0 + N =(N-d)。所以重复的d=N-(sum-less)。
+     */
+    public int onlyRepeate(int[] arr) {
+        int size = arr.length;
+        if (size == 0 || arr == null) {
+            return -1;
+        }
+        int sum = 0;
+        int less = 0;
+        for (int i = 1; i <= size; ++i) {
+            sum += i;
+        }
+        for (int i = 0; i < size; ++i) {
+            less += arr[i];
+        }
+        int res = size - (sum - less);
+        return res;
+    }
+}
+```
 # 41.一个序列先增后减，求峰值
+```java
+package algorithm;
+
+public class GetPeek {
+    public static void main(String[] args) {
+        int[] arr = {3, 4, 5, 6, 7, 6, 4, 1, 0};
+        GetPeek gp = new GetPeek();
+        gp.getPeek(arr);
+    }
+
+    public void getPeek(int[] arr) {
+        int size = arr.length;
+        if (size == 0 || arr == null) {
+            return;
+        }
+
+        for (int i = 1; i < size; ++i) {
+            if (arr[i] < arr[i - 1]) {
+                System.out.println(arr[i - 1]);
+                break;
+            }
+        }
+    }
+}
+```
 # 42.递归求数组的和
+```java
+package algorithm;
+
+public class RecurSum {
+    public static void main(String[] args) {
+        RecurSum r = new RecurSum();
+        int[] arr = {9, 3, 1, 5, 2};
+        int sum = r.recurSum(arr, arr.length);
+        System.out.println(sum);
+    }
+
+    public int recurSum(int[] arr, int n) {
+        if (n == 0 || arr == null) {
+            return 0;
+        }
+
+        return recurSum(arr, n - 1) + arr[n - 1];
+    }
+}
+```
 # 43.输入一个字符串，输出该字符串中字符的所有组合。举个例子，如果输入abc，它的组合有a、b、c、ab、ac、bc、abc
+```java
+package algorithm;
+
+public class Combinations {
+    public static void main(String[] args) {
+        String str = "abc";
+        Combinations cbs = new Combinations();
+        cbs.combinations(str);
+        System.out.println("-------------");
+        cbs.printAllCombination(str);
+    }
+
+    /*
+        假设想在长度为n的字符串中求m个字符的组合。 先从头扫描字符串的第一个字符。针对第一个字符，
+        有两种选择：一是把这个字符放到组合中去，接下来需要在剩下的n-1个字符中选取m-1个字符；
+        二是不把这个字符放到组合中去，接下来需要在剩下的n-1个字符中选择m个字符。
+     */
+    public void combinations(String str) {
+        if (str.isEmpty()) {
+            return;
+        }
+
+        int size = str.length();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < size; ++i) {
+            helper(str, 0, i, sb);
+        }
+    }
+
+    public void helper(String str, int index, int num, StringBuilder sb) {
+        if (num == -1) {
+            System.out.println(sb.toString());
+            return;
+        }
+        if (index == str.length()) {
+            return;
+        }
+        sb.append(str.charAt(index));
+        helper(str, index + 1, num - 1, sb);
+        sb.deleteCharAt(sb.length() - 1);
+        helper(str, index + 1, num, sb);
+    }
+
+    /*
+        利用位操作来简化题目，即给所有输出方式进行编号（1 ~ 2^n-1）
+        0 0 1 --> a
+        0 1 0 --> b
+        0 1 1 --> ab
+        1 0 0 --> c
+        1 0 1 --> ac
+        1 1 0 --> bc
+        1 1 1 --> abc
+     */
+    public void printAllCombination(String s) {
+        int size = s.length();
+        int comb_count = 1 << size;
+        for (int i = 1; i < comb_count; ++i) {
+            for (int j = 0; j < size; ++j) {
+                if ((i & (1 << j)) != 0) {
+                    System.out.print(s.charAt(j) + "\t");
+                }
+            }
+            System.out.println();
+        }
+    }
+}
+```
 # 44.在两个数组中寻找两个数的和等于指定的数值
-# 45.不用两个指针求有环单链表的结点数
-# 46.计算给定的日期是一年中的第多少天
-# 47.求A的B次的后三位
-# 48.
-# 49.
-# 50.
+```java
+package algorithm;
+
+import java.util.Arrays;
+
+public class TargetInTwoArray {
+    public static void main(String[] args) {
+        int[] arr1 = {1, 2, 0, 9, 4, 7, 3};
+        int[] arr2 = {9, 4, 3, 2, 1, 0, 8};
+        TargetInTwoArray tns = new TargetInTwoArray();
+        int target = 6;
+        tns.twoNumSumInArray(arr1, arr2, target);
+    }
+
+    private void twoNumSumInArray(int[] arr1, int[] arr2, int target) {
+        int size1 = arr1.length;
+        int size2 = arr2.length;
+        if (arr1 == null || size1 == 0 || arr2 == null || size2 == 0) {
+            return;
+        }
+        Arrays.sort(arr1);
+        Arrays.sort(arr2);
+        int i = 0;
+        int j = size2 - 1;
+        while (i < size1 && j >= 0) {
+            if (arr1[i] + arr2[j] == target) {
+                System.out.println(arr1[i] + "\t" + arr2[j]);
+                ++i;
+                --j;
+            } else if (arr1[i] + arr2[j] > target) {
+                --j;
+            } else {
+                ++i;
+            }
+        }
+    }
+}
+```
+# 45.计算给定的日期是一年中的第多少天
+```java
+package algorithm;
+
+import java.util.Scanner;
+
+public class GetDay {
+    public static void main(String[] args) {
+        GetDay gd = new GetDay();
+        Scanner sc = new Scanner(System.in);
+        int year = sc.nextInt();
+        int month = sc.nextInt();
+        int day = sc.nextInt();
+        int days = gd.getDay(year, month, day);
+        System.out.println(days);
+    }
+
+    public int getDay(int year, int month, int day) {
+        int res = 0;
+        int d = 0;
+        for (int i = 1; i < month; ++i) {
+            switch (i) {
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                case 8:
+                case 10:
+                case 12:
+                    d = 31;
+                    res += d;
+                    break;
+                case 2:
+                    if ((year % 4 == 0 && year % 100 == 0) || year % 400 == 0) {
+                        d = 29;
+                    } else {
+                        d = 28;
+                    }
+                    res += d;
+                    break;
+                case 4:
+                case 6:
+                case 9:
+                case 11:
+                    d = 30;
+                    res += d;
+                    break;
+            }
+        }
+
+        return res + day;
+    }
+}
+```
+# 46.求A的B次的后三位
+```java
+package algorithm;
+
+public class LastThree {
+    public static void main(String[] args) {
+        LastThree lt = new LastThree();
+        int res = lt.lastThree(23, 9);
+        System.out.println(res);
+    }
+
+    private int lastThree(int n, int m) {
+        int last = 1;
+        for (int i = 1; i <= m; ++i) {
+            last = (last * n) % 1000;
+        }
+        return last;
+    }
+}
+```
+# 47.最长公共子序列（不连续）时间复杂度O(m*n)
+```java
+package algorithm;
+
+import java.util.Scanner;
+
+public class LongestCommonSubsequence {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("enter two string:");
+        String s1 = sc.next();
+        String s2 = sc.next();
+        int m = s1.length();
+        int n = s2.length();
+        int[][] b = new int[m][n];
+        LongestCommonSubsequence lcs = new LongestCommonSubsequence();
+        System.out.println("Length of LCS is " + lcs.longestCommonSubsequence(s1, s2, b, m, n));
+        System.out.println("打印其中的一个LCS:");
+        lcs.printLongestCommonSubsequence(b, s1, m, n);
+    }
+
+    public int longestCommonSubsequence(String s1, String s2, int[][] b, int m, int n) {
+        int[][] c = new int[m + 1][n + 1];
+        for (int i = 0; i <= m; ++i) {
+            for (int j = 0; j <= n; ++j) {
+                if (i == 0 || j == 0) {
+                    c[i][j] = 0;
+                } else {
+                    if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+                        c[i][j] = c[i - 1][j - 1];
+                        b[i - 1][j - 1] = 1;
+                    } else {
+                        if (c[i - 1][j] >= c[i][j - 1]) {
+                            c[i][j] = c[i - 1][j];
+                            b[i - 1][j - 1] = 0;
+                        } else {
+                            c[i][j] = c[i][j - 1];
+                            b[i - 1][j - 1] = -1;
+                        }
+                    }
+                }
+            }
+        }
+
+        return c[m][n];
+    }
+
+    public void printLongestCommonSubsequence(int[][] b, String s, int i, int j) {
+        if (i == 0 || j == 0) {
+            return;
+        }
+
+        if (b[i - 1][j - 1] == 1) {
+            printLongestCommonSubsequence(b, s, i - 1, j - 1);
+            System.out.print(s.charAt(i - 1));
+        } else if (b[i - 1][j - 1] == 0) {
+            printLongestCommonSubsequence(b, s, i - 1, j);
+        } else {
+            printLongestCommonSubsequence(b, s, i, j - 1);
+        }
+    }
+}
+```
+# 48.最长公共子字符串：类似最长子序列，只是公共子字符串要求必须是连续的
+```java
+package algorithm;
+
+import java.util.Arrays;
+
+public class LongestCommonSubstring {
+    public static void main(String[] args) {
+        LongestCommonSubstring ls = new LongestCommonSubstring();
+        String str1 = "123456";
+        String str2 = "14568";
+        int[][] arr = new int[str1.length() + 1][str2.length() + 1];
+        for (int i = 0; i <= str1.length(); ++i) {
+            Arrays.fill(arr[i], -1);
+        }
+        int res = ls.longCommonSubstring(str1, str2, arr);
+        System.out.println("result = " + res);
+        ls.printLongCommonSubstring(arr, str1, str1.length(), str2.length());
+    }
+
+    private int longCommonSubstring(String str1, String str2, int[][] arr) {
+        int size1 = str1.length();
+        int size2 = str2.length();
+        int max = 0;
+        int[][] dp = new int[size1 + 1][size2 + 1];
+        for (int i = 0; i <= size1; ++i) {
+            for (int j = 0; j <= size2; ++j) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 0;
+                } else if (str1.charAt(i - 1) == str2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                    arr[i][j] = 1;
+                    max = dp[i][j] > max ? dp[i][j] : max;
+                }
+            }
+        }
+        return max;
+    }
+
+    private void printLongCommonSubstring(int[][] arr, String str, int i, int j) {
+        if (i == 0 || j == 0) {
+            return;
+        }
+        if (arr[i][j] == 1) {
+            printLongCommonSubstring(arr, str, i - 1, j - 1);
+            System.out.print(str.charAt(i - 1));
+        } else if (arr[i][j] == 0) {
+            printLongCommonSubstring(arr, str, i - 1, j);
+        } else {
+            printLongCommonSubstring(arr, str, i, j - 1);
+        }
+    }
+}
+```
+# 49.M进制与N进制的转换
+```java
+package algorithm;
+
+public class MtoN {
+    public static void main(String[] args) {
+        MtoN mn = new MtoN();
+        String str = "9C";
+        String res = mn.MToN(str, 16, 8);
+        System.out.println(res);
+    }
+
+    public String MToN(String str, int m, int n) {
+        int[] charToNum = new int[256];
+        int[] numToChar = new int[256];
+
+        for (int i = 0; i <= 9; ++i) {
+            charToNum['0' + i] = i;
+            numToChar[i] = '0' + i;
+        }
+
+        for (int i = 10; i <= 35; ++i) {
+            charToNum['A' + i - 10] = i;
+            numToChar[i] = 'A' + i - 10;
+        }
+
+        int realValue = 0;
+        int maxChar = numToChar[m];
+        for (int i = 0; i < str.length(); ++i) {
+            if (str.charAt(i) >= maxChar) {
+                return "Error Input";
+            }
+
+            realValue = realValue * m + charToNum[str.charAt(i)];
+        }
+
+        String s = "";
+        while (realValue != 0) {
+            char ch = (char) numToChar[realValue % n];
+            s = ch + s;
+            realValue = realValue / n;
+        }
+
+        return s;
+    }
+}
+```
+# 50.等概率产生0和1
+```java
+package algorithm;
+
+/*
+有一个随机数发生器，以概率P产生0，概率(1-P)产生1，请问能否利用这个随机数发生器，
+构造出新的发生器，以1/2的概率产生0和1。请写明结论及推理过程。
+ */
+public class RandEqual {
+    /*
+        已知:产生0的概率为P，产生1的概率为（1-P）
+        则:产生01的概率为P（1-P），产生10的概率为（1-P）P，两者相等
+        新函数:产生01返回0，产生10返回1
+     */
+    public int getRand() {
+        int i = rand();
+        int j = rand();
+
+        int res = -1;
+        while (true) {
+            if (i == 0 && j == 1) {
+                res = 0;
+                break;
+            } else if (i == 1 && j == 0) {
+                res = 1;
+                break;
+            }
+        }
+
+        return res;
+    }
+}
+```
+# 51.求一个序列的平衡点
+```java
+package algorithm;
+
+public class FindBalance {
+    public static void main(String[] args) {
+        FindBalance fb = new FindBalance();
+        int[] arr = {5, 1, -1, 3, 2, 7, -3, 0, 4};
+        fb.findBalance(arr);
+    }
+
+    public void findBalance(int[] arr) {
+        int size = arr.length;
+        if (size == 0 || arr == null) {
+            return;
+        }
+
+        int sum = 0;
+        int subSum = 0;
+        for (int i = 0; i < size; ++i) {
+            sum += arr[i];
+        }
+
+        for (int i = 0; i < size; ++i) {
+            if (subSum == (sum - subSum - arr[i])) {
+                System.out.println("balance is " + arr[i]);
+            } else {
+                subSum += arr[i];
+            }
+        }
+    }
+}
+```
