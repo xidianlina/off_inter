@@ -1,7 +1,95 @@
 LeetCode
 ======
+# 算法题目
+### 1.两数之和
+### 2.两数相加
+### 3.无重复字符的最长子串
+### 4.寻找两个正序数组的中位数
+### 5.最长回文子串
+### 6.Z字形变换
+### 7.整数反转
+### 8.字符串转换整数(atoi)
+### 9.回文数
+### 10.正则表达式匹配
+### 11.盛最多水的容器
+### 12.整数转罗马数字
+### 13.罗马数字转整数
+### 14.最长公共前缀                      
+### 15.三数之和
+### 16.最接近的三数之和
+### 17.电话号码的字母组合
+### 18.四数之和
+### 19.删除链表的倒数第N个结点
+### 20.有效的括号
+### 21.合并两个有序链表
+### 22.括号生成
+### 23.合并K个升序链表
+### 24.两两交换链表中的节点
+### 25.K 个一组翻转链表
+### 26.删除有序数组中的重复项
+### 27.移除元素
+### 28.实现 strStr() kmp算法
+### 29.两数相除   
+### 30.串联所有单词的子串
+### 31.下一个排列
+### 32.最长有效括号            
+### 33.搜索旋转排序数组   
+### 34.在排序数组中查找元素的第一个和最后一个位置        
+### 35.搜索插入位置                   
+### 38.外观数列(数数并说)        
+### 39.组合总和                     
+### 40.组合总和II
+### 41.缺失的第一个正数
+### 42.接雨水
+### 43.字符串相乘
+### 44.通配符匹配
+### 45.跳跃游戏II
+### 46.全排列      
+### 47.全排列II
+### 48.旋转图像
+### 49.字母异位词分组
+### 50.Pow(x, n)
+### 53.最大子序和
+### 54.螺旋矩阵
+### 55.跳跃游戏
+### 56.合并区间
+### 57.插入区间
+### 58.最后一个单词的长度
+### 59.螺旋矩阵II
+### 60.排列序列
+### 61.旋转链表
+### 62.不同路径
+### 63.不同路径II
+### 64.最小路径和
+### 66.加一
+### 67.二进制求和
+### 69.x的平方根
+### 70.爬楼梯
+### 71.简化路径
+### 72.编辑距离
+### 73.矩阵置零
+### 74.搜索二维矩阵
+### 75.颜色分类
+### 76.最小覆盖子串
+### 77.组合
+### 78.子集
+### 79.单词搜索
+### 80.删除有序数组中的重复项II
+### 98.验证二叉搜索树
+### 109.有序链表转换二叉搜索树
+### 146.LRU缓存机制
+### 172.阶乘后的零
+### 206.反转链表
+### 228.汇总区间
+### 300.最长递增子序列
+### 322.零钱兑换
+### 328.奇偶链表
+### 543.二叉树的直径(二叉树中节点的最大距离)
+### 674.最长连续递增序列
+### 1143.最长公共子序列
 
-# 1.两数之和
+# 算法解答
+### 1.两数之和
 题目链接        
 https://leetcode-cn.com/problems/two-sum/       
 https://leetcode.com/problems/two-sum/      
@@ -74,7 +162,7 @@ public class lc001 {
     }
 }
 ```
-# 2.两数相加
+### 2.两数相加
 题目链接        
 https://leetcode-cn.com/problems/add-two-numbers/       
 https://leetcode.com/problems/add-two-numbers/      
@@ -135,7 +223,7 @@ public class lc002 {
     }
 }
 ```
-# 3.无重复字符的最长子串
+### 3.无重复字符的最长子串
 题目链接        
 https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/        
 https://leetcode.com/problems/longest-substring-without-repeating-characters/       
@@ -212,7 +300,7 @@ public class lc003 {
     }
 }
 ```
-# 4.寻找两个正序数组的中位数
+### 4.寻找两个正序数组的中位数
 题目连接        
 https://leetcode-cn.com/problems/median-of-two-sorted-arrays/       
 https://leetcode.com/problems/median-of-two-sorted-arrays/      
@@ -289,7 +377,7 @@ public class lc004 {
     }
 }
 ```
-# 5.最长回文子串
+### 5.最长回文子串
 题目链接        
 https://leetcode-cn.com/problems/longest-palindromic-substring/     
 https://leetcode.com/problems/longest-palindromic-substring/        
@@ -346,7 +434,7 @@ public class lc005 {
     }
 }
 ```
-# 6.Z字形变换
+### 6.Z字形变换
 题目链接        
 https://leetcode-cn.com/problems/zigzag-conversion/     
 https://leetcode.com/problems/zigzag-conversion/        
@@ -424,7 +512,7 @@ public class lc006 {
     }
 }
 ```
-# 7.整数反转
+### 7.整数反转
 题目链接        
 https://leetcode-cn.com/problems/reverse-integer/       
 https://leetcode.com/problems/reverse-integer/
@@ -466,7 +554,7 @@ public class lc007 {
     }
 }
 ```
-# 8.字符串转换整数 (atoi)
+### 8.字符串转换整数 (atoi)
 题目链接                
 https://leetcode-cn.com/problems/string-to-integer-atoi/                
 https://leetcode.com/problems/string-to-integer-atoi/
@@ -592,7 +680,7 @@ public class lc008 {
     }
 }
 ```
-# 9.回文数
+### 9.回文数
 题目链接            
 https://leetcode-cn.com/problems/palindrome-number/
 https://leetcode.com/problems/palindrome-number/
@@ -670,7 +758,7 @@ public class lc009 {
     }
 }
 ```
-# 10.正则表达式匹配
+### 10.正则表达式匹配
 题目链接            
 https://leetcode-cn.com/problems/regular-expression-matching/               
 https://leetcode.com/problems/regular-expression-matching/   
@@ -784,7 +872,7 @@ public class lc010 {
     }
 }
 ```
-# 11.盛最多水的容器
+### 11.盛最多水的容器
 题目链接            
 https://leetcode-cn.com/problems/container-with-most-water/                 
 https://leetcode.com/problems/container-with-most-water/            
@@ -850,7 +938,7 @@ public class lc011 {
     }
 }
 ```
-# 12.整数转罗马数字
+### 12.整数转罗马数字
 题目链接            
 https://leetcode-cn.com/problems/integer-to-roman/
 https://leetcode.com/problems/integer-to-roman/
@@ -922,7 +1010,7 @@ public class lc012 {
     }
 }
 ```
-# 13.罗马数字转整数
+### 13.罗马数字转整数
 题目链接                
 https://leetcode-cn.com/problems/roman-to-integer/
 https://leetcode.com/problems/roman-to-integer/
@@ -1031,7 +1119,7 @@ public class lc013 {
     }
 }
 ```
-# 14.最长公共前缀
+### 14.最长公共前缀
 题目链接                                    
 https://leetcode-cn.com/problems/longest-common-prefix/                                 
 https://leetcode.com/problems/longest-common-prefix/             
@@ -1107,7 +1195,7 @@ public class lc014 {
     }
 }
 ```                         
-# 15. 三数之和
+### 15. 三数之和
 题目链接                
 https://leetcode-cn.com/problems/3sum/                  
 https://leetcode.com/problems/3sum/              
@@ -1184,7 +1272,7 @@ public class lc015 {
     }
 }
 ```
-# 16.最接近的三数之和
+### 16.最接近的三数之和
 题目链接        
 https://leetcode-cn.com/problems/3sum-closest/          
 https://leetcode.com/problems/3sum-closest/
@@ -1243,7 +1331,7 @@ public class lc016 {
     }
 }
 ```
-# 17.电话号码的字母组合
+### 17.电话号码的字母组合
 题目链接        
 https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/             
 https://leetcode.com/problems/letter-combinations-of-a-phone-number/       
@@ -1301,7 +1389,7 @@ public class lc017 {
     }
 }
 ```
-# 18.四数之和
+### 18.四数之和
 题目链接            
 https://leetcode-cn.com/problems/4sum/        
 https://leetcode.com/problems/4sum/        
@@ -1373,7 +1461,7 @@ public class lc018 {
     }
 }
 ```
-# 19.删除链表的倒数第N个结点
+### 19.删除链表的倒数第N个结点
 题目链接        
 https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/          
 https://leetcode.com/problems/remove-nth-node-from-end-of-list/        
@@ -1429,7 +1517,7 @@ public class lc019 {
     }
 }
 ```
-# 20.有效的括号
+### 20.有效的括号
 题目链接      
 https://leetcode-cn.com/problems/valid-parentheses/         
 https://leetcode.com/problems/valid-parentheses/
@@ -1499,7 +1587,7 @@ public class lc020 {
     }
 }
 ```
-# 21.合并两个有序链表
+### 21.合并两个有序链表
 题目链接        
 https://leetcode-cn.com/problems/merge-two-sorted-lists/        
 https://leetcode.com/problems/merge-two-sorted-lists/       
@@ -1580,7 +1668,7 @@ public class lc021 {
     }
 }
 ```
-# 22.括号生成
+### 22.括号生成
 题目链接                
 https://leetcode-cn.com/problems/generate-parentheses/
 https://leetcode.com/problems/generate-parentheses/
@@ -1647,7 +1735,7 @@ public class lc022 {
     }
 }
 ```
-# 23.合并K个升序链表
+### 23.合并K个升序链表
 题目链接                
 https://leetcode-cn.com/problems/merge-k-sorted-lists/
 https://leetcode.com/problems/merge-k-sorted-lists/
@@ -1737,7 +1825,7 @@ public class lc023 {
     }
 }
 ```
-# 24.两两交换链表中的节点
+### 24.两两交换链表中的节点
 题目链接                
 https://leetcode-cn.com/problems/swap-nodes-in-pairs/                   
 https://leetcode-cn.com/problems/swap-nodes-in-pairs/           
@@ -1782,7 +1870,7 @@ public class lc024 {
     }
 }
 ```
-# 25.K 个一组翻转链表
+### 25.K 个一组翻转链表
 题目链接                
 https://leetcode-cn.com/problems/reverse-nodes-in-k-group/              
 https://leetcode.com/problems/reverse-nodes-in-k-group/             
@@ -1859,7 +1947,7 @@ public class lc025 {
     }
 }
 ```
-# 26.删除有序数组中的重复项
+### 26.删除有序数组中的重复项
 题目链接                
 https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/               
 https://leetcode.com/problems/remove-duplicates-from-sorted-array/          
@@ -1918,7 +2006,7 @@ public class lc026 {
     }
 }
 ```
-# 27.移除元素
+### 27.移除元素
 题目链接                
 https://leetcode-cn.com/problems/remove-element/                    
 https://leetcode.com/problems/remove-element/               
@@ -1977,7 +2065,7 @@ public class lc027 {
     }
 }
 ``` 
-# 28.实现 strStr() kmp算法
+### 28.实现 strStr() kmp算法
 题目链接      
 https://leetcode-cn.com/problems/implement-strstr/      
 https://leetcode.com/problems/implement-strstr/     
@@ -2106,7 +2194,7 @@ public class lc028 {
 > 像上边的例子，已经不可能找到[ A，B，A，B ]这个最长的后缀串了，但还是可能找到[ A，B ]、[ B ]这样的前缀串的。所以这个过程像不像在定位[ A，B，A，C ]这个串，当C和主串不一样了（也就是k位置不一样了），那当然是把指针移动到next[k]啦。                                             
 >                                     
 > 参考 https://www.cnblogs.com/yjiyjige/p/3263858.html
-# 29.两数相除
+### 29.两数相除
 题目链接                
 https://leetcode-cn.com/problems/divide-two-integers/               
 https://leetcode.com/problems/divide-two-integers/              
@@ -2167,7 +2255,7 @@ public class lc029 {
     }
 }
 ```              
-# 30.串联所有单词的子串
+### 30.串联所有单词的子串
 题目链接            
 https://leetcode-cn.com/problems/substring-with-concatenation-of-all-words/                 
 https://leetcode.com/problems/substring-with-concatenation-of-all-words/         
@@ -2249,7 +2337,7 @@ public class lc030 {
     }
 }
 ```   
-# 31.下一个排列
+### 31.下一个排列
 题目链接            
 https://leetcode-cn.com/problems/next-permutation/
 https://leetcode.com/problems/next-permutation/
@@ -2331,7 +2419,7 @@ public class lc031 {
     }
 }
 ``` 
-# 32.最长有效括号
+### 32.最长有效括号
 题目链接            
 https://leetcode-cn.com/problems/longest-valid-parentheses/             
 https://leetcode.com/problems/longest-valid-parentheses/     
@@ -2391,7 +2479,7 @@ public class lc032 {
     }
 }
 ```              
-# 33.搜索旋转排序数组
+### 33.搜索旋转排序数组
 题目链接            
 https://leetcode-cn.com/problems/search-in-rotated-sorted-array/            
 https://leetcode.com/problems/search-in-rotated-sorted-array/            
@@ -2460,7 +2548,7 @@ public class lc033 {
     }
 }
 ```              
-# 34.在排序数组中查找元素的第一个和最后一个位置
+### 34.在排序数组中查找元素的第一个和最后一个位置
 题目链接                
 https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/                   
 https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/           
@@ -2531,7 +2619,7 @@ public class lc034 {
     }
 }
 ```              
-# 35.搜索插入位置
+### 35.搜索插入位置
 题目链接                
 https://leetcode-cn.com/problems/search-insert-position/                
 https://leetcode.com/problems/search-insert-position/            
@@ -2584,7 +2672,7 @@ public class lc035 {
     }
 }
 ```                           
-# 38.外观数列(数数并说)
+### 38.外观数列(数数并说)
 题目链接                                    
 https://leetcode-cn.com/problems/count-and-say/                 
 https://leetcode.com/problems/count-and-say/            
@@ -2657,7 +2745,7 @@ public class lc038 {
     }
 }
 ```           
-# 39.组合总和
+### 39.组合总和
 题目链接            
 https://leetcode-cn.com/problems/combination-sum/               
 https://leetcode.com/problems/combination-sum/          
@@ -2728,7 +2816,7 @@ public class lc039 {
     }
 }
 ```                        
-# 40.组合总和 II
+### 40.组合总和 II
 题目链接            
 https://leetcode-cn.com/problems/combination-sum-ii/                              
 https://leetcode.com/problems/combination-sum-ii/               
@@ -2795,7 +2883,7 @@ public class lc040 {
     }
 }
 ```     
-# 41.缺失的第一个正数
+### 41.缺失的第一个正数
 题目链接      
 https://leetcode-cn.com/problems/first-missing-positive/          
 https://leetcode.com/problems/first-missing-positive/ 
@@ -2845,7 +2933,7 @@ public class lc041 {
     }
 }
 ```
-# 42. 接雨水
+### 42. 接雨水
 题目链接                      
 https://leetcode-cn.com/problems/trapping-rain-water/           
 https://leetcode.com/problems/trapping-rain-water/           
@@ -2943,7 +3031,7 @@ public class lc042 {
     }
 }
 ```
-# 43.字符串相乘
+### 43.字符串相乘
 题目链接                
 https://leetcode-cn.com/problems/multiply-strings/              
 https://leetcode.com/problems/multiply-strings/          
@@ -3011,7 +3099,7 @@ public class lc043 {
     }
 }
 ```
-# 44.通配符匹配
+### 44.通配符匹配
 题目链接                
 https://leetcode-cn.com/problems/wildcard-matching/             
 https://leetcode.com/problems/wildcard-matching/                
@@ -3097,7 +3185,7 @@ public class lc044 {
     }
 }
 ```
-# 45.跳跃游戏 II
+### 45.跳跃游戏 II
 题目链接                
 https://leetcode-cn.com/problems/jump-game-ii/              
 https://leetcode.com/problems/jump-game-ii/          
@@ -3176,7 +3264,7 @@ public class lc045 {
     }
 }
 ```
-# 46.全排列
+### 46.全排列
 题目链接            
 https://leetcode-cn.com/problems/permutations/              
 https://leetcode.com/problems/permutations/             
@@ -3240,7 +3328,7 @@ public class lc046 {
     }
 }
 ```              
-# 47.全排列 II
+### 47.全排列 II
 题目链接                
 https://leetcode-cn.com/problems/permutations-ii/               
 https://leetcode.com/problems/permutations-ii/           
@@ -3316,7 +3404,7 @@ public class lc047 {
     }
 }
 ```
-# 48.旋转图像
+### 48.旋转图像
 题目链接                
 https://leetcode-cn.com/problems/rotate-image/          
 https://leetcode.com/problems/rotate-image/          
@@ -3371,7 +3459,7 @@ public class lc048 {
     }
 }
 ```
-# 49.字母异位词分组
+### 49.字母异位词分组
 题目链接            
 https://leetcode-cn.com/problems/group-anagrams/            
 https://leetcode.com/problems/group-anagrams/           
@@ -3425,7 +3513,7 @@ public class lc049 {
     }
 }
 ```
-# 50.Pow(x, n)
+### 50.Pow(x, n)
 题目链接    
 https://leetcode-cn.com/problems/powx-n/        
 https://leetcode.com/problems/powx-n/
@@ -3472,7 +3560,7 @@ public class lc050 {
     }
 }
 ```
-# 53.最大子序和
+### 53.最大子序和
 题目链接      
 https://leetcode-cn.com/problems/maximum-subarray/      
 https://leetcode.com/problems/maximum-subarray/      
@@ -3549,7 +3637,7 @@ public class lc053 {
     }
 }
 ```
-# 54.螺旋矩阵
+### 54.螺旋矩阵
 题目链接            
 https://leetcode-cn.com/problems/spiral-matrix/         
 https://leetcode.com/problems/spiral-matrix/
@@ -3633,7 +3721,7 @@ public class lc054 {
     }
 }
 ```
-# 55.跳跃游戏
+### 55.跳跃游戏
 题目链接                
 https://leetcode-cn.com/problems/jump-game/         
 https://leetcode.com/problems/jump-game/            
@@ -3705,7 +3793,7 @@ public class lc055 {
     }
 }
 ```
-# 56.合并区间
+### 56.合并区间
 题目链接                
 https://leetcode-cn.com/problems/merge-intervals/               
 https://leetcode.com/problems/merge-intervals/          
@@ -3768,7 +3856,7 @@ public class lc056 {
     }
 }
 ```
-# 57.插入区间
+### 57.插入区间
 题目链接            
 https://leetcode-cn.com/problems/insert-interval/               
 https://leetcode.com/problems/insert-interval/          
@@ -3838,7 +3926,7 @@ public class lc057 {
     }
 }
 ```
-# 58.最后一个单词的长度
+### 58.最后一个单词的长度
 题目链接            
 https://leetcode-cn.com/problems/length-of-last-word/           
 https://leetcode.com/problems/length-of-last-word/       
@@ -3879,7 +3967,7 @@ public class lc058 {
     }
 }
 ```
-# 59.螺旋矩阵 II
+### 59.螺旋矩阵 II
 题目链接
 https://leetcode-cn.com/problems/spiral-matrix-ii/          
 https://leetcode.com/problems/spiral-matrix-ii/          
@@ -3954,7 +4042,7 @@ public class lc059 {
     }
 }
 ```
-# 60.排列序列
+### 60.排列序列
 题目链接            
 https://leetcode-cn.com/problems/permutation-sequence/          
 https://leetcode.com/problems/permutation-sequence/          
@@ -4040,7 +4128,7 @@ public class lc060 {
     }
 }
 ```
-# 61.旋转链表
+### 61.旋转链表
 题目链接            
 https://leetcode-cn.com/problems/rotate-list/               
 https://leetcode.com/problems/rotate-list/               
@@ -4105,7 +4193,7 @@ public class lc061 {
     }
 }
 ```
-# 62.不同路径
+### 62.不同路径
 题目链接            
 https://leetcode-cn.com/problems/unique-paths/          
 https://leetcode.com/problems/unique-paths/          
@@ -4178,7 +4266,7 @@ public class lc062 {
     }
 }
 ```
-# 63.不同路径 II
+### 63.不同路径 II
 题目链接            
 https://leetcode-cn.com/problems/unique-paths-ii/           
 https://leetcode.com/problems/unique-paths-ii/       
@@ -4289,7 +4377,7 @@ public class lc063 {
     }
 }
 ```
-# 64.最小路径和
+### 64.最小路径和
 题目链接            
 https://leetcode-cn.com/problems/minimum-path-sum/          
 https://leetcode.com/problems/minimum-path-sum/         
@@ -4341,7 +4429,7 @@ public class lc064 {
     }
 }
 ```
-# 66.加一
+### 66.加一
 题目链接            
 https://leetcode-cn.com/problems/plus-one/          
 https://leetcode.com/problems/plus-one/          
@@ -4395,7 +4483,7 @@ public class lc066 {
     }
 }
 ```
-# 67. 二进制求和
+### 67.二进制求和
 题目链接        
 https://leetcode-cn.com/problems/add-binary/            
 https://leetcode.com/problems/add-binary/        
@@ -4439,7 +4527,7 @@ public class lc067 {
     }
 }
 ```
-# 69.x 的平方根
+### 69.x 的平方根
 题目链接            
 https://leetcode-cn.com/problems/sqrtx/             
 https://leetcode.com/problems/sqrtx/         
@@ -4510,7 +4598,7 @@ public class lc069 {
     }
 }
 ```
-# 70.爬楼梯
+### 70.爬楼梯
 题目链接        
 https://leetcode-cn.com/problems/climbing-stairs/           
 https://leetcode.com/problems/climbing-stairs/           
@@ -4579,7 +4667,7 @@ public class lc070 {
     }
 }
 ```
-# 71.简化路径
+### 71.简化路径
 题目链接            
 https://leetcode-cn.com/problems/simplify-path/         
 https://leetcode.com/problems/simplify-path/         
@@ -4679,7 +4767,7 @@ public class lc071 {
     }
 }
 ```
-# 72.编辑距离
+### 72.编辑距离
 题目链接            
 https://leetcode-cn.com/problems/edit-distance/         
 https://leetcode.com/problems/edit-distance/         
@@ -4751,7 +4839,7 @@ public class lc072 {
     }
 }
 ```
-# 73.
+### 73.矩阵置零
 题目链接            
 https://leetcode-cn.com/problems/set-matrix-zeroes/         
 https://leetcode.com/problems/set-matrix-zeroes/             
@@ -4816,7 +4904,7 @@ public class lc073 {
     }
 }
 ```
-# 74.搜索二维矩阵
+### 74.搜索二维矩阵
 题目链接            
 https://leetcode-cn.com/problems/search-a-2d-matrix/            
 https://leetcode.com/problems/search-a-2d-matrix/            
@@ -4866,7 +4954,7 @@ public class lc074 {
     }
 }
 ```
-# 75.颜色分类
+### 75.颜色分类
 题目链接                
 https://leetcode-cn.com/problems/sort-colors/               
 https://leetcode.com/problems/sort-colors/           
@@ -4928,7 +5016,7 @@ public class lc075 {
     }
 }
 ```
-# 76.最小覆盖子串
+### 76.最小覆盖子串
 题目链接            
 https://leetcode-cn.com/problems/minimum-window-substring/              
 https://leetcode.com/problems/minimum-window-substring/
@@ -5008,7 +5096,7 @@ public class lc076 {
     }
 }
 ```
-# 77.组合
+### 77.组合
 题目链接            
 https://leetcode-cn.com/problems/combinations/          
 https://leetcode.com/problems/combinations/          
@@ -5054,7 +5142,7 @@ public class lc077 {
     }
 }
 ```
-# 78.子集
+### 78.子集
 题目链接            
 https://leetcode-cn.com/problems/subsets/           
 https://leetcode.com/problems/subsets/           
@@ -5101,7 +5189,7 @@ public class lc078 {
     }
 }
 ```
-# 79.单词搜索
+### 79.单词搜索
 题目链接            
 https://leetcode-cn.com/problems/word-search/           
 https://leetcode.com/problems/word-search/
@@ -5179,7 +5267,7 @@ public class lc079 {
     }
 }
 ```
-# 80.删除有序数组中的重复项 II
+### 80.删除有序数组中的重复项 II
 题目链接            
 https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/            
 https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/        
@@ -5224,7 +5312,7 @@ public class lc080 {
     }
 }
 ```
-# 98. 验证二叉搜索树
+### 98.验证二叉搜索树
 ```java
 package leetcode;
 
@@ -5304,7 +5392,7 @@ class TreeNode {
     }
 }
 ```
-# 109.有序链表转换二叉搜索树
+### 109.有序链表转换二叉搜索树
 ```java
 package leetcode;
 
@@ -5356,7 +5444,7 @@ public class lc109 {
     }
 }
 ```
-# 146.LRU缓存机制
+### 146.LRU缓存机制
 ```java
 package leetcode;
 
@@ -5437,7 +5525,7 @@ public class lc146 {
     }
 }
 ```
-# 172.阶乘后的零
+### 172.阶乘后的零
 ```java
 package leetcode;
 
@@ -5499,7 +5587,7 @@ public class lc172 {
 
 
 
-# 206.反转链表
+### 206.反转链表
 题目链接        
 https://leetcode-cn.com/problems/reverse-linked-list/       
 https://leetcode.com/problems/reverse-linked-list/
@@ -5548,7 +5636,7 @@ public class lc206 {
     }
 }
 ```
-# 228.汇总区间
+### 228.汇总区间
 题目链接        
 https://leetcode-cn.com/problems/summary-ranges/          
 https://leetcode.com/problems/summary-ranges/        
@@ -5624,7 +5712,7 @@ public class lc228 {
 }
 ```
 
-# 300.最长递增子序列
+### 300.最长递增子序列
 题目链接            
 https://leetcode-cn.com/problems/longest-increasing-subsequence/           
 https://leetcode.com/problems/longest-increasing-subsequence/               
@@ -5728,7 +5816,7 @@ public class lc300 {
     }
 }
 ```
-# 322.零钱兑换
+### 322.零钱兑换
 题目链接        
 https://leetcode-cn.com/problems/coin-change/submissions/           
 https://leetcode.com/problems/coin-change/submissions/           
@@ -5790,7 +5878,7 @@ public class lc322 {
 }
 ```
 
-# 328.奇偶链表
+### 328.奇偶链表
 题目链接    
 https://leetcode-cn.com/problems/odd-even-linked-list/      
 https://leetcode.com/problems/odd-even-linked-list/     
@@ -5850,7 +5938,7 @@ public class lc328 {
 }
 ```
 
-# 543.二叉树的直径(二叉树中节点的最大距离)
+### 543.二叉树的直径(二叉树中节点的最大距离)
 ```java
 package leetcode;
 
@@ -5909,7 +5997,7 @@ public class lc543 {
     }
 }
 ```
-# 674.最长连续递增序列
+### 674.最长连续递增序列
 ```java
 package leetcode;
 
@@ -5953,7 +6041,7 @@ public class lc674 {
     }
 }
 ```
-# 796.旋转字符串
+### 796.旋转字符串
 题目链接            
 https://leetcode-cn.com/problems/rotate-string/             
 https://leetcode.com/problems/rotate-string/
@@ -6054,7 +6142,7 @@ public class lc796 {
     }
 }
 ```
-# 1143.最长公共子序列
+### 1143.最长公共子序列
 题目链接        
 https://leetcode-cn.com/problems/longest-common-subsequence/            
 https://leetcode.com/problems/longest-common-subsequence/            

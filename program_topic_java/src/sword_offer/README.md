@@ -1,4 +1,74 @@
-# 1.二维数组中的查找
+剑指offer
+======
+# 算法题目
+### 1.二维数组中的查找
+### 2.替换空格
+### 3.从尾到头打印链表
+### 4.重建二叉树
+### 5.用两个栈实现队列
+### 6.旋转数组的最小数字
+### 7.斐波那契数列
+### 8.跳台阶
+### 9.变态跳台阶
+### 10.矩形覆盖
+### 11.二进制中1的个数
+### 12.数值的整数次方
+### 13.调整数组顺序使奇数位于偶数前面
+### 14.链表中倒数第k个结点
+### 15.反转链表
+### 16.合并两个排序的链表
+### 17.树的子结构
+### 18.二叉树的镜像
+### 19.顺时针打印矩阵
+### 20.包含min函数的栈
+### 21.栈的压入、弹出序列
+### 22.从上往下打印二叉树
+### 23.二叉搜索树的后序遍历序列
+### 24.二叉树中和为某一值的路径
+### 25.复杂链表的复制
+### 26.二叉搜索树与双向链表
+### 27.字符串的排序
+### 28.数组中出现次数超过一半的数字
+### 29.最小的K个数
+### 30.连续子数组的最大和
+### 31.整数中1出现的次数（从1到n整数中1出现的次数）
+### 32.把数组排成最小的数
+### 33.丑数
+### 34.第一个只出现一次的字符位置
+### 35.数组中的逆序对
+### 36.两个链表的第一个公共结点
+### 37.数字在排序数组中出现的次数
+### 38.二叉树的深度
+### 39.平衡二叉树
+### 40.数组中只出现一次的数字
+### 41.和为S的连续正数序列
+### 42.和为S的两个数字
+### 43.左旋转字符串
+### 44.翻转单词序列
+### 45.扑克牌顺子
+### 46.孩子们的游戏(圆圈中最后剩下的数)
+### 47.求1+2+3+...+n
+### 48.不用加减乘除做加法
+### 49.把字符串转换成整数
+### 50.数组中重复的数字
+### 51.构建乘积数组
+### 52.正则表达式匹配
+### 53.表示数值的字符串
+### 54.字符流中第一个不重复的字符
+### 55.链表中环的入口结点
+### 56.删除链表中重复的结点
+### 57.二叉树的下一个结点(后继结点)
+### 58.对称的二叉树
+### 59.按之字形顺序打印二叉树
+### 60.把二叉树打印成多行
+### 61.序列化二叉树
+### 62.二叉搜索树的第k个结点
+### 63.数据流中的中位数
+### 64.滑动窗口的最大值
+### 67.剪绳子
+
+# 算法解答
+### 1.二维数组中的查找
 ```java
 package sword_offer;
 
@@ -43,7 +113,7 @@ public class JZ01 {
     }
 }
 ```
-# 2.替换空格
+### 2.替换空格
 ```java
 package sword_offer;
 
@@ -97,7 +167,7 @@ public class JZ02 {
     }
 }
 ```
-# 3.从尾到头打印链表
+### 3.从尾到头打印链表
 ```java
 package sword_offer;
 
@@ -188,7 +258,7 @@ public class JZ03 {
     }
 }
 ```
-# 4. 重建二叉树
+### 4.重建二叉树
 ```java
 package sword_offer;
 
@@ -250,7 +320,7 @@ public class JZ04 {
     }
 }
 ```
-# 5.用两个栈实现队列
+### 5.用两个栈实现队列
 ```java
 package sword_offer;
 
@@ -278,7 +348,7 @@ public class JZ05 {
     }
 }
 ```
-# 6.旋转数组的最小数字
+### 6.旋转数组的最小数字
 ```java
 package sword_offer;
 
@@ -330,7 +400,7 @@ public class JZ06 {
     }
 }
 ```
-# 7.斐波那契数列
+### 7.斐波那契数列
 ```java
 package sword_offer;
 
@@ -368,7 +438,7 @@ public class JZ07 {
     }
 }
 ```
-# 8.跳台阶
+### 8.跳台阶
 ```java
 package sword_offer;
 
@@ -418,7 +488,7 @@ public class JZ08 {
     }
 }
 ```
-# 9.变态跳台阶
+### 9.变态跳台阶
 ```java
 package sword_offer;
 
@@ -450,7 +520,7 @@ public class JZ09 {
     }
 }
 ```
-# 10.矩形覆盖
+### 10.矩形覆盖
 ```java
 package sword_offer;
 
@@ -488,7 +558,7 @@ public class JZ10 {
     }
 }
 ```
-# 11.二进制中1的个数
+### 11.二进制中1的个数
 ```java
 package sword_offer;
 
@@ -558,7 +628,7 @@ public class JZ11 {
     }
 }
 ```
-# 12.数值的整数次方
+### 12.数值的整数次方
 ```java
 package sword_offer;
 
@@ -608,7 +678,7 @@ public class JZ12 {
     }
 }
 ```
-# 13.调整数组顺序使奇数位于偶数前面
+### 13.调整数组顺序使奇数位于偶数前面
 ```java
 package sword_offer;
 
@@ -694,7 +764,7 @@ public class JZ13 {
     }
 }
 ```
-# 14.链表中倒数第k个结点
+### 14.链表中倒数第k个结点
 ```java
 package sword_offer;
 
@@ -733,7 +803,7 @@ public class JZ14 {
     }
 }
 ```
-# 15.反转链表
+### 15.反转链表
 ```java
 package sword_offer;
 
@@ -765,7 +835,7 @@ public class JZ15 {
     }
 }
 ```
-# 16.合并两个排序的链表
+### 16.合并两个排序的链表
 ```java
 package sword_offer;
 
@@ -802,7 +872,7 @@ public class JZ16 {
     }
 }
 ```
-# 17.树的子结构
+### 17.树的子结构
 ```java
 package sword_offer;
 
@@ -811,7 +881,7 @@ package sword_offer;
  * 输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）
  * 示例1
  * 输入
- * {8,8,#,9,#,2,#,5},{8,9,#,2}
+ * {8,8,###,9,###,2,###,5},{8,9,###,2}
  * 返回值
  * true
  */
@@ -836,7 +906,7 @@ public class JZ17 {
     }
 }
 ```
-# 18.二叉树的镜像
+### 18.二叉树的镜像
 ```java
 package sword_offer;
 
@@ -909,7 +979,7 @@ public class JZ18 {
     }
 }
 ```
-# 19.顺时针打印矩阵
+### 19.顺时针打印矩阵
 ```java
 package sword_offer;
 
@@ -982,7 +1052,7 @@ public class JZ19 {
     }
 }
 ```
-# 20.包含min函数的栈
+### 20.包含min函数的栈
 ```java
 package sword_offer;
 
@@ -1059,7 +1129,7 @@ public class JZ20_2 {
     }
 }
 ```
-# 21.栈的压入、弹出序列
+### 21.栈的压入、弹出序列
 ```java
 package sword_offer;
 
@@ -1096,7 +1166,7 @@ public class JZ21 {
     }
 }
 ```
-# 22.从上往下打印二叉树
+### 22.从上往下打印二叉树
 ```java
 package sword_offer;
 
@@ -1108,7 +1178,7 @@ import java.util.LinkedList;
  * 从上往下打印出二叉树的每个节点，同层节点从左至右打印。
  * 示例1
  * 输入
- * {5,4,#,3,#,2,#,1}
+ * {5,4,###,3,###,2,###,1}
  * 返回值
  * [5,4,3,2,1]
  */
@@ -1137,7 +1207,7 @@ public class JZ22 {
     }
 }
 ```
-# 23.二叉搜索树的后序遍历序列
+### 23.二叉搜索树的后序遍历序列
 ```java
 package sword_offer;
 
@@ -1190,7 +1260,7 @@ public class JZ23 {
     }
 }
 ```
-# 24.二叉树中和为某一值的路径
+### 24.二叉树中和为某一值的路径
 ```java
 package sword_offer;
 
@@ -1242,7 +1312,7 @@ public class JZ24 {
     }
 }
 ```
-# 25.复杂链表的复制
+### 25.复杂链表的复制
 ```java
 package sword_offer;
 
@@ -1288,7 +1358,7 @@ public class JZ25 {
     }
 }
 ```
-# 26.二叉搜索树与双向链表
+### 26.二叉搜索树与双向链表
 ```java
 package sword_offer;
 
@@ -1361,7 +1431,7 @@ public class JZ26 {
     }
 }
 ```
-# 27.字符串的排序
+### 27.字符串的排序
 ```java
 package sword_offer;
 
@@ -1421,7 +1491,7 @@ public class JZ27 {
     }
 }
 ```
-# 28.数组中出现次数超过一半的数字
+### 28.数组中出现次数超过一半的数字
 ```java
 package sword_offer;
 
@@ -1530,7 +1600,7 @@ public class JZ28 {
     }
 }
 ```
-# 29.最小的K个数
+### 29.最小的K个数
 ```java
 package sword_offer;
 
@@ -1624,7 +1694,7 @@ public class JZ29 {
     }
 }
 ```
-# 30.连续子数组的最大和
+### 30.连续子数组的最大和
 ```java
 package sword_offer;
 
@@ -1684,7 +1754,7 @@ public class JZ30 {
     }
 }
 ```
-# 31.整数中1出现的次数（从1到n整数中1出现的次数）
+### 31.整数中1出现的次数（从1到n整数中1出现的次数）
 ```java
 package sword_offer;
 
@@ -1776,7 +1846,7 @@ public class JZ31 {
     }
 }
 ```
-# 32.把数组排成最小的数
+### 32.把数组排成最小的数
 ```java
 package sword_offer;
 
@@ -1819,7 +1889,7 @@ public class JZ32 {
     }
 }
 ```
-# 33.丑数
+### 33.丑数
 ```java
 package sword_offer;
 
@@ -1859,7 +1929,7 @@ public class JZ33 {
     }
 }
 ```
-# 34.第一个只出现一次的字符位置
+### 34.第一个只出现一次的字符位置
 ```java
 package sword_offer;
 
@@ -1921,7 +1991,7 @@ public class JZ34 {
     }
 }
 ```
-# 35.数组中的逆序对
+### 35.数组中的逆序对
 ```java
 package sword_offer;
 
@@ -1991,7 +2061,7 @@ public class JZ35 {
     }
 }
 ```
-# 36.两个链表的第一个公共结点
+### 36.两个链表的第一个公共结点
 ```java
 package sword_offer;
 
@@ -2091,7 +2161,7 @@ public class JZ36 {
     }
 }
 ```
-# 37.数字在排序数组中出现的次数
+### 37.数字在排序数组中出现的次数
 ```java
 package sword_offer;
 
@@ -2141,7 +2211,7 @@ public class JZ37 {
     }
 }
 ```
-# 38.二叉树的深度
+### 38.二叉树的深度
 ```java
 package sword_offer;
 
@@ -2152,7 +2222,7 @@ import java.util.LinkedList;
  * 输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
  * 示例1
  * 输入
- * {1,2,3,4,5,#,6,#,#,7}
+ * {1,2,3,4,5,###,6,###,###,7}
  * 返回值
  * 4
  */
@@ -2197,7 +2267,7 @@ public class JZ38 {
     }
 }
 ```
-# 39.平衡二叉树
+### 39.平衡二叉树
 ```java
 package sword_offer;
 
@@ -2239,7 +2309,7 @@ public class JZ39 {
     }
 }
 ```
-# 40.数组中只出现一次的数字
+### 40.数组中只出现一次的数字
 ```java
 package sword_offer;
 
@@ -2328,7 +2398,7 @@ public class JZ40 {
     }
 }
 ```
-# 41.和为S的连续正数序列
+### 41.和为S的连续正数序列
 ```java
 package sword_offer;
 
@@ -2379,7 +2449,7 @@ public class JZ41 {
     }
 }
 ```
-# 42.和为S的两个数字
+### 42.和为S的两个数字
 ```java
 package sword_offer;
 
@@ -2442,7 +2512,7 @@ public class JZ42 {
     }
 }
 ```
-# 43.左旋转字符串
+### 43.左旋转字符串
 ```java
 package sword_offer;
 
@@ -2506,7 +2576,7 @@ public class JZ43 {
     }
 }
 ```
-# 44.翻转单词序列
+### 44.翻转单词序列
 ```java
 package sword_offer;
 
@@ -2560,7 +2630,7 @@ public class JZ44 {
     }
 }
 ```
-# 45.扑克牌顺子
+### 45.扑克牌顺子
 ```java
 package sword_offer;
 
@@ -2627,7 +2697,7 @@ public class JZ45 {
     }
 }
 ```
-# 46.孩子们的游戏(圆圈中最后剩下的数)	
+### 46.孩子们的游戏(圆圈中最后剩下的数)	
 ```java
 package sword_offer;
 
@@ -2684,7 +2754,7 @@ public class JZ46 {
     }
 }
 ```
-# 47.求1+2+3+...+n
+### 47.求1+2+3+...+n
 ```java
 package sword_offer;
 
@@ -2713,7 +2783,7 @@ public class JZ47 {
     }
 }
 ```
-# 48.不用加减乘除做加法
+### 48.不用加减乘除做加法
 ```java
 package sword_offer;
 
@@ -2746,7 +2816,7 @@ public class JZ48 {
     }
 }
 ```
-# 49.把字符串转换成整数
+### 49.把字符串转换成整数
 ```java
 package sword_offer;
 
@@ -2798,7 +2868,7 @@ public class JZ49 {
     }
 }
 ```
-# 50.数组中重复的数字
+### 50.数组中重复的数字
 ```java
 package sword_offer;
 
@@ -2852,7 +2922,7 @@ public class JZ50 {
     }
 }
 ```
-# 51.构建乘积数组
+### 51.构建乘积数组
 ```java
 package sword_offer;
 
@@ -2890,7 +2960,7 @@ public class JZ51 {
     }
 }
 ```
-# 52.正则表达式匹配
+### 52.正则表达式匹配
 > ![jz52](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/sword_offer/picture/jz52.png)                           
 ```java
 package sword_offer;
@@ -2944,7 +3014,7 @@ public class JZ52 {
     }
 }
 ```
-# 53.表示数值的字符串
+### 53.表示数值的字符串
 ```java
 package sword_offer;
 
@@ -3002,7 +3072,7 @@ public class JZ53 {
     }
 }
 ```
-# 54.字符流中第一个不重复的字符
+### 54.字符流中第一个不重复的字符
 ```java
 package sword_offer;
 
@@ -3013,7 +3083,7 @@ import java.util.HashMap;
  * 请实现一个函数用来找出字符流中第一个只出现一次的字符。例如，当从字符流中只读出前两个字符"go"时，
  * 第一个只出现一次的字符是"g"。当从该字符流中读出前六个字符“google"时，第一个只出现一次的字符是"l"。
  * 返回值描述:
- * 如果当前字符流没有存在出现一次的字符，返回#字符。
+ * 如果当前字符流没有存在出现一次的字符，返回###字符。
  */
 public class JZ54 {
     HashMap<Character, Integer> map = new HashMap<Character, Integer>();
@@ -3034,7 +3104,7 @@ public class JZ54 {
                 return s.charAt(i);
             }
         }
-        return '#';
+        return '###';
     }
 }
 ```
@@ -3051,7 +3121,7 @@ import java.util.Map;
  * 请实现一个函数用来找出字符流中第一个只出现一次的字符。例如，当从字符流中只读出前两个字符"go"时，
  * 第一个只出现一次的字符是"g"。当从该字符流中读出前六个字符“google"时，第一个只出现一次的字符是"l"。
  * 返回值描述:
- * 如果当前字符流没有存在出现一次的字符，返回#字符。
+ * 如果当前字符流没有存在出现一次的字符，返回###字符。
  */
 public class JZ54_2 {
     HashMap<Character, Integer> map = new LinkedHashMap<>();
@@ -3070,7 +3140,7 @@ public class JZ54_2 {
                 return entry.getKey();
             }
         }
-        return '#';
+        return '###';
     }
 }
 ```
@@ -3086,7 +3156,7 @@ import java.util.Map;
  * 请实现一个函数用来找出字符流中第一个只出现一次的字符。例如，当从字符流中只读出前两个字符"go"时，
  * 第一个只出现一次的字符是"g"。当从该字符流中读出前六个字符“google"时，第一个只出现一次的字符是"l"。
  * 返回值描述:
- * 如果当前字符流没有存在出现一次的字符，返回#字符。
+ * 如果当前字符流没有存在出现一次的字符，返回###字符。
  */
 public class JZ54_3 {
     HashMap<Character, Integer> map = new LinkedHashMap<>();
@@ -3105,11 +3175,11 @@ public class JZ54_3 {
                 return c;
             }
         }
-        return '#';
+        return '###';
     }
 }
 ```
-# 55.链表中环的入口结点	
+### 55.链表中环的入口结点	
 ```java
 package sword_offer;
 
@@ -3166,7 +3236,7 @@ public class JZ55 {
     }
 }
 ```
-# 56.删除链表中重复的结点
+### 56.删除链表中重复的结点
 ```java
 package sword_offer;
 
@@ -3230,7 +3300,7 @@ public class JZ56 {
     }
 }
 ```
-# 57.二叉树的下一个结点(后继结点)
+### 57.二叉树的下一个结点(后继结点)
 ```java
 package sword_offer;
 
@@ -3288,7 +3358,7 @@ public class JZ57 {
     }
 }
 ```
-# 58.对称的二叉树
+### 58.对称的二叉树
 ```java
 package sword_offer;
 
@@ -3332,7 +3402,7 @@ public class JZ58 {
     }
 }
 ```
-# 59.按之字形顺序打印二叉树
+### 59.按之字形顺序打印二叉树
 ```java
 package sword_offer;
 
@@ -3462,7 +3532,7 @@ public class JZ59_2 {
     }
 }
 ```
-# 60.把二叉树打印成多行
+### 60.把二叉树打印成多行
 ```java
 package sword_offer;
 
@@ -3541,14 +3611,14 @@ public class JZ60 {
     }
 }
 ```
-# 61.序列化二叉树
+### 61.序列化二叉树
 ```java
 package sword_offer;
 
 /**
  * 题目描述
  * 请实现两个函数，分别用来序列化和反序列化二叉树
- * 二叉树的序列化是指：把一棵二叉树按照某种遍历方式的结果以某种格式保存为字符串，从而使得内存中建立起来的二叉树可以持久保存。序列化可以基于先序、中序、后序、层序的二叉树遍历方式来进行修改，序列化的结果是一个字符串，序列化时通过 某种符号表示空节点（#），以 ！ 表示一个结点值的结束（value!）。
+ * 二叉树的序列化是指：把一棵二叉树按照某种遍历方式的结果以某种格式保存为字符串，从而使得内存中建立起来的二叉树可以持久保存。序列化可以基于先序、中序、后序、层序的二叉树遍历方式来进行修改，序列化的结果是一个字符串，序列化时通过 某种符号表示空节点（###），以 ！ 表示一个结点值的结束（value!）。
  * 二叉树的反序列化是指：根据某种遍历顺序得到的序列化字符串结果str，重构二叉树。
  * 例如，我们可以把一个只有根节点为1的二叉树序列化为"1,"，然后通过自己的函数来解析回这个二叉树
  * 示例1
@@ -3561,7 +3631,7 @@ public class JZ61 {
     String Serialize(TreeNode root) {
         StringBuffer sb = new StringBuffer();
         if (root == null) {
-            sb.append("#,");
+            sb.append("###,");
             return sb.toString();
         }
 
@@ -3582,7 +3652,7 @@ public class JZ61 {
 
         String[] s = str.split(",");
         TreeNode node = null;
-        if (!s[index].equals("#")) {
+        if (!s[index].equals("###")) {
             node = new TreeNode(Integer.valueOf(s[index]));
             node.left = Deserialize(str);
             node.right = Deserialize(str);
@@ -3592,7 +3662,7 @@ public class JZ61 {
     }
 }
 ```
-# 62.二叉搜索树的第k个结点
+### 62.二叉搜索树的第k个结点
 ```java
 package sword_offer;
 
@@ -3659,7 +3729,7 @@ public class JZ62 {
     }
 }
 ```
-# 63.数据流中的中位数
+### 63.数据流中的中位数
 ```java
 package sword_offer;
 
@@ -3705,7 +3775,7 @@ public class JZ63 {
     }
 }
 ```
-# 64.滑动窗口的最大值
+### 64.滑动窗口的最大值
 ```java
 package sword_offer;
 
@@ -3746,7 +3816,7 @@ public class JZ64 {
     }
 }
 ```
-# 67.剪绳子
+### 67.剪绳子
 ```java
 package sword_offer;
 

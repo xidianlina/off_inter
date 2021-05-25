@@ -1,6 +1,60 @@
 算法题目整理
 ======
-# 1.洗牌算法
+# 算法题目
+### 1.洗牌算法
+### 2.完美洗牌算法                   
+### 3.两个线程分别打印1-100，a线程打印偶数，b线程打印奇数
+### 4.一个链表，奇数位升序偶数位降序，让链表变成升序的
+### 5.IP转换成整数及整数转换成IP
+### 6.IP转换成长整数及长整数转换成IP
+### 7.给一个字符串表示IP地址，检测是否合法
+### 8.杨辉三角
+### 9.字符串翻转
+### 10.判断两个日期之间相隔的天数
+### 11.给定A, B两个整数，不使用除法和取模运算，求A/B的商和余数
+### 12.压缩驼峰字符串
+### 13,除去s1中与s2中相同的字符
+### 14.给定n个数，要求比较1.5n次同时找出最大值和最小值
+### 15.按照map的value进行排序，并按value有序输出
+### 16.找出数组里出现次数超过总数1/3的数(可能存在一个也可能存在两个)
+### 17.判断一个字符串是否是回文字符串
+### 18.不使用循环，判断一个数是否是2的N次方
+### 19.求1!+2!+3!+4!+...+n!的结果
+### 20.在字符串中求最长数字子序列的长度
+### 21.打印最长递增子序列
+### 22.打印最长连续递增子序列
+### 22.没有优先级的"+","-","x"
+### 23.在不使用循环的条件下，如何计算出一个数其2的n次方的最大数字（这个比较绕，例如17-->16，31-- >16）
+### 24.未排序数组中累加和为给定值的最长子数组的长度
+### 25.N的阶乘二进制表示的最低位1的位置
+### 26.输入一个正整数N，输出大于N且最接近这个数的素数
+### 27.字符串转换float
+### 28.字符串数组的字符串是否都能首尾相接
+### 29.递归求和
+### 30.递归算法判断一个数组是否是递增数组
+### 31.二分查找的递归与非递归实现
+### 32.正整数序列Q中的每个元素都至少能被正整数a和b中的一个整除，现给定a和b，如何计算出Q中的前N项？
+### 33.如何判断一个整数 x 是否可以表示成 n（n >= 2）个连续正整数的和?
+### 34.给一个由n-1个数组成的未经排序的数列，其元素都是1—n中的不同的整数。找出缺失的整数？
+### 35.求两个数组的交集
+### 36.如何判断一个数组中的数值是否连续相邻
+### 37.找出数组中重复数字最多的数
+### 38.将数组的后m个数移动为前m个数
+### 39.找出数组中出现奇数次的元素：有一个整数数组arr，其中的元素只有一个元素出现奇数次，请找出这个元素。
+### 40.数组a[N]，1-N-1这（N-1）个数存放在a[N]中，其中某个数重复一次，找出这个数。时间复杂度不超过
+### 41.一个序列先增后减，求峰值
+### 42.递归求数组的和
+### 43.输入一个字符串，输出该字符串中字符的所有组合。举个例子，如果输入abc，它的组合有a、b、c、ab、ac、bc、abc
+### 44.在两个数组中寻找两个数的和等于指定的数值
+### 45.计算给定的日期是一年中的第多少天
+### 46.求A的B次的后三位
+### 47.最长公共子序列（不连续）时间复杂度O(m*n)
+### 48.最长公共子字符串：类似最长子序列，只是公共子字符串要求必须是连续的
+### 49.M进制与N进制的转换
+### 50.等概率产生0和1
+### 51.求一个序列的平衡点
+# 算法解答
+### 1.洗牌算法
 ```java
 package algorithm;
 
@@ -76,7 +130,7 @@ public class FisherYatesShuffle {
     }
 }
 ```
-# 2.完美洗牌算法
+### 2.完美洗牌算法
 > 题目描述      
 有个长度为2n的数组{a1, a2, a3, ..., an, b1, b2, b3, ..., bn} ，
 希望排序后 {a1, b1, a2, b2, ...., an, bn} ，请考虑有无时间复杂度 O(n)，空间复杂度 O(1) 的解法。     
@@ -203,7 +257,7 @@ public class Shuffle2 {
 }
 ```
 > 参考 https://www.jianshu.com/p/9c841ad88ded                     
-# 3.两个线程分别打印1-100，a线程打印偶数，b线程打印奇数
+### 3.两个线程分别打印1-100，a线程打印偶数，b线程打印奇数
 ```java
 package algorithm;
 
@@ -250,7 +304,7 @@ class PrintEvenThread implements Runnable {
     }
 }
 ```
-# 4.一个链表，奇数位升序偶数位降序，让链表变成升序的
+### 4.一个链表，奇数位升序偶数位降序，让链表变成升序的
 ```java
 package algorithm;
 
@@ -414,7 +468,7 @@ class ListNode {
     }
 }
 ```
-# 5.IP转换成整数及整数转换成IP
+### 5.IP转换成整数及整数转换成IP
 ```java
 package algorithm;
 
@@ -462,7 +516,7 @@ public class IpToInt {
     }
 }
 ```
-# 6.IP转换成长整数及长整数转换成IP
+### 6.IP转换成长整数及长整数转换成IP
 ```java
 package algorithm;
 
@@ -536,7 +590,7 @@ public class IpToLong {
     }
 }
 ```
-# 7.给一个字符串表示IP地址，检测是否合法
+### 7.给一个字符串表示IP地址，检测是否合法
 ```java
 package algorithm;
 
@@ -592,7 +646,7 @@ public class IsValidIp {
     }
 }
 ```
-# 8.杨辉三角
+### 8.杨辉三角
 ```java
 package algorithm;
 
@@ -635,7 +689,7 @@ public class YangHuiSanJiao {
     }
 }
 ```
-# 9.字符串翻转
+### 9.字符串翻转
 ```java
 package algorithm;
 
@@ -663,7 +717,7 @@ public class StringReverse {
     }
 }
 ```
-# 10.判断两个日期之间相隔的天数
+### 10.判断两个日期之间相隔的天数
 ```java
 package algorithm;
 
@@ -754,7 +808,7 @@ public class DiffDay {
     }
 }
 ```
-# 11.给定A, B两个整数，不使用除法和取模运算，求A/B的商和余数
+### 11.给定A, B两个整数，不使用除法和取模运算，求A/B的商和余数
 ```java
 package algorithm;
 
@@ -773,7 +827,7 @@ public class Divide {
     }
 }
 ```
-# 12.压缩驼峰字符串
+### 12.压缩驼峰字符串
 ```java
 package algorithm;
 
@@ -826,7 +880,7 @@ public class CamelAndSnakeString {
     }
 }
 ```
-# 13,除去s1中与s2中相同的字符
+### 13,除去s1中与s2中相同的字符
 ```java
 package algorithm;
 
@@ -879,7 +933,7 @@ public class Squeeze {
     }
 }
 ```
-# 14.给定n个数，要求比较1.5n次同时找出最大值和最小值
+### 14.给定n个数，要求比较1.5n次同时找出最大值和最小值
 ```java
 package algorithm;
 
@@ -931,7 +985,7 @@ public class FindMaxMin {
     }
 }
 ```
-# 15.按照map的value进行排序，并按value有序输出
+### 15.按照map的value进行排序，并按value有序输出
 ```java
 package algorithm;
 
@@ -977,7 +1031,7 @@ public class MapValueSort {
     }
 }
 ```
-# 16.找出数组里出现次数超过总数1/3的数(可能存在一个也可能存在两个)
+### 16.找出数组里出现次数超过总数1/3的数(可能存在一个也可能存在两个)
 ```java
 package algorithm;
 
@@ -1027,7 +1081,7 @@ public class MajorityElement {
     }
 }
 ```
-# 17.判断一个字符串是否是回文字符串
+### 17.判断一个字符串是否是回文字符串
 ```java
 package algorithm;
 
@@ -1057,7 +1111,7 @@ public class IsPalindrome {
     }
 }
 ```
-# 18.不使用循环，判断一个数是否是2的N次方
+### 18.不使用循环，判断一个数是否是2的N次方
 ```java
 package algorithm;
 
@@ -1077,7 +1131,7 @@ public class Is2N {
     }
 }
 ```
-# 19.求1!+2!+3!+4!+...+n!的结果
+### 19.求1!+2!+3!+4!+...+n!的结果
 ```java
 package algorithm;
 
@@ -1116,7 +1170,7 @@ public class JieChengHe {
     }
 }
 ```
-# 20.在字符串中求最长数字子序列的长度
+### 20.在字符串中求最长数字子序列的长度
 ```java
 package algorithm;
 
@@ -1158,7 +1212,7 @@ public class LongestNumSubString {
     }
 }
 ```
-# 21.打印最长递增子序列
+### 21.打印最长递增子序列
 ```java
 package algorithm;
 
@@ -1220,7 +1274,7 @@ public class LongestIncreasingSubsequence {
     }
 }
 ```
-# 22.打印最长连续递增子序列
+### 22.打印最长连续递增子序列
 ```java
 package algorithm;
 
@@ -1260,7 +1314,7 @@ public class LongestContinuousIncreasingSubsequence {
     }
 }
 ```
-# 22.没有优先级的"+","-","x"
+### 22.没有优先级的"+","-","x"
 ```java
 package algorithm;
 
@@ -1300,7 +1354,7 @@ public class NoPriority {
     }
 }
 ```
-# 23.在不使用循环的条件下，如何计算出一个数其2的n次方的最大数字（这个比较绕，例如17-->16，31-- >16）
+### 23.在不使用循环的条件下，如何计算出一个数其2的n次方的最大数字（这个比较绕，例如17-->16，31-- >16）
 ```java
 package algorithm;
 
@@ -1319,7 +1373,7 @@ public class Max2N {
     }
 }
 ```
-# 24.未排序数组中累加和为给定值的最长子数组的长度
+### 24.未排序数组中累加和为给定值的最长子数组的长度
 ```java
 package algorithm;
 
@@ -1404,7 +1458,7 @@ public class MaxLength {
     }
 }
 ```
-# 25.N的阶乘二进制表示的最低位1的位置
+### 25.N的阶乘二进制表示的最低位1的位置
 ```java
 package algorithm;
 
@@ -1433,7 +1487,7 @@ public class PosOfOneBinary {
     }
 }
 ```
-# 26.输入一个正整数N，输出大于N且最接近这个数的素数
+### 26.输入一个正整数N，输出大于N且最接近这个数的素数
 ```java
 package algorithm;
 
@@ -1471,7 +1525,7 @@ public class FindPrime {
     }
 }
 ```
-# 27.字符串转换float
+### 27.字符串转换float
 ```java
 package algorithm;
 
@@ -1527,7 +1581,7 @@ public class StringToFloat {
     }
 }
 ```
-# 28.字符串数组的字符串是否都能首尾相接
+### 28.字符串数组的字符串是否都能首尾相接
 ```java
 package algorithm;
 
@@ -1624,7 +1678,7 @@ public class StrOrgEnd {
     }
 }
 ```
-# 29.递归求和
+### 29.递归求和
 ```java
 package algorithm;
 
@@ -1644,7 +1698,7 @@ public class SumWithRecur {
     }
 }
 ```
-# 30.递归算法判断一个数组是否是递增数组
+### 30.递归算法判断一个数组是否是递增数组
 ```java
 package algorithm;
 
@@ -1666,7 +1720,7 @@ public class ArrayIsIncrement {
     }
 }
 ```
-# 31.二分查找的递归与非递归实现
+### 31.二分查找的递归与非递归实现
 ```java
 package algorithm;
 
@@ -1728,7 +1782,7 @@ public class BinarySearch {
     }
 }
 ```
-# 32.正整数序列Q中的每个元素都至少能被正整数a和b中的一个整除，现给定a和b，如何计算出Q中的前N项？
+### 32.正整数序列Q中的每个元素都至少能被正整数a和b中的一个整除，现给定a和b，如何计算出Q中的前N项？
 ```java
 package algorithm;
 
@@ -1772,7 +1826,7 @@ public class CreateQArray {
     }
 }
 ```
-# 33.如何判断一个整数 x 是否可以表示成 n（n >= 2）个连续正整数的和?
+### 33.如何判断一个整数 x 是否可以表示成 n（n >= 2）个连续正整数的和?
 ```java
 package algorithm;
 
@@ -1808,7 +1862,7 @@ public class ContinuousSequence {
     }
 }
 ```
-# 34.给一个由n-1个数组成的未经排序的数列，其元素都是1—n中的不同的整数。找出缺失的整数？
+### 34.给一个由n-1个数组成的未经排序的数列，其元素都是1—n中的不同的整数。找出缺失的整数？
 ```java
 package algorithm;
 
@@ -1837,7 +1891,7 @@ public class FindLost {
     }
 }
 ```
-# 35.求两个数组的交集
+### 35.求两个数组的交集
 ```java
 package algorithm;
 
@@ -1877,7 +1931,7 @@ public class IntersectArray {
     }
 }
 ```
-# 36.如何判断一个数组中的数值是否连续相邻
+### 36.如何判断一个数组中的数值是否连续相邻
 ```java
 package algorithm;
 
@@ -1925,7 +1979,7 @@ public class ArrayIsContinues {
     }
 }
 ```
-# 37.找出数组中重复数字最多的数
+### 37.找出数组中重复数字最多的数
 ```java
 package algorithm;
 
@@ -1970,7 +2024,7 @@ public class DuplicateMaxCount {
     }
 }
 ```
-# 38.将数组的后m个数移动为前m个数
+### 38.将数组的后m个数移动为前m个数
 ```java
 package algorithm;
 
@@ -2024,7 +2078,7 @@ public class MoveArrayReverse {
     }
 }
 ```
-# 39.找出数组中出现奇数次的元素：有一个整数数组arr，其中的元素只有一个元素出现奇数次，请找出这个元素。
+### 39.找出数组中出现奇数次的元素：有一个整数数组arr，其中的元素只有一个元素出现奇数次，请找出这个元素。
 ```java
 package algorithm;
 
@@ -2050,7 +2104,7 @@ public class OddElement {
     }
 }
 ```
-# 40.数组a[N]，1-N-1这（N-1）个数存放在a[N]中，其中某个数重复一次，找出这个数。时间复杂度不超过
+### 40.数组a[N]，1-N-1这（N-1）个数存放在a[N]中，其中某个数重复一次，找出这个数。时间复杂度不超过
 ```java
 package algorithm;
 
@@ -2105,7 +2159,7 @@ public class OnlyRepeateOnce {
     }
 }
 ```
-# 41.一个序列先增后减，求峰值
+### 41.一个序列先增后减，求峰值
 ```java
 package algorithm;
 
@@ -2131,7 +2185,7 @@ public class GetPeek {
     }
 }
 ```
-# 42.递归求数组的和
+### 42.递归求数组的和
 ```java
 package algorithm;
 
@@ -2152,7 +2206,7 @@ public class RecurSum {
     }
 }
 ```
-# 43.输入一个字符串，输出该字符串中字符的所有组合。举个例子，如果输入abc，它的组合有a、b、c、ab、ac、bc、abc
+### 43.输入一个字符串，输出该字符串中字符的所有组合。举个例子，如果输入abc，它的组合有a、b、c、ab、ac、bc、abc
 ```java
 package algorithm;
 
@@ -2220,7 +2274,7 @@ public class Combinations {
     }
 }
 ```
-# 44.在两个数组中寻找两个数的和等于指定的数值
+### 44.在两个数组中寻找两个数的和等于指定的数值
 ```java
 package algorithm;
 
@@ -2259,7 +2313,7 @@ public class TargetInTwoArray {
     }
 }
 ```
-# 45.计算给定的日期是一年中的第多少天
+### 45.计算给定的日期是一年中的第多少天
 ```java
 package algorithm;
 
@@ -2313,7 +2367,7 @@ public class GetDay {
     }
 }
 ```
-# 46.求A的B次的后三位
+### 46.求A的B次的后三位
 ```java
 package algorithm;
 
@@ -2333,7 +2387,7 @@ public class LastThree {
     }
 }
 ```
-# 47.最长公共子序列（不连续）时间复杂度O(m*n)
+### 47.最长公共子序列（不连续）时间复杂度O(m*n)
 ```java
 package algorithm;
 
@@ -2396,7 +2450,7 @@ public class LongestCommonSubsequence {
     }
 }
 ```
-# 48.最长公共子字符串：类似最长子序列，只是公共子字符串要求必须是连续的
+### 48.最长公共子字符串：类似最长子序列，只是公共子字符串要求必须是连续的
 ```java
 package algorithm;
 
@@ -2450,7 +2504,7 @@ public class LongestCommonSubstring {
     }
 }
 ```
-# 49.M进制与N进制的转换
+### 49.M进制与N进制的转换
 ```java
 package algorithm;
 
@@ -2497,7 +2551,7 @@ public class MtoN {
     }
 }
 ```
-# 50.等概率产生0和1
+### 50.等概率产生0和1
 ```java
 package algorithm;
 
@@ -2530,7 +2584,7 @@ public class RandEqual {
     }
 }
 ```
-# 51.求一个序列的平衡点
+### 51.求一个序列的平衡点
 ```java
 package algorithm;
 

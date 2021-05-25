@@ -1,8 +1,24 @@
 二叉树
 ======
-# 1.二叉树的遍历
+# 算法题目
+### 1.二叉树的遍历
+### 2.求二叉树的结点数
+### 3.求二叉树的叶子结点数
+### 4.求树的深度
+### 5.求二叉树第 k 层的结点个数
+### 6.判断两棵二叉树是否结构相同
+### 7.求二叉树的镜像
+### 8.判断一颗二叉树是否是镜像二叉树
+### 9.求两个结点的最低公共祖先结点
+### 10.求任意两结点距离
+### 11.找出二叉树中某个结点的所有祖先结点
+### 12.判断二叉树是不是完全二叉树
+### 13.二叉排序树中插入新的节点
+
+# 算法解答
+### 1.二叉树的遍历
 > ![tree](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/tree/picture/tree.png)                              
-## (1).递归遍历二叉树
+#### (1).递归遍历二叉树
 ```java
 package tree;
 
@@ -87,7 +103,7 @@ class TreeNode {
     }
 }
 ```
-## (2).非递归遍历二叉树
+#### (2).非递归遍历二叉树
 ```java
 package tree;
 
@@ -193,7 +209,7 @@ public class TraverseTree {
     }
 }
 ```
-## (3).按层遍历二叉树
+#### (3).按层遍历二叉树
 ```java
 package tree;
 
@@ -252,7 +268,7 @@ public class LevelTraverseTree {
     }
 }
 ```
-## 2.求二叉树的结点数
+### 2.求二叉树的结点数
 ```java
 package tree;
 
@@ -318,7 +334,7 @@ public class GetTreeNodeCounts {
     }
 }
 ```
-## 3.求二叉树的叶子结点数
+### 3.求二叉树的叶子结点数
 ```java
 package tree;
 
@@ -392,7 +408,7 @@ public class GetLeafNodeCounts {
     }
 }
 ```
-## 4.求树的深度
+### 4.求树的深度
 ```java
 package tree;
 
@@ -461,7 +477,7 @@ public class GetTreeDepth {
     }
 }
 ```
-## 5.求二叉树第 k 层的结点个数
+### 5.求二叉树第 k 层的结点个数
 ```java
 package tree;
 
@@ -534,7 +550,7 @@ public class GetKLevelNodeCounts {
     }
 }
 ```
-## 6.判断两棵二叉树是否结构相同
+### 6.判断两棵二叉树是否结构相同
 ```java
 package tree;
 
@@ -582,8 +598,7 @@ public class TwoTreeSame {
     }
 }
 ```
-## 7.求二叉树的镜像
-
+### 7.求二叉树的镜像
 ```java
 package tree;
 
@@ -699,7 +714,7 @@ public class Mirror {
     }
 }
 ```
-## 8.判断一颗二叉树是否是镜像二叉树
+### 8.判断一颗二叉树是否是镜像二叉树
 ```java
 package tree;
 
@@ -752,7 +767,7 @@ public class IsMirror {
     }
 }
 ```
-## 9.求两个结点的最低公共祖先结点
+### 9.求两个结点的最低公共祖先结点
 ```java
 package tree;
 
@@ -802,7 +817,7 @@ public class GetLowestCommonAncestor {
     }
 }
 ```
-## 10.求任意两结点距离
+### 10.求任意两结点距离
 ```java
 package tree;
 
@@ -890,7 +905,7 @@ public class DistanceTreeNodes {
     }
 }
 ```
-## 11.找出二叉树中某个结点的所有祖先结点
+### 11.找出二叉树中某个结点的所有祖先结点
 ```java
 package tree;
 
@@ -941,7 +956,7 @@ public class FindAllAncestors {
     }
 }
 ```
-## 12.判断二叉树是不是完全二叉树
+### 12.判断二叉树是不是完全二叉树
 ```java
 package tree;
 
@@ -1005,7 +1020,7 @@ public class IsCompleteBinaryTree {
     }
 }
 ```
-## 13.二叉排序树中插入新的节点
+### 13.二叉排序树中插入新的节点
 ```java
 package tree;
 
