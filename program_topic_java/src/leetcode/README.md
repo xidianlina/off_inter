@@ -77,13 +77,16 @@ LeetCode
 ### 80.删除有序数组中的重复项II
 ### 98.验证二叉搜索树
 ### 109.有序链表转换二叉搜索树
+### 143.重排链表
 ### 146.LRU缓存机制
 ### 172.阶乘后的零
 ### 206.反转链表
 ### 228.汇总区间
+### 232.重排链表
 ### 300.最长递增子序列
 ### 322.零钱兑换
 ### 328.奇偶链表
+### 349.两个数组的交集
 ### 543.二叉树的直径(二叉树中节点的最大距离)
 ### 674.最长连续递增序列
 ### 1143.最长公共子序列
@@ -5444,6 +5447,117 @@ public class lc109 {
     }
 }
 ```
+### 143.重排链表
+题目连接
+```java
+package leetcode;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/*
+给定一个单链表L：L0→L1→…→Ln-1→Ln ，
+将其重新排列后变为： L0→Ln→L1→Ln-1→L2→Ln-2→…
+你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+
+示例1:
+给定链表 1->2->3->4, 重新排列为 1->4->2->3.
+
+示例 2:
+给定链表 1->2->3->4->5, 重新排列为 1->5->2->4->3.
+ */
+public class lc143 {
+    /*
+        时间复杂度：O(N)，其中N是链表中的节点数。
+        空间复杂度：O(N)，其中N是链表中的节点数。主要为线性表的开销。
+     */
+    public void reorderList(ListNode head) {
+        if (head == null) {
+            return;
+        }
+
+        List<ListNode> list = new ArrayList<ListNode>();
+        ListNode node = head;
+        while (node != null) {
+            list.add(node);
+            node = node.next;
+        }
+        int i = 0, j = list.size() - 1;
+        while (i < j) {
+            list.get(i).next = list.get(j);
+            i++;
+            if (i == j) {
+                break;
+            }
+            list.get(j).next = list.get(i);
+            j--;
+        }
+        list.get(i).next = null;
+    }
+
+    /*
+        时间复杂度：O(N)，其中 N 是链表中的节点数。
+        空间复杂度：O(1)。
+     */
+    public void reorderList2(ListNode head) {
+        if (head == null) {
+            return;
+        }
+
+        ListNode mid = middleNode(head);
+        ListNode list1 = head;
+        ListNode list2 = mid.next;
+        mid.next = null;
+        list2 = reverseList(list2);
+        mergeList(list1, list2);
+    }
+
+    public ListNode middleNode(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        return slow;
+    }
+
+    public ListNode reverseList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+
+        ListNode cur = head;
+        ListNode pre = null;
+        ListNode next = null;
+        while (cur != null) {
+            next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+
+        return pre;
+    }
+
+    public void mergeList(ListNode list1, ListNode list2) {
+        ListNode tmp1 = null;
+        ListNode tmp2 = null;
+        while (list1 != null && list2 != null) {
+            tmp1 = list1.next;
+            tmp2 = list2.next;
+
+            list1.next = list2;
+            list1 = tmp1;
+
+            list2.next = list1;
+            list2 = tmp2;
+        }
+    }
+}
+```
+
 ### 146.LRU缓存机制
 ```java
 package leetcode;
@@ -5711,6 +5825,114 @@ public class lc228 {
     }
 }
 ```
+### 232. 用栈实现队列
+题目连接
+https://leetcode-cn.com/problems/implement-queue-using-stacks/          
+https://leetcode.com/problems/implement-queue-using-stacks/
+```java
+package leetcode;
+
+import java.util.Stack;
+
+/*
+请你仅使用两个栈实现先入先出队列。队列应当支持一般队列支持的所有操作（push、pop、peek、empty）：
+实现 MyQueue 类：
+void push(int x) 将元素 x 推到队列的末尾
+int pop() 从队列的开头移除并返回元素
+int peek() 返回队列开头的元素
+boolean empty() 如果队列为空，返回 true ；否则，返回 false
+
+说明：
+你只能使用标准的栈操作 —— 也就是只有push to top,peek/pop from top,size, 和is empty操作是合法的。
+你所使用的语言也许不支持栈。你可以使用 list 或者 deque（双端队列）来模拟一个栈，只要是标准的栈操作即可。
+
+进阶：
+你能否实现每个操作均摊时间复杂度为 O(1) 的队列？换句话说，执行 n 个操作的总时间复杂度为 O(n) ，即使其中一个操作可能花费较长时间。
+
+示例：
+输入：
+["MyQueue", "push", "push", "peek", "pop", "empty"]
+[[], [1], [2], [], [], []]
+输出：
+[null, null, null, 1, 1, false]
+
+解释：
+MyQueue myQueue = new MyQueue();
+myQueue.push(1); // queue is: [1]
+myQueue.push(2); // queue is: [1, 2] (leftmost is front of the queue)
+myQueue.peek(); // return 1
+myQueue.pop(); // return 1, queue is [2]
+myQueue.empty(); // return false
+
+提示：
+1 <= x <= 9
+最多调用 100 次 push、pop、peek 和 empty
+假设所有操作都是有效的 （例如，一个空的队列不会调用 pop 或者 peek 操作）
+ */
+public class MyQueue {
+    // 两个栈实现先入先出队列
+    private Stack<Integer> stkPush;
+    private Stack<Integer> stkPop;
+
+    public MyQueue() {
+        stkPush = new Stack<>();
+        stkPop = new Stack<>();
+    }
+
+    public void push(int x) {
+        stkPush.push(x);
+    }
+
+    public int pop() {
+        if (stkPop.isEmpty()) {
+            while (!stkPush.isEmpty()) {
+                stkPop.push(stkPush.pop());
+            }
+        }
+
+        return stkPop.pop();
+    }
+
+    public int peek() {
+        if (stkPop.isEmpty()) {
+            while (!stkPush.isEmpty()) {
+                stkPop.push(stkPush.pop());
+            }
+        }
+
+        return stkPop.peek();
+    }
+
+    public boolean empty() {
+        return stkPush.isEmpty() && stkPop.isEmpty();
+    }
+}
+
+class MyQueue2 {
+    // 一个栈实现先入先出队列
+    private Stack<Integer> stk;
+
+    public MyQueue2() {
+        stk = new Stack<>();
+    }
+
+    public void push(int x) {
+        stk.add(0, x);
+    }
+
+    public int pop() {
+        return stk.pop();
+    }
+
+    public int peek() {
+        return stk.peek();
+    }
+
+    public boolean empty() {
+        return stk.isEmpty();
+    }
+}
+```
 
 ### 300.最长递增子序列
 题目链接            
@@ -5934,6 +6156,74 @@ public class lc328 {
         }
 
         return head;
+    }
+}
+```
+### 349.两个数组的交集
+```java
+package leetcode;
+
+import java.util.*;
+
+/*
+给定两个数组，编写一个函数来计算它们的交集。
+
+示例 1：
+输入：nums1 = [1,2,2,1], nums2 = [2,2]
+输出：[2]
+
+示例 2：
+输入：nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+输出：[9,4]
+
+说明：
+输出结果中的每个元素一定是唯一的。
+我们可以不考虑输出结果的顺序
+ */
+public class lc349 {
+    public static int[] intersection(int[] nums1, int[] nums2) {
+        Set<Integer> nums = new HashSet<Integer>();
+        Set<Integer> result = new HashSet<>();
+        for (int i = 0; i < nums2.length; i++) {
+            //放入时候去掉重复的
+            nums.add(nums2[i]);
+        }
+        for (int i = 0; i < nums1.length; i++) {
+            if (nums.contains(nums1[i])) {
+                //放入交集
+                result.add(nums1[i]);
+            }
+        }
+        int[] res = new int[result.size()];
+        int i = 0;
+        Iterator iter = result.iterator();
+        while (iter.hasNext()) {
+            //集合变数组
+            res[i++] = (int) iter.next();
+        }
+        return res;
+    }
+
+    public static int[] intersection2(int[] nums1, int[] nums2) {
+        Map<Integer, Integer> m = new HashMap<Integer, Integer>();
+        Set<Integer> result = new HashSet<>();
+        for (int num : nums1) {
+            m.put(num, 1);
+        }
+        for (int num : nums2) {
+            if (m.containsKey(num)) {
+                //放入交集
+                result.add(num);
+            }
+        }
+        int[] res = new int[result.size()];
+        int i = 0;
+        Iterator iter = result.iterator();
+        while (iter.hasNext()) {
+            //集合变数组
+            res[i++] = (int) iter.next();
+        }
+        return res;
     }
 }
 ```
