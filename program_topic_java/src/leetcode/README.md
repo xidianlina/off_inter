@@ -77,19 +77,27 @@ LeetCode
 ### 80.删除有序数组中的重复项II
 ### 98.验证二叉搜索树
 ### 109.有序链表转换二叉搜索树
+### 121.买卖股票的最佳时机
+### 122.买卖股票的最佳时机II
+### 123.买卖股票的最佳时机III
 ### 143.重排链表
 ### 146.LRU缓存机制
 ### 172.阶乘后的零
+### 188.买卖股票的最佳时机IV
 ### 206.反转链表
 ### 228.汇总区间
 ### 232.重排链表
 ### 300.最长递增子序列
+### 309.最佳买卖股票时机含冷冻期
 ### 322.零钱兑换
 ### 328.奇偶链表
 ### 349.两个数组的交集
 ### 543.二叉树的直径(二叉树中节点的最大距离)
 ### 674.最长连续递增序列
+### 714.买卖股票的最佳时机含手续费
+### 796.旋转字符串
 ### 1143.最长公共子序列
+### 1502.判断能否形成等差数列
 
 # 算法解答
 ### 1.两数之和
@@ -5447,8 +5455,244 @@ public class lc109 {
     }
 }
 ```
+### 121.买卖股票的最佳时机
+题目连接
+https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+```java
+package leetcode;
+
+/*
+给定一个数组 prices ，它的第i个元素prices[i] 表示一支给定股票第 i 天的价格。
+你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
+
+示例 1：
+输入：[7,1,5,3,6,4]
+输出：5
+解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
+     注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。
+
+示例 2：
+输入：prices = [7,6,4,3,1]
+输出：0
+解释：在这种情况下, 没有交易完成, 所以最大利润为 0。
+
+提示：
+1 <= prices.length <= 105
+0 <= prices[i] <= 104
+ */
+public class lc121 {
+    /*
+        时间复杂度：O(n^2)
+        空间复杂度：O(1)。只使用了常数个变量。
+        运行时超时
+     */
+    public int maxProfit(int[] prices) {
+        int max = 0;
+        //从第一个元素遍历到倒数第二个元素
+        for (int i = 0; i < prices.length - 1; ++i) {
+            //从第二个元素遍历到最后一个元素,保证买入在卖出前
+            for (int j = i + 1; j < prices.length; ++j) {
+                int profile = prices[i] - prices[j];
+                if (profile > max) {
+                    max = profile;
+                }
+            }
+        }
+
+        return max;
+    }
+
+    /*
+        时间复杂度：O(n)，只需要遍历一次。
+        空间复杂度：O(1)，只使用了常数个变量。
+     */
+
+    public int maxProfit2(int[] prices) {
+        int minPrice = Integer.MAX_VALUE;
+        int maxProfit = 0;
+        for (int i = 0; i < prices.length; ++i) {
+            if (prices[i] < minPrice) {
+                minPrice = prices[i];
+            } else if (prices[i] - minPrice > maxProfit) {
+                maxProfit = prices[i] - minPrice;
+            }
+        }
+
+        return maxProfit;
+    }
+}
+```
+### 122.买卖股票的最佳时机II
+题目连接
+https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
+```java
+package leetcode;
+
+import sun.nio.cs.ext.MacHebrew;
+
+/*
+给定一个数组 prices ，其中prices[i] 是一支给定股票第 i 天的价格。
+设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+
+示例 1:
+输入: prices = [7,1,5,3,6,4]
+输出: 7
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+     随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6-3 = 3 。
+
+示例 2:
+输入: prices = [1,2,3,4,5]
+输出: 4
+解释: 在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+     注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
+
+示例 3:
+输入: prices = [7,6,4,3,1]
+输出: 0
+解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+
+提示：
+1 <= prices.length <= 3 * 104
+0 <= prices[i] <= 104
+ */
+public class lc122 {
+    /*
+        因为不能同时参与多笔交易，因此每天交易结束后只可能存在手里有一支股票或者没有股票的状态。
+        dp[i][0]表示第i天交易完后手里没有股票的最大利润，dp[i][1]表示第i天交易完后手里持有一支股票的最大利润（i从0开始）。
+        考虑dp[i][0]的转移方程，如果这一天交易完后手里没有股票，那么可能的转移状态为前一天已经没有股票，即dp[i−1][0]，
+        或者前一天结束的时候手里持有一支股票，即dp[i−1][1]，这时候要将其卖出，并获得prices[i]的收益。因此为了收益最大化，转移方程：
+        dp[i][0]=max{dp[i−1][0],dp[i−1][1]+prices[i]}
+
+        再来考虑dp[i][1]的转移方程，如果这一天交易完后手里有股票，那么可能是前一天已经持有一支股票，即dp[i−1][1]，
+        或者前一天结束时还没有股票，即dp[i−1][0]，这一天要将买入一支股票，并减少prices[i]的收益。转移方程：
+        dp[i][1]=max{dp[i−1][1],dp[i−1][0]−prices[i]}
+
+        对于初始状态，根据状态定义可以知道第0天交易结束的时候dp[0][0]=0，dp[0][1]=−prices[0]。
+        因此，只要从前往后依次计算状态即可。由于全部交易结束后，持有股票的收益一定低于不持有股票的收益，
+        因此这时候dp[n−1][0]的收益必然是大于dp[n−1][1]的，最后的答案即为dp[n−1][0]。
+
+        时间复杂度：O(n)，其中n为数组的长度。一共有2n个状态，每次状态转移的时间复杂度为O(1)，因此时间复杂度为O(2n)=O(n)。
+        空间复杂度：O(n)。需要开辟O(n)空间存储动态规划中的所有状态。如果使用空间优化，空间复杂度可以优化至O(1)。
+     */
+    public int maxProfit(int[] prices) {
+        int n = prices.length;
+        int[][] dp = new int[n][2];
+        dp[0][0] = 0;
+        dp[0][1] = -prices[0];
+
+        for (int i = 1; i < n; ++i) {
+            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
+            dp[i][1] = Math.max(dp[i - 1][0] - prices[i], dp[i - 1][1]);
+        }
+
+        return dp[n - 1][0];
+    }
+
+    /*
+        贪心算法
+        贪心算法只能用于计算最大利润，计算的过程并不是实际的交易过程。
+        时间复杂度：O(n)，其中n为数组的长度。只需要遍历一次数组即可。
+        空间复杂度：O(1)。只需要常数空间存放若干变量。
+     */
+    public int maxProfit2(int[] prices) {
+        int ans = 0;
+        int n = prices.length;
+
+        for (int i = 1; i < n; ++i) {
+            ans += Math.max(0, prices[i] - prices[i - 1]);
+        }
+
+        return ans;
+    }
+}
+```
+### 123.买卖股票的最佳时机III
+题目连接
+https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/
+```java
+package leetcode;
+
+/*
+给定一个数组，它的第 i 个元素是一支给定的股票在第 i 天的价格。
+设计一个算法来计算你所能获取的最大利润。你最多可以完成两笔交易。
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+
+示例 1:
+输入：prices = [3,3,5,0,0,3,1,4]
+输出：6
+解释：在第 4 天（股票价格 = 0）的时候买入，在第 6 天（股票价格 = 3）的时候卖出，这笔交易所能获得利润 = 3-0 = 3 。
+     随后，在第 7 天（股票价格 = 1）的时候买入，在第 8 天 （股票价格 = 4）的时候卖出，这笔交易所能获得利润 = 4-1 = 3 。
+
+示例 2：
+输入：prices = [1,2,3,4,5]
+输出：4
+解释：在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4。
+     注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。
+     因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
+
+示例 3：
+输入：prices = [7,6,4,3,1]
+输出：0
+解释：在这个情况下, 没有交易完成, 所以最大利润为 0。
+
+示例 4：
+输入：prices = [1]
+输出：0
+
+提示：
+1 <=prices.length <= 10^5
+0 <=prices[i] <= 10^5
+ */
+public class lc123 {
+    /*
+        由于最多可以完成两笔交易，因此在任意一天结束之后，会处于以下五个状态中的一种：
+        1.未进行过任何操作；
+        2.只进行过一次买操作；
+        3.进行了一次买操作和一次卖操作，即完成了一笔交易；
+        4.在完成了一笔交易的前提下，进行了第二次买操作；
+        5.完成了全部两笔交易。
+        由于第一个状态的利润显然为0，因此可以不用将其记录。
+        对于剩下的四个状态，分别将它们的最大利润记为buy1、sell1、buy2、sell2
+
+        对于buy1，在第i天可以不进行任何操作，保持不变，也可以在未进行任何操作的前提下以prices[i]的价格买入股票，那么buy1的状态转移方程即为：
+        buy1 = max{buy1,−prices[i]}
+
+        对于sell1，在第i天可以不进行任何操作，保持不变，也可以在只进行过一次买操作的前提下以prices[i]的价格卖出股票，那么sell1的状态转移方程即为：：
+        sell1 = max{sell1,buy1+prices[i]}
+
+        对于buy2，在第i天可以不进行任何操作，保持不变，也可以在完成了一笔交易(一次买操作和一次卖操作)操作的前提下以prices[i]的价格买入股票，那么buy2的状态转移方程即为：
+        buy2 = max{buy2,sell1−prices[i]}
+
+        对于sell2，在第i天可以不进行任何操作，保持不变，也可以在完成了一笔交易之后又买了一次的前提下以prices[i]的价格卖出股票，那么sell2的状态转移方程即为：
+        sell2 = max{sell2,buy2+prices[i]}
+
+        时间复杂度：O(n)，其中n是数组prices的长度。
+        空间复杂度：O(1)。
+     */
+
+    public int maxProfit(int[] prices) {
+        int n = prices.length;
+        int buy1 = -prices[0], sell1 = 0;
+        int buy2 = -prices[0], sell2 = 0;
+        for (int i = 1; i < n; ++i) {
+            buy1 = Math.max(buy1, -prices[i]);
+            sell1 = Math.max(sell1, buy1 + prices[i]);
+            buy2 = Math.max(buy2, sell1 - prices[i]);
+            sell2 = Math.max(sell2, buy2 + prices[i]);
+        }
+        return sell2;
+    }
+}
+```
 ### 143.重排链表
 题目连接
+https://leetcode-cn.com/problems/reorder-list/
+https://leetcode.com/problems/reorder-list/
 ```java
 package leetcode;
 
@@ -5694,9 +5938,72 @@ public class lc172 {
     }
 }
 ```
+### 188.买卖股票的最佳时机IV
+题目链接
+https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iv/
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/
+```java
+package leetcode;
 
+import java.util.Arrays;
 
+/*
+给定一个整数数组prices ，它的第i个元素prices[i] 是一支给定的股票在第 i 天的价格。
+设计一个算法来计算你所能获取的最大利润。你最多可以完成 k 笔交易。
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
 
+示例 1：
+输入：k = 2, prices = [2,4,1]
+输出：2
+解释：在第 1 天 (股票价格 = 2) 的时候买入，在第 2 天 (股票价格 = 4) 的时候卖出，这笔交易所能获得利润 = 4-2 = 2 。
+
+示例 2：
+输入：k = 2, prices = [3,2,6,5,0,3]
+输出：7
+解释：在第 2 天 (股票价格 = 2) 的时候买入，在第 3 天 (股票价格 = 6) 的时候卖出, 这笔交易所能获得利润 = 6-2 = 4 。
+     随后，在第 5 天 (股票价格 = 0) 的时候买入，在第 6 天 (股票价格 = 3) 的时候卖出, 这笔交易所能获得利润 = 3-0 = 3 。
+
+提示：
+0 <= k <= 100
+0 <= prices.length <= 1000
+0 <= prices[i] <= 1000
+ */
+public class lc188 {
+    /*
+        时间复杂度：O(n*min(n,k))，其中n是数组prices的大小，即使用二重循环进行动态规划需要的时间。
+        空间复杂度：O(min(n,k))。
+
+        本题中k的最大值可以达到10^9 ，然而这是毫无意义的，因为n天最多只能进行n/2笔交易，其中[x]表示对x向下取整。
+        因此可以将k对[n/2]取较小值之后再进行动态规划。
+     */
+    public int maxProfit(int k, int[] prices) {
+        if (prices.length == 0) {
+            return 0;
+        }
+
+        int n = prices.length;
+        k = Math.min(k, n / 2);
+        int[] buy = new int[k + 1];
+        int[] sell = new int[k + 1];
+
+        buy[0] = -prices[0];
+        sell[0] = 0;
+        for (int i = 1; i <= k; ++i) {
+            buy[i] = sell[i] = Integer.MIN_VALUE / 2;
+        }
+
+        for (int i = 1; i < n; ++i) {
+            buy[0] = Math.max(buy[0], sell[0] - prices[i]);
+            for (int j = 1; j <= k; ++j) {
+                buy[j] = Math.max(buy[j], sell[j] - prices[i]);
+                sell[j] = Math.max(sell[j], buy[j - 1] + prices[i]);
+            }
+        }
+
+        return Arrays.stream(sell).max().getAsInt();
+    }
+}
+```
 
 
 
@@ -6038,6 +6345,49 @@ public class lc300 {
     }
 }
 ```
+### 309.最佳买卖股票时机含冷冻期
+题目链接
+https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
+```java
+package leetcode;
+
+/*
+给定一个整数数组，其中第i个元素代表了第i天的股票价格 。
+设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:
+你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天)。
+
+示例:
+输入: [1,2,3,0,2]
+输出: 3
+解释: 对应的交易状态为: [买入, 卖出, 冷冻期, 买入, 卖出]
+ */
+public class lc309 {
+    /*
+        时间复杂度：O(n)，其中n为数组prices 的长度。
+        空间复杂度：O(1)。
+    */
+    public int maxProfit(int[] prices) {
+        if (prices.length == 0) {
+            return 0;
+        }
+
+        int n = prices.length;
+        // f[i][0]: 手上持有股票的最大收益
+        // f[i][1]: 手上不持有股票，并且处于冷冻期中的累计最大收益
+        // f[i][2]: 手上不持有股票，并且不在冷冻期中的累计最大收益
+        int[][] f = new int[n][3];
+        f[0][0] = -prices[0];
+        for (int i = 1; i < n; ++i) {
+            f[i][0] = Math.max(f[i - 1][0], f[i - 1][2] - prices[i]);
+            f[i][1] = f[i - 1][0] + prices[i];
+            f[i][2] = Math.max(f[i - 1][1], f[i - 1][2]);
+        }
+        return Math.max(f[n - 1][1], f[n - 1][2]);
+    }
+}
+```
 ### 322.零钱兑换
 题目链接        
 https://leetcode-cn.com/problems/coin-change/submissions/           
@@ -6331,6 +6681,57 @@ public class lc674 {
     }
 }
 ```
+
+### 714.买卖股票的最佳时机含手续费
+题目链接
+https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/
+```java
+package leetcode;
+
+/*
+给定一个整数数组prices，其中第i个元素代表了第i天的股票价格 ；非负整数fee代表了交易股票的手续费用。
+你可以无限次地完成交易，但是你每笔交易都需要付手续费。如果你已经购买了一个股票，在卖出它之前你就不能再继续购买股票了。
+返回获得利润的最大值。
+注意：这里的一笔交易指买入持有并卖出股票的整个过程，每笔交易你只需要为支付一次手续费。
+
+示例 1:
+输入: prices = [1, 3, 2, 8, 4, 9], fee = 2
+输出: 8
+解释: 能够达到的最大利润:
+在此处买入prices[0] = 1
+在此处卖出 prices[3] = 8
+在此处买入 prices[4] = 4
+在此处卖出 prices[5] = 9
+总利润:((8 - 1) - 2) + ((9 - 4) - 2) = 8
+
+注意:
+0 < prices.length <= 50000.
+0 < prices[i] < 50000.
+0 <= fee < 50000.
+ */
+public class lc714 {
+    /*
+        不能同时参与多笔交易，因此每天交易结束后只可能存在手里有一支股票或者没有股票的状态。
+        定义状态dp[i][0]表示第i天交易完后手里没有股票的最大利润，
+        dp[i][1]表示第i天交易完后手里持有一支股票的最大利润（i从0开始）。
+
+        时间复杂度：O(n)，其中n为数组的长度。一共有2n个状态，每次状态转移的时间复杂度为O(1)，因此时间复杂度为O(2n)=O(n)。
+        空间复杂度：O(n)。
+     */
+    public int maxProfit(int[] prices, int fee) {
+        int n = prices.length;
+        int[][] dp = new int[n][2];
+        dp[0][0] = 0;
+        dp[0][1] = -prices[0];
+        for (int i = 1; i < n; ++i) {
+            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i] - fee);
+            dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
+        }
+        return dp[n - 1][0];
+    }
+}
+```
 ### 796.旋转字符串
 题目链接            
 https://leetcode-cn.com/problems/rotate-string/             
@@ -6484,6 +6885,83 @@ public class lc1143 {
         }
 
         return dp[m][n];
+    }
+}
+```
+### 1502.判断能否形成等差数列
+题目链接
+https://leetcode-cn.com/problems/can-make-arithmetic-progression-from-sequence/
+https://leetcode.com/problems/can-make-arithmetic-progression-from-sequence/
+```java
+package leetcode;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+/*
+给你一个数字数组 arr 。
+如果一个数列中，任意相邻两项的差总等于同一个常数，那么这个数列就称为 等差数列 。
+如果可以重新排列数组形成等差数列，请返回 true ；否则，返回 false 。
+
+示例 1：
+输入：arr = [3,5,1]
+输出：true
+解释：对数组重新排序得到 [1,3,5] 或者 [5,3,1] ，任意相邻两项的差分别为 2 或 -2 ，可以形成等差数列。
+
+示例 2：
+输入：arr = [1,2,4]
+输出：false
+解释：无法通过重新排序得到等差数列。
+
+提示：
+2 <= arr.length <= 1000
+-10^6 <= arr[i] <= 10^6
+ */
+public class lc1502 {
+    /*
+        时间复杂度：O(nlogn)。排序的时间代价为O(n*logn)，遍历序列的时间代价是O(n)，故渐进时间复杂度为 O(n*log n + n) = O(n*logn)。
+        空间复杂度：O(logn)。快速排序中使用的栈空间期望是O(logn)。
+     */
+    public boolean canMakeArithmeticProgression(int[] arr) {
+        Arrays.sort(arr);
+        for (int i = 1; i < arr.length - 1; ++i) {
+            if (arr[i] * 2 != arr[i - 1] + arr[i + 1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /*
+        时间复杂度：O(n)
+        空间复杂度：O(n)
+     */
+    public boolean canMakeArithmeticProgression2(int[] arr) {
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        Set<Integer> set = new HashSet<>();
+
+        //对数组进行第一次遍历,找出数组中min ,max
+        for (int i : arr) {
+            max = Math.max(max, i);
+            min = Math.min(min, i);
+            set.add(i);
+        }
+
+        if ((max - min) % (arr.length - 1) != 0) {
+            return false;
+        }
+
+        //求得公差
+        int diff = (max - min) / (arr.length - 1);
+
+        for (int i = min + diff; i < max; i += diff) {
+            if (!set.contains(i)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 ```
