@@ -75,6 +75,7 @@ LeetCode
 ### 78.子集
 ### 79.单词搜索
 ### 80.删除有序数组中的重复项II
+### 88.合并两个有序数组
 ### 98.验证二叉搜索树
 ### 109.有序链表转换二叉搜索树
 ### 121.买卖股票的最佳时机
@@ -5323,6 +5324,54 @@ public class lc080 {
     }
 }
 ```
+### 88.合并两个有序数组
+题目连接
+https://leetcode-cn.com/problems/merge-sorted-array/                    
+https://leetcode.com/problems/merge-sorted-array/
+```java
+package leetcode;
+
+/*
+给你两个有序整数数组nums1和nums2，请你将nums2合并到nums1中，使nums1成为一个有序数组。
+初始化nums1和nums2的元素数量分别为m和n。你可以假设nums1的空间大小等于m + n，这样它就有足够的空间保存来自nums2的元素。
+
+示例 1：
+输入：nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
+输出：[1,2,2,3,5,6]
+
+示例 2：
+输入：nums1 = [1], m = 1, nums2 = [], n = 0
+输出：[1]
+
+提示：
+nums1.length == m + n
+nums2.length == n
+0 <= m, n <= 200
+1 <= m + n <= 200
+-109 <= nums1[i], nums2[i] <= 109
+ */
+public class lc088 {
+    /*
+        时间复杂度：O(m+n)。指针移动单调递减，最多移动 m+n 次，因此时间复杂度为 O(m+n)。
+        空间复杂度：O(1)。直接对数组原地修改，不需要额外空间。
+     */
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int i = m - 1;
+        int j = n - 1;
+        int k = m + n - 1;
+        while (i >= 0 && j >= 0) {
+            if (nums1[i] > nums2[j]) {
+                nums1[k--] = nums1[i--];
+            } else {
+                nums1[k--] = nums2[j--];
+            }
+        }
+        while (j >= 0) {
+            nums1[k--] = nums2[j--];
+        }
+    }
+}
+```
 ### 98.验证二叉搜索树
 ```java
 package leetcode;
@@ -6890,8 +6939,8 @@ public class lc1143 {
 ```
 ### 1502.判断能否形成等差数列
 题目链接
-https://leetcode-cn.com/problems/can-make-arithmetic-progression-from-sequence/
-https://leetcode.com/problems/can-make-arithmetic-progression-from-sequence/
+https://leetcode-cn.com/problems/can-make-arithmetic-progression-from-sequence/                             
+https://leetcode.com/problems/can-make-arithmetic-progression-from-sequence/                            
 ```java
 package leetcode;
 
