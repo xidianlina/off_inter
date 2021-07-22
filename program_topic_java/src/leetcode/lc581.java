@@ -1,7 +1,10 @@
 package leetcode;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /*
-给你一个整数数组 nums ，你需要找出一个 连续子数组 ，如果对这个子数组进行升序排序，那么整个数组都会变为升序排序。
+给你一个整数数组 nums ，你需要找出一个连续子数组 ，如果对这个子数组进行升序排序，那么整个数组都会变为升序排序。
 请你找出符合题意的 最短 子数组，并输出它的长度。
 
 示例 1：
@@ -58,5 +61,12 @@ public class lc581 {
             }
         }
         return right - left < 0 ? 0 : right - left + 1;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {0, 1, 2, 4, 3, 90, 8, 10, 9, 15, 16, 18};
+        lc581 main = new lc581();
+        int res = main.findUnsortedSubarray(arr);
+        System.out.println(res);
     }
 }
