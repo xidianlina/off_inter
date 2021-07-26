@@ -1,6 +1,7 @@
 package leetcode;
 
 /*
+28. 实现 strStr()
 实现strStr()函数。
 给你两个字符串haystack和needle ，请你在haystack字符串中找出needle字符串出现的第一个位置（下标从 0 开始）。如果不存在，则返回-1 。
 
