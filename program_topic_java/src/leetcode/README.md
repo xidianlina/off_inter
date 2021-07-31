@@ -5375,6 +5375,9 @@ public class lc088 {
 }
 ```
 ### 98.验证二叉搜索树
+题目链接
+https://leetcode-cn.com/problems/validate-binary-search-tree/                       
+https://leetcode.com/problems/validate-binary-search-tree/                       
 ```java
 package leetcode;
 
@@ -5455,6 +5458,9 @@ class TreeNode {
 }
 ```
 ### 109.有序链表转换二叉搜索树
+题目链接
+https://leetcode-cn.com/problems/convert-sorted-list-to-binary-search-tree/         
+https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/             
 ```java
 package leetcode;
 
@@ -5854,6 +5860,9 @@ public class lc143 {
 ```
 
 ### 146.LRU缓存机制
+题目链接        
+https://leetcode-cn.com/problems/lru-cache/         
+https://leetcode.com/problems/lru-cache/         
 ```java
 package leetcode;
 
@@ -5935,6 +5944,9 @@ public class lc146 {
 }
 ```
 ### 172.阶乘后的零
+题目链接        
+https://leetcode-cn.com/problems/factorial-trailing-zeroes/             
+https://leetcode.com/problems/factorial-trailing-zeroes/         
 ```java
 package leetcode;
 
@@ -6053,9 +6065,9 @@ public class lc179 {
 }
 ```
 ### 188.买卖股票的最佳时机IV
-题目链接
-https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iv/
-https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/
+题目链接                    
+https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iv/                    
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/                   
 ```java
 package leetcode;
 
@@ -6460,9 +6472,9 @@ public class lc300 {
 }
 ```
 ### 309.最佳买卖股票时机含冷冻期
-题目链接
-https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
-https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
+题目链接                
+https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/             
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/            
 ```java
 package leetcode;
 
@@ -6624,6 +6636,9 @@ public class lc328 {
 }
 ```
 ### 349.两个数组的交集
+题目链接                     
+https://leetcode-cn.com/problems/intersection-of-two-arrays/                    
+https://leetcode.com/problems/intersection-of-two-arrays/                                     
 ```java
 package leetcode;
 
@@ -6693,6 +6708,9 @@ public class lc349 {
 ```
 
 ### 543.二叉树的直径(二叉树中节点的最大距离)
+题目链接            
+https://leetcode-cn.com/problems/diameter-of-binary-tree/       
+https://leetcode.com/problems/diameter-of-binary-tree/           
 ```java
 package leetcode;
 
@@ -6820,6 +6838,9 @@ public class lc581 {
 }
 ```
 ### 674.最长连续递增序列
+题目链接        
+https://leetcode-cn.com/problems/longest-continuous-increasing-subsequence/         
+https://leetcode.com/problems/longest-continuous-increasing-subsequence/         
 ```java
 package leetcode;
 
@@ -6865,9 +6886,9 @@ public class lc674 {
 ```
 
 ### 714.买卖股票的最佳时机含手续费
-题目链接
-https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/
-https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/
+题目链接                    
+https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/              
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/                     
 ```java
 package leetcode;
 
@@ -6915,9 +6936,9 @@ public class lc714 {
 }
 ```
 ### 796.旋转字符串
-题目链接            
-https://leetcode-cn.com/problems/rotate-string/             
-https://leetcode.com/problems/rotate-string/
+题目链接                    
+https://leetcode-cn.com/problems/rotate-string/                            
+https://leetcode.com/problems/rotate-string/                    
 ```java
 package leetcode;
 
@@ -7016,9 +7037,9 @@ public class lc796 {
 }
 ```
 ### 1143.最长公共子序列
-题目链接        
-https://leetcode-cn.com/problems/longest-common-subsequence/            
-https://leetcode.com/problems/longest-common-subsequence/            
+题目链接                    
+https://leetcode-cn.com/problems/longest-common-subsequence/                            
+https://leetcode.com/problems/longest-common-subsequence/                          
 > ![lc1143](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/leetcode/picture/lc1143.png)            
 ```java
 package leetcode;
@@ -7071,9 +7092,9 @@ public class lc1143 {
 }
 ```
 ### 1502.判断能否形成等差数列
-题目链接
-https://leetcode-cn.com/problems/can-make-arithmetic-progression-from-sequence/                             
-https://leetcode.com/problems/can-make-arithmetic-progression-from-sequence/                            
+题目链接                
+https://leetcode-cn.com/problems/can-make-arithmetic-progression-from-sequence/                                         
+https://leetcode.com/problems/can-make-arithmetic-progression-from-sequence/                                      
 ```java
 package leetcode;
 

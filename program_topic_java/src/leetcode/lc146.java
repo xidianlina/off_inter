@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Queue;
 
 /*
+146. LRU 缓存机制
 运用你所掌握的数据结构，设计和实现一个LRU (最近最少使用) 缓存机制 。
 实现 LRUCache 类：
 LRUCache(int capacity) 以正整数作为容量capacity 初始化 LRU 缓存

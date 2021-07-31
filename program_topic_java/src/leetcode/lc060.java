@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
+60. 排列序列
 给出集合[1,2,3,...,n]，其所有元素共有n!种排列。
 按大小顺序列出所有排列情况，并一一标记，当n = 3 时, 所有排列如下：
 "123"

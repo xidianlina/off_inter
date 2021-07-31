@@ -31,7 +31,7 @@ class ListNode {
     }
 }
 
-class lt328 {
+class lc328 {
     public ListNode oddEvenList(ListNode head) {
         if (head == null || head.next == null) {
             return head;

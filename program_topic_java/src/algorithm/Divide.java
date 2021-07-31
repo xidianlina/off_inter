@@ -3,6 +3,7 @@ package algorithm;
 public class Divide {
     public static void main(String[] args) {
         divide(10, 3);
+        divide2(10, 3);
     }
 
     public static void divide(int a, int b) {
@@ -12,5 +13,15 @@ public class Divide {
                 break;
             }
         }
+    }
+
+    public static void divide2(int a, int b) {
+        int i = 1;
+        while ((a - b) > b) {
+            a = a - b;
+            ++i;
+        }
+
+        System.out.println(i + " " + (a - b));
     }
 }
