@@ -1,0 +1,78 @@
+package leetcode;
+
+/*
+200. 岛屿数量
+给你一个由'1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。
+此外，你可以假设该网格的四条边均被水包围。
+
+示例 1：
+输入：grid = [
+  ["1","1","1","1","0"],
+  ["1","1","0","1","0"],
+  ["1","1","0","0","0"],
+  ["0","0","0","0","0"]
+]
+输出：1
+
+示例 2：
+输入：grid = [
+  ["1","1","0","0","0"],
+  ["1","1","0","0","0"],
+  ["0","0","1","0","0"],
+  ["0","0","0","1","1"]
+]
+输出：3
+
+提示：
+m == grid.length
+n == grid[i].length
+1 <= m, n <= 300
+grid[i][j] 的值为 '0' 或 '1'
+ */
+public class lc200 {
+    /*
+        深度优先搜索：
+            可以将二维网格看成一个无向图，竖直或水平相邻的1之间有边相连。
+            为了求出岛屿的数量，可以扫描整个二维网格。如果一个位置为1，
+            则以其为起始节点开始进行深度优先搜索。在深度优先搜索的过程中，
+            每个搜索到的1都会被重新标记为0。最终岛屿的数量就是进行深度优先搜索的次数。
+
+        时间复杂度：O(MN)，其中M和N分别为行数和列数。
+        空间复杂度：O(min(M,N))，在最坏情况下，整个网格均为陆地，队列的大小可以达到min(M,N)。
+     */
+    public int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0) {
+            return 0;
+        }
+
+        int row = grid.length;
+        int col = grid[0].length;
+        int count = 0;
+        for (int r = 0; r < row; ++r) {
+            for (int c = 0; c < col; ++c) {
+                if (grid[r][c] == '1') {
+                    ++count;
+                    dfs(grid, r, c);
+                }
+            }
+        }
+
+        return count;
+    }
+
+    public void dfs(char[][] grid, int r, int c) {
+        int row = grid.length;
+        int col = grid[0].length;
+
+        if (r < 0 || c < 0 || r >= row || c >= col || grid[r][c] == '0') {
+            return;
+        }
+
+        grid[r][c] = '0';
+        dfs(grid, r - 1, c);
+        dfs(grid, r + 1, c);
+        dfs(grid, r, c - 1);
+        dfs(grid, r, c + 1);
+    }
+}

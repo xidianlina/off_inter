@@ -1,5 +1,7 @@
 LeetCode
 ======
+https://www.cnblogs.com/xidian2014                          
+https://codetop.cc/home                                    
 # 算法题目
 ### 1.两数之和
 ### 2.两数相加
@@ -86,13 +88,17 @@ LeetCode
 ### 172.阶乘后的零
 ### 179.最大数
 ### 188.买卖股票的最佳时机IV
+### 198.打家劫舍
 ### 206.反转链表
+### 213.打家劫舍II
+### 215.数组中的第K个最大元素
 ### 228.汇总区间
 ### 232.重排链表
 ### 300.最长递增子序列
 ### 309.最佳买卖股票时机含冷冻期
 ### 322.零钱兑换
 ### 328.奇偶链表
+### 337.打家劫舍 III
 ### 349.两个数组的交集
 ### 543.二叉树的直径(二叉树中节点的最大距离)
 ### 581.最短无序连续子数组
@@ -5374,6 +5380,58 @@ public class lc088 {
     }
 }
 ```
+### 92.验证二叉搜索树
+题目链接            
+https://leetcode-cn.com/problems/reverse-linked-list-ii/                        
+https://leetcode.com/problems/reverse-linked-list-ii/            
+```java
+package leetcode;
+
+/*
+92. 反转链表 II 反转子链表
+给你单链表的头指针head和两个整数left和right，其中left <= right 。
+请你反转从位置 left 到位置 right 的链表节点，返回 反转后的链表 。
+示例 1：
+输入：head = [1,2,3,4,5], left = 2, right = 4
+输出：[1,4,3,2,5]
+
+示例 2：
+输入：head = [5], left = 1, right = 1
+输出：[5]
+
+提示：
+链表中节点数目为 n
+1 <= n <= 500
+-500 <= Node.val <= 500
+1 <= left <= right <= n
+ */
+public class lc092 {
+    /*
+        时间复杂度：O(N)，其中N是链表总节点数。最多只遍历了链表一次，就完成了反转。
+        空间复杂度：O(1)。只使用到常数个变量。
+     */
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        ListNode dummyNode = new ListNode(-1);
+        dummyNode.next = head;
+        ListNode pre = dummyNode;
+
+        for (int i = 0; i < left - 1; i++) {
+            pre = pre.next;
+        }
+
+        ListNode cur = pre.next;
+        ListNode next;
+        for (int i = 0; i < right - left; i++) {
+            next = cur.next;
+            cur.next = next.next;
+            next.next = pre.next;
+            pre.next = next;
+        }
+
+        return dummyNode.next;
+    }
+}
+```           
 ### 98.验证二叉搜索树
 题目链接
 https://leetcode-cn.com/problems/validate-binary-search-tree/                       
@@ -6130,7 +6188,253 @@ public class lc188 {
     }
 }
 ```
+### 198.打家劫舍
+题目链接            
+https://leetcode-cn.com/problems/house-robber/              
+https://leetcode.com/problems/house-robber/              
+```java
+package leetcode;
 
+/*
+198. 打家劫舍
+你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，
+如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。给定一个代表每个房屋存放金额的非负整数数组，计算你 不触动警报装置的情况下 ，
+一夜之内能够偷窃到的最高金额。
+
+示例 1：
+输入：[1,2,3,1]
+输出：4
+解释：偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。
+     偷窃到的最高金额 = 1 + 3 = 4 。
+
+示例 2：
+输入：[2,7,9,3,1]
+输出：12
+解释：偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。
+     偷窃到的最高金额 = 2 + 9 + 1 = 12 。
+
+提示：
+1 <= nums.length <= 100
+0 <= nums[i] <= 400
+ */
+public class lc198 {
+    /*
+        动态规划：
+        如果只有一间房屋，则偷窃该房屋，可以偷窃到最高总金额。
+        如果只有两间房屋，则由于两间房屋相邻，不能同时偷窃，只能偷窃其中的一间房屋，因此选择其中金额较高的房屋进行偷窃，可以偷窃到最高总金额。
+        如果房屋数量大于两间，应该如何计算能够偷窃到的最高总金额呢？
+        对于第k(k>2) 间房屋，有两个选项：
+        偷窃第k间房屋，那么就不能偷窃第k-1间房屋，偷窃总金额为前k-2间房屋的最高总金额与第k间房屋的金额之和。
+        不偷窃第k间房屋，偷窃总金额为前k−1间房屋的最高总金额。
+        在两个选项中选择偷窃总金额较大的选项，该选项对应的偷窃总金额即为前k间房屋能偷窃到的最高总金额。
+
+        用dp[i]表示前i间房屋能偷窃到的最高总金额，那么就有如下的状态转移方程：
+        dp[i] = max(dp[i-2]+nums[i],dp[i-1])
+        边界条件为：
+        dp[0] = nums[0] 只有一间房屋，则偷窃该房屋
+        dp[1] = max(nums[0], nums[1])  只有两间房屋，选择其中金额较高的房屋进行偷窃
+        最终的答案即为dp[n−1]，其中n是数组的长度。
+
+        时间复杂度：O(n)，其中n是数组长度。只需要对数组遍历一次。
+        空间复杂度：O(1)。
+     */
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        int len = nums.length;
+        if (len == 1) {
+            return nums[0];
+        }
+
+        int[] dp = new int[len];
+        dp[0] = nums[0];
+        dp[1] = Math.max(nums[0], nums[1]);
+
+        for (int i = 2; i < len; i++) {
+            dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
+        }
+
+        return dp[len - 1];
+    }
+
+    /*
+        考虑到每间房屋的最高总金额只和该房屋的前两间房屋的最高总金额相关，
+        因此可以使用滚动数组，在每个时刻只需要存储前两间房屋的最高总金额。
+
+        时间复杂度：O(n)，其中n是数组长度。只需要对数组遍历一次。
+        空间复杂度：O(1)。使用滚动数组，可以只存储前两间房屋的最高总金额，而不需要存储整个数组的结果，因此空间复杂度是O(1)。
+     */
+    public int rob2(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        int len = nums.length;
+        if (len == 1) {
+            return nums[0];
+        }
+
+        int first = nums[0];
+        int second = Math.max(nums[0], nums[1]);
+        for (int i = 2; i < len; i++) {
+            int tmp = second;
+            second = Math.max(first + nums[i], second);
+            first = tmp;
+        }
+
+        return second;
+    }
+}
+```
+ 
+### 200.反转链表
+题目链接            
+https://leetcode-cn.com/problems/binary-tree-right-side-view/           
+https://leetcode.com/problems/binary-tree-right-side-view/
+```java
+package leetcode;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+/*
+199. 二叉树的右视图
+给定一个二叉树的 根节点 root，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+
+示例 1:
+输入:[1,2,3,null,5,null,4]
+输出:[1,3,4]
+示例 2:
+
+输入:[1,null,3]
+输出:[1,3]
+示例 3:
+
+输入:[]
+输出:[]
+
+提示:
+二叉树的节点个数的范围是 [0,100]
+-100<= Node.val <= 100
+ */
+public class lc199 {
+    /*
+        时间复杂度 : O(n)。 每个节点最多进队列一次，出队列一次，因此广度优先搜索的复杂度为线性。
+        空间复杂度 : O(n)。
+     */
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> res = new ArrayList<Integer>();
+        if (root == null) {
+            return res;
+        }
+        LinkedList<TreeNode> que = new LinkedList<TreeNode>();
+        que.offer(root);
+        int node = 1;
+        while (!que.isEmpty()) {
+            root = que.poll();
+            --node;
+            if (root.left != null) {
+                que.offer(root.left);
+            }
+            if (root.right != null) {
+                que.offer(root.right);
+            }
+            if (node == 0) {
+                res.add(root.val);
+                node = que.size();
+            }
+        }
+        return res;
+    }
+}
+```
+### 200.反转链表
+题目链接            
+https://leetcode-cn.com/problems/number-of-islands/         
+https://leetcode.com/problems/number-of-islands/         
+```java
+package leetcode;
+
+/*
+200. 岛屿数量
+给你一个由'1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。
+此外，你可以假设该网格的四条边均被水包围。
+
+示例 1：
+输入：grid = [
+  ["1","1","1","1","0"],
+  ["1","1","0","1","0"],
+  ["1","1","0","0","0"],
+  ["0","0","0","0","0"]
+]
+输出：1
+
+示例 2：
+输入：grid = [
+  ["1","1","0","0","0"],
+  ["1","1","0","0","0"],
+  ["0","0","1","0","0"],
+  ["0","0","0","1","1"]
+]
+输出：3
+
+提示：
+m == grid.length
+n == grid[i].length
+1 <= m, n <= 300
+grid[i][j] 的值为 '0' 或 '1'
+ */
+public class lc200 {
+    /*
+        深度优先搜索：
+            可以将二维网格看成一个无向图，竖直或水平相邻的1之间有边相连。
+            为了求出岛屿的数量，可以扫描整个二维网格。如果一个位置为1，
+            则以其为起始节点开始进行深度优先搜索。在深度优先搜索的过程中，
+            每个搜索到的1都会被重新标记为0。最终岛屿的数量就是进行深度优先搜索的次数。
+
+        时间复杂度：O(MN)，其中M和N分别为行数和列数。
+        空间复杂度：O(min(M,N))，在最坏情况下，整个网格均为陆地，队列的大小可以达到min(M,N)。
+     */
+    public int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0) {
+            return 0;
+        }
+
+        int row = grid.length;
+        int col = grid[0].length;
+        int count = 0;
+        for (int r = 0; r < row; ++r) {
+            for (int c = 0; c < col; ++c) {
+                if (grid[r][c] == '1') {
+                    ++count;
+                    dfs(grid, r, c);
+                }
+            }
+        }
+
+        return count;
+    }
+
+    public void dfs(char[][] grid, int r, int c) {
+        int row = grid.length;
+        int col = grid[0].length;
+
+        if (r < 0 || c < 0 || r >= row || c >= col || grid[r][c] == '0') {
+            return;
+        }
+
+        grid[r][c] = '0';
+        dfs(grid, r - 1, c);
+        dfs(grid, r + 1, c);
+        dfs(grid, r, c - 1);
+        dfs(grid, r, c + 1);
+    }
+}
+``` 
 
 
 
@@ -6180,6 +6484,176 @@ public class lc206 {
         p.next = null;
 
         return head;
+    }
+}
+```
+### 213.打家劫舍II
+题目链接            
+https://leetcode-cn.com/problems/house-robber-ii/           
+https://leetcode.com/problems/house-robber-ii/           
+```java
+package leetcode;
+
+/*
+213. 打家劫舍 II
+你是一个专业的小偷，计划偷窃沿街的房屋，每间房内都藏有一定的现金。这个地方所有的房屋都围成一圈 ，这意味着第一个房屋和最后一个房屋是紧挨着的。
+同时，相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警 。
+给定一个代表每个房屋存放金额的非负整数数，计算你 在不触动警报装置的情况下 ，今晚能够偷窃到的最高金额。
+
+示例 1：
+
+输入：nums = [2,3,2]
+输出：3
+解释：你不能先偷窃 1 号房屋（金额 = 2），然后偷窃 3 号房屋（金额 = 2）, 因为他们是相邻的。
+
+示例 2：
+输入：nums = [1,2,3,1]
+输出：4
+解释：你可以先偷窃 1 号房屋（金额 = 1），然后偷窃 3 号房屋（金额 = 3）。
+     偷窃到的最高金额 = 1 + 3 = 4 。
+
+示例 3：
+输入：nums = [0]
+输出：0
+
+提示：
+1 <= nums.length <= 100
+0 <= nums[i] <= 1000
+ */
+public class lc213 {
+    /*
+        时间复杂度：O(n)，其中n是数组长度。需要对数组遍历两次，计算可以偷窃到的最高总金额。
+        空间复杂度：O(1)。
+     */
+    public int rob(int[] nums) {
+        int len = nums.length;
+        if (len == 1) {
+            return nums[0];
+        } else if (len == 2) {
+            return Math.max(nums[0], nums[1]);
+        }
+        return Math.max(robRange(nums, 0, len - 2), robRange(nums, 1, len - 1));
+    }
+
+    public int robRange(int[] nums, int start, int end) {
+        int first = nums[start];
+        int second = Math.max(nums[start], nums[start + 1]);
+        for (int i = start + 2; i <= end; i++) {
+            int tmp = second;
+            second = Math.max(first + nums[i], second);
+            first = tmp;
+        }
+
+        return second;
+    }
+}
+```
+### 215.数组中的第K个最大元素
+题目链接            
+https://leetcode-cn.com/problems/kth-largest-element-in-an-array/           
+https://leetcode.com/problems/kth-largest-element-in-an-array/           
+```java
+package leetcode;
+
+import java.util.Random;
+
+/*
+215. 数组中的第K个最大元素
+给定整数数组 nums 和整数 k，请返回数组中第 k 个最大的元素。
+请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
+
+示例 1:
+输入: [3,2,1,5,6,4] 和 k = 2
+输出: 5
+
+示例 2:
+输入: [3,2,3,1,2,4,5,5,6] 和 k = 4
+输出: 4
+
+提示：
+1 <= k <= nums.length <= 104
+-104<= nums[i] <= 104
+ */
+public class lc215 {
+    /*
+        方法一：基于快速排序的选择方法
+        时间复杂度：O(n)
+        空间复杂度：O(logn)
+     */
+    Random random = new Random();
+
+    public int findKthLargest(int[] nums, int k) {
+        return quickSelect(nums, 0, nums.length - 1, nums.length - k);
+    }
+
+    public int quickSelect(int[] a, int l, int r, int index) {
+        int q = randomPartition(a, l, r);
+        if (q == index) {
+            return a[q];
+        } else {
+            return q < index ? quickSelect(a, q + 1, r, index) : quickSelect(a, l, q - 1, index);
+        }
+    }
+
+    public int randomPartition(int[] a, int l, int r) {
+        int i = random.nextInt(r - l + 1) + l;
+        swap(a, i, r);
+        return partition(a, l, r);
+    }
+
+    public int partition(int[] a, int l, int r) {
+        int x = a[r], i = l - 1;
+        for (int j = l; j < r; ++j) {
+            if (a[j] <= x) {
+                swap(a, ++i, j);
+            }
+        }
+
+        swap(a, i + 1, r);
+
+        return i + 1;
+    }
+
+    public void swap(int[] a, int i, int j) {
+        int temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
+    }
+
+    /*
+        方法二：基于堆排序的选择方法
+        时间复杂度：O(nlogn)
+        空间复杂度：O(logn)
+     */
+    public int findKthLargest2(int[] nums, int k) {
+        int heapSize = nums.length;
+        buildMaxHeap(nums, heapSize);
+        for (int i = nums.length - 1; i >= nums.length - k + 1; --i) {
+            swap(nums, 0, i);
+            --heapSize;
+            maxHeapify(nums, 0, heapSize);
+        }
+        return nums[0];
+    }
+
+    public void buildMaxHeap(int[] a, int heapSize) {
+        for (int i = heapSize / 2; i >= 0; --i) {
+            maxHeapify(a, i, heapSize);
+        }
+    }
+
+    public void maxHeapify(int[] a, int i, int heapSize) {
+        int l = i * 2 + 1, r = i * 2 + 2, largest = i;
+        if (l < heapSize && a[l] > a[largest]) {
+            largest = l;
+        }
+        if (r < heapSize && a[r] > a[largest]) {
+            largest = r;
+        }
+        if (largest != i) {
+            swap(a, i, largest);
+            maxHeapify(a, largest, heapSize);
+        }
     }
 }
 ```
@@ -6635,6 +7109,77 @@ public class lc328 {
     }
 }
 ```
+### 337.打家劫舍 III
+题目链接            
+https://leetcode-cn.com/problems/house-robber-iii/          
+https://leetcode.com/problems/house-robber-iii/      
+```java
+package leetcode;
+
+/*
+337. 打家劫舍 III
+在上次打劫完一条街道之后和一圈房屋后，小偷又发现了一个新的可行窃的地区。这个地区只有一个入口，我们称之为“根”。
+除了“根”之外，每栋房子有且只有一个“父“房子与之相连。一番侦察之后，聪明的小偷意识到“这个地方的所有房屋的排列类似于一棵二叉树”。
+如果两个直接相连的房子在同一天晚上被打劫，房屋将自动报警。
+计算在不触动警报的情况下，小偷一晚能够盗取的最高金额。
+
+示例 1:
+输入: [3,2,3,null,3,null,1]
+
+     3
+    / \
+   2   3
+    \   \
+     3   1
+
+输出: 7
+解释:小偷一晚能够盗取的最高金额 = 3 + 3 + 1 = 7.
+
+示例 2:
+输入: [3,4,5,1,3,null,1]
+
+     3
+    / \
+   4   5
+  / \   \
+ 1   3   1
+
+输出: 9
+解释:小偷一晚能够盗取的最高金额= 4 + 5 = 9.
+ */
+public class lc337 {
+    /*
+        一棵二叉树，树上的每个点都有对应的权值，每个点有两种状态（选中和不选中），
+        问在不能同时选中有父子关系的点的情况下，能选中的点的最大权值和是多少。
+        可以用f(o)表示选择o节点的情况下，o节点的子树上被选择的节点的最大权值和；
+        g(o) 表示不选择o节点的情况下，o节点的子树上被选择的节点的最大权值和；
+        l和r代表o的左右孩子。
+        当o被选中时，o的左右孩子都不能被选中，故o被选中情况下子树上被选中点的最大权值和为
+        l和r不被选中的最大权值和相加，即 f(o) = g(l) + g(r)。
+        当o不被选中时，o的左右孩子可以被选中，也可以不被选中。对于o的某个具体的孩子x，
+        它对o的贡献是x被选中和不被选中情况下权值和的较大值。
+        故g(o) = max{f(l),g(l)}+max{f(r),g(r)}。
+        
+        时间复杂度：O(n)。
+        空间复杂度：O(n)。
+     */
+    public int rob(TreeNode root) {
+        int[] rootStatus = dfs(root);
+        return Math.max(rootStatus[0], rootStatus[1]);
+    }
+
+    public int[] dfs(TreeNode node) {
+        if (node == null) {
+            return new int[]{0, 0};
+        }
+        int[] l = dfs(node.left);
+        int[] r = dfs(node.right);
+        int selected = node.val + l[1] + r[1];
+        int notSelected = Math.max(l[0], l[1]) + Math.max(r[0], r[1]);
+        return new int[]{selected, notSelected};
+    }
+}
+```
 ### 349.两个数组的交集
 题目链接                     
 https://leetcode-cn.com/problems/intersection-of-two-arrays/                    
@@ -6703,6 +7248,50 @@ public class lc349 {
             res[i++] = (int) iter.next();
         }
         return res;
+    }
+}
+```
+### 415.字符串相加
+题目链接            
+https://leetcode-cn.com/problems/add-strings/                
+https://leetcode.com/problems/add-strings/          
+```java
+package leetcode;
+
+/*
+415. 字符串相加
+给定两个字符串形式的非负整数num1 和num2，计算它们的和。
+
+提示：
+num1 和num2的长度都小于 5100
+num1 和num2 都只包含数字0-9
+num1 和num2 都不包含任何前导零
+你不能使用任何內建 BigInteger 库，也不能直接将输入的字符串转换为整数形式
+ */
+public class lc415 {
+    /*
+        时间复杂度：O(max(len1,len2))，其中len1=num 1.length，len2=num2.length。竖式加法的次数取决于较大数的位数。
+        空间复杂度：O(1)
+     */
+    public String addStrings(String num1, String num2) {
+        int i = num1.length() - 1;
+        int j = num2.length() - 1;
+        int carry = 0;
+        StringBuffer ans = new StringBuffer();
+
+        while (i >= 0 || j >= 0 || carry != 0) {
+            int x = i >= 0 ? num1.charAt(i) - '0' : 0;
+            int y = j >= 0 ? num2.charAt(j) - '0' : 0;
+            int result = x + y + carry;
+            ans.append(result % 10);
+            carry = result / 10;
+            i--;
+            j--;
+        }
+
+        // 计算完以后的答案需要翻转过来
+        ans.reverse();
+        return ans.toString();
     }
 }
 ```
@@ -6834,6 +7423,86 @@ public class lc581 {
             }
         }
         return right - left < 0 ? 0 : right - left + 1;
+    }
+}
+```
+
+### 628.三个数的最大乘积
+题目链接                
+https://leetcode-cn.com/problems/maximum-product-of-three-numbers/          
+https://leetcode.com/problems/maximum-product-of-three-numbers/          
+```java
+package leetcode;
+
+import java.util.Arrays;
+
+/*
+628. 三个数的最大乘积
+给你一个整型数组 nums ，在数组中找出由三个数组成的最大乘积，并输出这个乘积。
+
+示例 1：
+输入：nums = [1,2,3]
+输出：6
+
+示例 2：
+输入：nums = [1,2,3,4]
+输出：24
+
+示例 3：
+输入：nums = [-1,-2,-3]
+输出：-6
+
+提示：
+3 <= nums.length <=104
+-1000 <= nums[i] <= 1000
+ */
+public class lc628 {
+    /*
+        时间复杂度：O(N)，其中 N 为数组长度。仅需遍历数组一次。
+        空间复杂度：O(1)。
+     */
+    public int maximumProduct(int[] nums) {
+        // 最小的和第二小的
+        int min1 = Integer.MAX_VALUE, min2 = Integer.MAX_VALUE;
+        // 最大的、第二大的和第三大的
+        int max1 = Integer.MIN_VALUE, max2 = Integer.MIN_VALUE, max3 = Integer.MIN_VALUE;
+
+        for (int x : nums) {
+            if (x < min1) {
+                min2 = min1;
+                min1 = x;
+            } else if (x < min2) {
+                min2 = x;
+            }
+
+            if (x > max1) {
+                max3 = max2;
+                max2 = max1;
+                max1 = x;
+            } else if (x > max2) {
+                max3 = max2;
+                max2 = x;
+            } else if (x > max3) {
+                max3 = x;
+            }
+        }
+
+        return Math.max(min1 * min2 * max1, max1 * max2 * max3);
+    }
+
+    /*
+        首先将数组排序。
+        如果数组中全是非负数，则排序后最大的三个数相乘即为最大乘积；如果全是非正数，则最大的三个数相乘同样也为最大乘积。
+        如果数组中有正数有负数，则最大乘积既可能是三个最大正数的乘积，也可能是两个最小负数（即绝对值最大）与最大正数的乘积。
+        综上，在给数组排序后，分别求出三个最大正数的乘积，以及两个最小负数与最大正数的乘积，二者之间的最大值即为所求答案。
+
+        时间复杂度：O(NlogN)，其中 N 为数组长度。排序需要O(NlogN) 的时间。
+        空间复杂度：O(logN)，主要为排序的空间开销。
+     */
+    public int maximumProduct2(int[] nums) {
+        Arrays.sort(nums);
+        int n = nums.length;
+        return Math.max(nums[0] * nums[1] * nums[n - 1], nums[n - 3] * nums[n - 2] * nums[n - 1]);
     }
 }
 ```
