@@ -5337,9 +5337,9 @@ public class lc080 {
 }
 ```
 ### 81.搜索旋转排序数组II
-题目链接
-https://leetcode.cn/problems/search-in-rotated-sorted-array-ii/
-https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
+题目链接  
+https://leetcode.cn/problems/search-in-rotated-sorted-array-ii/ 
+https://leetcode.com/problems/search-in-rotated-sorted-array-ii/  
 ```java
 /**
  * 已知存在一个按非降序排列的整数数组 nums ，数组中的值不必互不相同。
@@ -5406,9 +5406,9 @@ public class lc081 {
 }
 ```
 ### 82.删除排序链表中的重复元素II
-题目连接
-https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii/
-https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/
+题目连接  
+https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii/ 
+https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/  
 ```java
 package leetcode;
 
@@ -5454,9 +5454,9 @@ public class lc082 {
 }
 ```
 ### 83.删除排序链表中的重复元素
-题目连接
-https://leetcode.cn/problems/remove-duplicates-from-sorted-list/
-https://leetcode.com/problems/remove-duplicates-from-sorted-list/
+题目连接  
+https://leetcode.cn/problems/remove-duplicates-from-sorted-list/  
+https://leetcode.com/problems/remove-duplicates-from-sorted-list/ 
 ```java
 package leetcode;
 
