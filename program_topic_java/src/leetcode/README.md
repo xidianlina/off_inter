@@ -5496,9 +5496,9 @@ public class lc083 {
 }
 ```
 ### 84.柱状图中最大的矩形
-题目连接
-https://leetcode.cn/problems/largest-rectangle-in-histogram/
-https://leetcode.com/problems/largest-rectangle-in-histogram/
+题目连接    
+https://leetcode.cn/problems/largest-rectangle-in-histogram/  
+https://leetcode.com/problems/largest-rectangle-in-histogram/ 
 > ![lc84](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/leetcode/picture/lc84.png)
 ```java
 package leetcode;
