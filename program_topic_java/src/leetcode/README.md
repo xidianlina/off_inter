@@ -77,6 +77,10 @@ https://codetop.cc/home
 ### 78.子集
 ### 79.单词搜索
 ### 80.删除有序数组中的重复项II
+### 81.搜索旋转排序数组II
+### 82.删除排序链表中的重复元素II
+### 83.删除排序链表中的重复元素
+### 84.柱状图中最大的矩形
 ### 88.合并两个有序数组
 ### 98.验证二叉搜索树
 ### 109.有序链表转换二叉搜索树
@@ -5329,6 +5333,253 @@ public class lc080 {
         }
 
         return index;
+    }
+}
+```
+### 81.搜索旋转排序数组II
+题目链接
+https://leetcode.cn/problems/search-in-rotated-sorted-array-ii/
+https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
+```java
+/**
+ * 已知存在一个按非降序排列的整数数组 nums ，数组中的值不必互不相同。
+ * 在传递给函数之前，nums 在预先未知的某个下标 k（0 <= k < nums.length）上进行了 旋转 ，
+ * 使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。
+ * 例如， [0,1,2,4,4,4,5,6,6,7] 在下标 5 处经旋转后可能变为 [4,5,6,6,7,0,1,2,4,4] 。
+ * 给你旋转后的数组nums和一个整数target，请你编写一个函数来判断给定的目标值是否存在于数组中。
+ * 如果nums中存在这个目标值target ，则返回true ，否则返回false 。你必须尽可能减少整个操作步骤。
+ *
+ * 示例 1：
+ * 输入：nums = [2,5,6,0,0,1,2], target = 0
+ * 输出：true
+ *
+ * 示例 2：
+ * 输入：nums = [2,5,6,0,0,1,2], target = 3
+ * 输出：false
+ *
+ * 提示：
+ * 1 <= nums.length <= 5000
+ * -104 <= nums[i] <= 104
+ * 题目数据保证 nums 在预先未知的某个下标上进行了旋转
+ * -104 <= target <= 104
+ *
+ * 进阶：
+ * 此题与 搜索旋转排序数组 相似，但本题中的 nums  可能包含 重复 元素。这会影响到程序的时间复杂度吗？会有怎样的影响，为什么？
+ */
+public class lc081 {
+    public boolean search(int[] nums, int target) {
+        int n = nums.length;
+        if (n == 0) {
+            return false;
+        }
+
+        if (n == 1) {
+            return nums[0] == target;
+        }
+
+        int l = 0, r = n - 1;
+        while (l <= r) {
+            int mid = (l + r) / 2;
+            if (nums[mid] == target) {
+                return true;
+            }
+
+            if (nums[l] == nums[mid] && nums[mid] == nums[r]) {
+                ++l;
+                --r;
+            } else if (nums[l] <= nums[mid]) {
+                if (nums[l] <= target && target < nums[mid]) {
+                    r = mid - 1;
+                } else {
+                    l = mid + 1;
+                }
+            } else {
+                if (nums[mid] < target && target <= nums[r]) {
+                    l = mid + 1;
+                } else {
+                    r = mid - 1;
+                }
+            }
+        }
+        return false;
+    }
+}
+```
+### 82.删除排序链表中的重复元素II
+题目连接
+https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii/
+https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/
+```java
+package leetcode;
+
+/**
+ *给定一个已排序的链表的头head,删除原始链表中所有重复数字的节点，
+ * 只留下不同的数字 。返回已排序的链表。
+ *
+ * 示例 1：
+ * 输入：head = [1,2,3,3,4,4,5]
+ * 输出：[1,2,5]
+ *
+ * 示例 2：
+ * 输入：head = [1,1,1,2,3]
+ * 输出：[2,3]
+ *
+ * 提示：
+ * 链表中节点数目在范围 [0, 300] 内
+ * -100 <= Node.val <= 100
+ * 题目数据保证链表已经按升序 排列
+ */
+public class lc082 {
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null) {
+            return head;
+        }
+
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        ListNode cur = dummy;
+        while (cur.next != null && cur.next.next != null) {
+            if (cur.next.val == cur.next.next.val) {
+                int val = cur.next.val;
+                while (cur.next != null && cur.next.val == val) {
+                    cur.next = cur.next.next;
+                }
+            } else {
+                cur = cur.next;
+            }
+        }
+
+        return dummy.next;
+    }
+}
+```
+### 83.删除排序链表中的重复元素
+题目连接
+https://leetcode.cn/problems/remove-duplicates-from-sorted-list/
+https://leetcode.com/problems/remove-duplicates-from-sorted-list/
+```java
+package leetcode;
+
+/**
+ * 给定一个已排序的链表的头head,删除所有重复的元素，使每个元素只出现一次。返回已排序的链表。
+ *
+ * 示例 1：
+ * 输入：head = [1,1,2]
+ * 输出：[1,2]
+ *
+ * 示例 2：
+ * 输入：head = [1,1,2,3,3]
+ * 输出：[1,2,3]
+ *
+ *
+ * 提示：
+ * 链表中节点数目在范围 [0, 300] 内
+ * -100 <= Node.val <= 100
+ * 题目数据保证链表已经按升序排列
+ */
+public class lc083 {
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null) {
+            return head;
+        }
+
+        ListNode cur = head;
+        while (cur.next != null) {
+            if (cur.val == cur.next.val) {
+                cur.next = cur.next.next;
+            } else {
+                cur = cur.next;
+            }
+        }
+        return head;
+    }
+}
+```
+### 84.柱状图中最大的矩形
+题目连接
+https://leetcode.cn/problems/largest-rectangle-in-histogram/
+https://leetcode.com/problems/largest-rectangle-in-histogram/
+> ![lc84](http://github.com/xidianlina/off_inter/raw/master//program_topic_java/src/leetcode/picture/lc84.png)
+```java
+package leetcode;
+
+/**
+ * 给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。
+ * 求在该柱状图中，能够勾勒出来的矩形的最大面积。
+ *
+ * 示例 1:
+ * 输入：heights = [2,1,5,6,2,3]
+ * 输出：10
+ * 解释：最大的矩形为图中红色区域，面积为10
+ *
+ * 示例 2：
+ * 输入： heights = [2,4]
+ * 输出： 4
+ *
+ * 提示：
+ * 1 <= heights.length <=105
+ * 0 <= heights[i] <= 104
+ */
+import java.util.ArrayDeque;
+import java.util.Deque;
+public class lc084 {
+    /*
+    方法一：暴力枚举高
+    使用一重循环枚举某一根柱子，将其固定为矩形的高度h。随后从这跟柱子开始向两侧延伸，直到遇到高度小于h的柱子，
+    就确定了矩形的左右边界。如果左右边界之间的宽度为w，那么对应的面积为w×h
+    这种暴力方法的时间复杂度均为 O(N*N)，会超出时间限制
+    */
+    public int largestRectangleArea(int[] heights) {
+        int size = heights.length;
+        int ans = 0;
+        for (int i = 0; i < size; i++) {
+            int height = heights[i];
+            int left = i;
+            int right = i;
+            while (left - 1 >= 0 && heights[left - 1] >= height) {
+                --left;
+            }
+            while (right + 1 < size && heights[right + 1] >= height) {
+                ++right;
+            }
+            ans = Math.max(ans, (right - left + 1) * height);
+        }
+        return ans;
+    }
+
+    /*
+    方法二:单调栈
+    时间复杂度：O(N)
+    空间复杂度：O(N)
+    */
+    public int largestRectangleArea2(int[] heights) {
+        int n = heights.length;
+        int[] left = new int[n];
+        int[] right = new int[n];
+
+        Deque<Integer> stack = new ArrayDeque<Integer>();
+        for (int i = 0; i < n; ++i) {
+            while (!stack.isEmpty() && heights[stack.peek()] >= heights[i]) {
+                stack.pop();
+            }
+            left[i] = (stack.isEmpty() ? -1 : stack.peek());
+            stack.push(i);
+        }
+
+        stack.clear();
+        for (int i = n - 1; i >= 0; --i) {
+            while (!stack.isEmpty() && heights[stack.peek()] >= heights[i]) {
+                stack.pop();
+            }
+            right[i] = (stack.isEmpty() ? n : stack.peek());
+            stack.push(i);
+        }
+
+        int ans = 0;
+        for (int i = 0; i < n; ++i) {
+            ans = Math.max(ans, (right[i] - left[i] - 1) * heights[i]);
+        }
+        return ans;
     }
 }
 ```
