@@ -53,6 +53,9 @@
 ### 50.M进制与N进制的转换
 ### 51.等概率产生0和1
 ### 52.求一个序列的平衡点
+### 53.数组的奇数位正序，数组的偶数位倒序，请给整体排出正序
+### 54.给定一个数组 nums，编写一个函数将所有0移动到数组的末尾，同时保持非零元素的相对顺序
+
 # 算法解答
 ### 1.洗牌算法
 ```java
@@ -2613,6 +2616,98 @@ public class FindBalance {
             } else {
                 subSum += arr[i];
             }
+        }
+    }
+}
+```
+### 53.数组的奇数位正序，数组的偶数位倒序，请给整体排出正序
+```java
+public class KuaiShou {
+    public static void main(String[] args) {
+        KuaiShou kuaiShou = new KuaiShou();
+        int[] arr = {10, 60, 20, 5, 30, 4};
+        int[] res = kuaiShou.testSort(arr);
+        for (int num : res) {
+            System.out.print(num + "\t");
+        }
+    }
+
+    /**
+     * [10,60,20,5,30,4]
+     * 数组的奇数位正序，数组的偶数位倒序
+     * 请给整体排出正序
+     */
+    public int[] testSort(int[] arr) {
+        int n = arr.length;
+        if (n == 0) {
+            return arr;
+        }
+
+        int[] res = new int[n];
+        int k = 0;
+        int i = 0;
+        int j = n - 1;
+        while (i < n && j > 0) {
+            if (arr[i] < arr[j]) {
+                res[k++] = arr[i];
+                i += 2;
+            } else {
+                res[k++] = arr[j];
+                j -= 2;
+            }
+        }
+
+        while (i < n) {
+            res[k++] = arr[i];
+            i += 2;
+        }
+
+        while (j > 0) {
+            res[k++] = arr[j];
+            j -= 2;
+        }
+
+        return res;
+    }
+}
+```
+### 54.给定一个数组 nums，编写一个函数将所有0移动到数组的末尾，同时保持非零元素的相对顺序
+```java
+/*
+给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
+请注意 ，必须在不复制数组的情况下原地对数组进行操作。
+示例 1:
+输入: nums = [0,1,0,3,12]
+输出: [1,3,12,0,0]
+
+示例 2:
+输入: nums = [0]
+输出: [0]
+*/
+public class Test {
+    /**
+     * 首先遍历数组，将非零元素依次移动到数组的前面，同时记录下非零元素的个数。然后，从记录的非零元素个数的位置开始，将剩余的元素都置为0
+     */
+    public static void main(String[] args) {
+        Test test = new Test();
+        int[] arr = {0, 1, 0, 3, 12};
+        test.testResult(arr);
+    }
+
+    public void testResult(int[] nums) {
+        int nonZeroIndex = 0;
+        for (int num : nums) {
+            if (num != 0) {
+                nums[nonZeroIndex] = num;
+                nonZeroIndex += 1;
+            }
+        }
+        while (nonZeroIndex < nums.length) {
+            nums[nonZeroIndex++] = 0;
+        }
+
+        for (int num : nums) {
+            System.out.print(num + "\t");
         }
     }
 }
